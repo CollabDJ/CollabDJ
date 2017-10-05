@@ -3,17 +3,17 @@
 
 ## User Stories
 1. After a session of making a song you can save what you made locally on the device
-2. Screen to choose initial options
+2. **Choose initial options** page
     * Create a new song
     * Open existing song
     * Join a friend's song making session
-3. "Create a new song" opens the song making screen with a blank song
-4. "Open existing song" opens a menu to view past saved songs
+3. **Create a new song** page opens the song making screen with a blank song
+4. **Open existing song** page opens a menu to view past saved songs
     * Opens the song making screen with sound samples queued up from a previous session
-5. "Join a friend" opens a menu where you can see sessions available for joining
+5. **Join a friend** page opens a menu where you can see sessions available for joining
     * Friends can be seen either if they're local over Wifi or Bluetooth (Maybe)
     * As a fallback, instead of implementing this screen, make it possible to just enter a person's ip address for demo purposes since the song making part is the most important
-    
+    ```
         One possible implementation:
         ============================
         Session has a GUID and name
@@ -31,7 +31,8 @@
             Person 2: (Looking for a session)
             Person 3, Person 5 Name:(Cool people making a song)
             Person 4 Name:(I'm by myself)
-6. "Make a song" page
+   ```
+6. **Make a song** page
     * Has a session name (This is what shows up for people in the "Join a friend" screen)
     * Has a hidden/unhidden toggle
       * When unhidden the session is visible in the "Join a friend" screen
