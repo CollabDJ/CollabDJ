@@ -4,9 +4,9 @@
 ## User Stories
 1. After a session of making a song you can save what you made locally on the device
 2. Screen to choose initial options
-    ..* Create a new song
-    ..* Open existing song
-    ..* Join a friend's song making session
+    * Create a new song
+    * Open existing song
+    * Join a friend's song making session
 3. "Create a new song" opens the song making screen with a blank song
 4. "Open existing song" opens a menu to view past saved songs
     ..* Opens the song making screen with sound samples queued up from a previous session
