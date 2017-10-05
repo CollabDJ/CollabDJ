@@ -14,23 +14,23 @@
     * Friends can be seen either if they're local over Wifi or Bluetooth (Maybe)
     * As a fallback, instead of implementing this screen, make it possible to just enter a person's ip address for demo purposes since the song making part is the most important
     ```
-        One possible implementation:
-        ============================
-        Session has a GUID and name
-        Each person says which session ID theyre in.
-        If there are multiple people in the list with the same session id, it puts them as one item in the list
-        Menu looks something like this:
-        List of people around you (Under the hood):
-            Person 1: Session NULL
-            Person 2: Session NULL
-            Person 3: Session 012
-            Person 4: Session 1337
-            Person 5: Session 012
-        What you actually see in the menu:
-            Person 1: (Looking for a session)
-            Person 2: (Looking for a session)
-            Person 3, Person 5 Name:(Cool people making a song)
-            Person 4 Name:(I'm by myself)
+    One possible implementation:
+    ============================
+    Session has a GUID and name
+    Each person says which session ID theyre in.
+    If there are multiple people in the list with the same session id, it puts them as one item in the list
+    Menu looks something like this:
+    List of people around you (Under the hood):
+        Person 1: Session NULL
+        Person 2: Session NULL
+        Person 3: Session 012
+        Person 4: Session 1337
+        Person 5: Session 012
+    What you actually see in the menu:
+        Person 1: (Looking for a session)
+        Person 2: (Looking for a session)
+        Person 3, Person 5 Name:(Cool people making a song)
+        Person 4 Name:(I'm by myself)
    ```
 6. **Make a song** page
     * Has a session name (This is what shows up for people in the "Join a friend" screen)
@@ -43,7 +43,9 @@
     * Each person is connected to each other peer to peer (Maybe)
     * There's a track that is constantly moving
       * There's a little bar on the screen
+      ```
         ----|-----------------
+      ```
       * There's a menu of various sound samples that can be queued
       * They appear on the track and as they intersect the bar, the sound plays
          * Each queued sample stores the user and time who queued it so it can be saved for later and the song can be replayed
