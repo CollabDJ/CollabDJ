@@ -3,7 +3,7 @@
 
 ## User Stories
 
-![Home][HomeScreen=250x]
+![Home][HomeScreen]
 
 1. After a session of making a song you can save what you made locally on the device
 2. **Choose initial options** page
