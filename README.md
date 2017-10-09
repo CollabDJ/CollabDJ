@@ -26,16 +26,12 @@
     * Open from cloud load saved songs from cloud
     * <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/OpenSong.jpg">Open Song Wireframe</a>
 
-4. **After a session of making a song you can save what you made
+4. **Saving**
     * You can save locally or to the cloud
     * <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/HamburgerMenu.jpg">Hamburger Menu Wireframe</a>
 
-5. **Joining friends
+5. **Joining friends**
     * You can join friends by typing in the IP address of their session (The prettier way is under the optional stories)
-
-6. **Managing friends
-    * Clicking the people icon in the song screen opens a list of currently joined people
-    * <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/People.jpg">People</a>
 
 **Optional**
 
@@ -43,12 +39,14 @@
     * When a sample is playing, a little pie chart shows up showing the playing position
     * Some way to add new samples
 
-2. **Joining friends
+2. **Joining friends**
     * Clicking QR code button in the song screen opens the QR code for other people to scan
     * <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/QRCode.jpg">QRCode Wireframe</a>
     * Friends can scan your QR code from the home menu by pushing Join Session
     * <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/JoinSession.jpg">Join Session</a>
 
-3. **Managing friends
+3. **Managing friends**
+    * Clicking the people icon in the song screen opens a list of currently joined people
+    * <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/People.jpg">People</a>
     * You can mute people making them unable to add to the song but still be in the session
     * You can kick people
