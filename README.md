@@ -5,14 +5,14 @@
 
 **Core**
 
-**Choose initial options** page
+1. **Choose initial options** page
     * <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/HomeScreen.jpg">Home Screen Wireframe</a>
     * Create a new song
     * Open existing song
     * Join a friend's song making session
     * Look at saved songs
 
-**Create a new song** page opens the song making screen with a blank song
+2. **Create a new song** page opens the song making screen with a blank song
     * <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/SongScreen.jpg">Song Screen Wireframe</a>
     * <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/SampleViewDetailed.jpg">Sample View Detailed Wireframe</a>
     * Show a recycler view of playable samples
@@ -21,34 +21,34 @@
     * Samples only start playing at the right times to stay in sync
     * <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/SamplesScreen.jpg">Samples Screen Wireframe</a>
 
-**Open existing song** page opens a menu to view past saved songs
+3. **Open existing song** page opens a menu to view past saved songs
     * Opens the song making screen with sound samples queued up from a previous session
     * Open from cloud load saved songs from cloud
     * <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/OpenSong.jpg">Open Song Wireframe</a>
 
-**After a session of making a song you can save what you made
+4. **After a session of making a song you can save what you made
     * You can save locally or to the cloud
     * <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/HamburgerMenu.jpg">Hamburger Menu Wireframe</a>
 
-**Joining friends
+5. **Joining friends
     * You can join friends by typing in the IP address of their session (The prettier way is under the optional stories)
 
-**Managing friends
+6. **Managing friends
     * Clicking the people icon in the song screen opens a list of currently joined people
     * <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/People.jpg">People</a>
 
 **Optional**
 
-**Create a new song** page opens the song making screen with a blank song
+1. **Create a new song** page opens the song making screen with a blank song
     * When a sample is playing, a little pie chart shows up showing the playing position
     * Some way to add new samples
 
-**Joining friends
+2. **Joining friends
     * Clicking QR code button in the song screen opens the QR code for other people to scan
     * <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/QRCode.jpg">QRCode Wireframe</a>
     * Friends can scan your QR code from the home menu by pushing Join Session
     * <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/JoinSession.jpg">Join Session</a>
 
-**Managing friends
+3. **Managing friends
     * You can mute people making them unable to add to the song but still be in the session
     * You can kick people
