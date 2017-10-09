@@ -2,6 +2,9 @@
 **CollabDJ** is an app that can make tunes on the fly with friends
 
 ## User Stories
+
+![Home][HomeScreen]
+
 1. After a session of making a song you can save what you made locally on the device
 2. **Choose initial options** page
     * Create a new song
@@ -50,3 +53,5 @@
       * saving allows you to either override a file or save a new file
     * you can quit any time
       * asks you if you want to save
+
+[HomeScreen]: https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/HomeScreen.jpg "Home Screen"
