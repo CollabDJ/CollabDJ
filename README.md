@@ -6,11 +6,11 @@
 <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/HamburgerMenu.jpg">Hamburger Menu</a>
 
 <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/JoinSession.jpg">Join Session</a>
-<a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/OpenSong.jpg">Open Song</a>
+
 <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/People.jpg">People</a>
 <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/QRCode.jpg">QRCode</a>
-<a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/SamplesScreen.jpg">Samples Screen</a>
-<a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/SampleViewDetailed.jpg">Sample View Detailed</a>
+
+
 
 
 1. **Choose initial options** page
@@ -21,13 +21,20 @@
     * Look at saved songs
 
 2. **Create a new song** page opens the song making screen with a blank song
-    * <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/SongScreen.jpg">Song Screen</a>
+    * <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/SongScreen.jpg">Song Screen Wireframe</a>
+    * <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/SampleViewDetailed.jpg">Sample View Detailed Wireframe</a>
+    * Show a recycler view of playable samples
+    * Samples can be played, paused, stopped
+    * New samples can be added with a + button by clicking empty cells
+    * <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/SamplesScreen.jpg">Samples Screen Wireframe</a>
 
 1. After a session of making a song you can save what you made locally on the device
 
 
 4. **Open existing song** page opens a menu to view past saved songs
     * Opens the song making screen with sound samples queued up from a previous session
+    * <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/OpenSong.jpg">Open Song Wireframe</a>
+
 5. **Join a friend** page opens a menu where you can see sessions available for joining (Optional)
     * Friends can be seen either if they're local over Wifi or Bluetooth (Maybe)
     * As a fallback, instead of implementing this screen, make it possible to just scan a person's QR code for demo purposes since the song making part is the most important
