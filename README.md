@@ -3,7 +3,7 @@
 
 ## User Stories
 
-![Home][HomeScreen]
+![Home][HomeScreen=250x]
 
 1. After a session of making a song you can save what you made locally on the device
 2. **Choose initial options** page
@@ -54,4 +54,4 @@
     * you can quit any time
       * asks you if you want to save
 
-[HomeScreen]: https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/HomeScreen.jpg = 250x "Home Screen"
+[HomeScreen]: https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/HomeScreen.jpg "Home Screen"
