@@ -3,6 +3,10 @@
 
 ## User Stories
 
+![HomeScreen][HomeScreen]
+![SongScreen][SongScreen]
+![Home][HomeScreen]
+![Home][HomeScreen]
 ![Home][HomeScreen]
 
 1. After a session of making a song you can save what you made locally on the device
@@ -54,4 +58,12 @@
     * you can quit any time
       * asks you if you want to save
 
+[HamburgerMenu]: https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/HamburgerMenu.jpg "Hamburger Menu"
 [HomeScreen]: https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/HomeScreen.jpg "Home Screen"
+[JoinSession]: https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/JoinSession.jpg "Join Session"
+[OpenSong]: https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/OpenSong.jpg "Open Song"
+[People]: https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/People.jpg "People"
+[QRCode]: https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/QRCode.jpg "QRCode"
+[SamplesScreen]: https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/SamplesScreen.jpg "Samples Screen"
+[SampleViewDetailed]: https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/SampleViewDetailed.jpg "Sample View Detailed"
+[SongScreen]: https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/SongScreen.jpg "SongScreen"
