@@ -54,4 +54,4 @@
     * you can quit any time
       * asks you if you want to save
 
-[HomeScreen]: https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/HomeScreen.jpg "Home Screen"
+[HomeScreen]: https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/HomeScreen.jpg = 250x "Home Screen"
