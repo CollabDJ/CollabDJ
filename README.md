@@ -4,21 +4,28 @@
 ## User Stories
 
 <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/HamburgerMenu.jpg">Hamburger Menu</a>
-<a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/HomeScreen.jpg">Home Screen</a>
+
 <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/JoinSession.jpg">Join Session</a>
 <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/OpenSong.jpg">Open Song</a>
 <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/People.jpg">People</a>
 <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/QRCode.jpg">QRCode</a>
 <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/SamplesScreen.jpg">Samples Screen</a>
 <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/SampleViewDetailed.jpg">Sample View Detailed</a>
-<a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/SongScreen.jpg">Song Screen</a>
 
-1. After a session of making a song you can save what you made locally on the device
-2. **Choose initial options** page
+
+1. **Choose initial options** page
+    * <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/HomeScreen.jpg">Home Screen Wireframe</a>
     * Create a new song
     * Open existing song
     * Join a friend's song making session
-3. **Create a new song** page opens the song making screen with a blank song
+    * Look at saved songs
+
+2. **Create a new song** page opens the song making screen with a blank song
+    * <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/SongScreen.jpg">Song Screen</a>
+
+1. After a session of making a song you can save what you made locally on the device
+
+
 4. **Open existing song** page opens a menu to view past saved songs
     * Opens the song making screen with sound samples queued up from a previous session
 5. **Join a friend** page opens a menu where you can see sessions available for joining (Optional)
