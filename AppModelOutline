@@ -1,0 +1,92 @@
+Basic Model Objects
+=======================
+
+User
+	Name (Display name for fun so you have a nickname in the app)
+	Photo (Optional)
+	(We don't have real authentication so no need for id, just allow users to have a nickname for fun in the app)
+
+Sound Sample
+	Name (Display name of the sound sample)
+	IconDrawbleName (Drawble name to show in the sample view)
+	Path (Path to the sound file)
+	Duration (For easy displaying of the number of measures)
+	MyPath (Path of the corresponding json file for this sound sample definition)
+
+Song
+	Title (Display name of the song)
+	[User Name] (Array of strings)
+	[Sound Sample] (Array of sound sample objects)
+
+	[Sample Usage] (Array of sample usages)
+
+	SampleUsage
+		Sound Sample Index (Corresponds to sound sample index in the song's sound sample array)
+		Start time (Timestamp of some sort, seconds?)
+		End time (Timestamp of some sort, seconds?)
+
+Storage Methods
+=======================
+
+UserDefaults
+	Store current User object (If possible as a parcelable or serializeable)
+
+Filesystem
+	Samples/<Genre Folder Name>/JSON describing sound sample
+		And also store the sound file
+
+	Songs/JSON with song data
+
+
+
+File Formats
+=======================
+
+Sample JSON Schema:
+	RockBeat7.sample
+
+	{
+		"title" : "Rock Beat 7",
+		"iconDrawable" : "rockIcon",
+		"duration" : 3,
+		"path" : "Samples/Rock/RockBeat7.ogg"
+	}
+
+
+Song JSON Schema:
+	Our1337Song.song
+
+	{
+		"title" : "Our 1337 Song",
+
+		"AuthorNames" : [
+			"Chenran",
+			"Ilya",
+			"Santiago"
+		],
+
+		"SoundSamplePaths" : [
+			"Samples/Rock/RockBeat7.json",
+			"Samples/Rock/RockBeat8.json",
+			"Samples/Rock/RockBeat7.json",			//Duplicates are allowed so you can have the same sample queued up
+			"Samples/Rock/EDBBeat0.json"
+		],
+
+		"SoundSampleTimings" : [
+			{
+				"sampleIndex" : 0,
+				"startTime" : 1337,
+				"endTime" : 1338
+			},
+			{
+				"sampleIndex" : 1,
+				"startTime" : 1337,
+				"endTime" : 1340
+			},
+			{
+				"sampleIndex" : 0,
+				"startTime" : 1360,
+				"endTime" : 1390
+			}
+		]
+	}
