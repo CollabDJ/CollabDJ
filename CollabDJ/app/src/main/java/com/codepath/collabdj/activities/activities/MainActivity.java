@@ -1,4 +1,4 @@
-package com.codepath.collabdj.activities;
+package com.codepath.collabdj.activities.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

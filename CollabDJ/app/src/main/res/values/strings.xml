@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">CollabDJ</string>
+
+    <!-- Strings for MainActivity -->
+    <string name="new_song">New Song</string>
+    <string name="new_song_description">Tap to start a new song</string>
+
+    <string name="open_song">Open Song</string>
+    <string name="open_song_desciption">Tap to open a song</string>
+
+    <string name="join_session">Join Session</string>
+    <string name="join_session_description">Tap to join a session</string>
+
+    <string name="shared_songs">Shared Songs</string>
+    <string name="shared_songs_description">Tap to enter shared songs</string>
 </resources>
