@@ -9,14 +9,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.activities.MainActivity">
+        <activity android:name="com.codepath.collabdj.activities.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.activities.CreateSongActivity"></activity>
+        <activity android:name="com.codepath.collabdj.activities.activities.CreateSongActivity"
+                   android:parentActivityName="com.codepath.collabdj.activities.activities.MainActivity">
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.codepath.collabdj.activities.activities.MainActivity"/>
+        </activity>
     </application>
 
 </manifest>
