@@ -8,6 +8,13 @@ import com.codepath.collabdj.sound.SamplePlayer;
 
 public class MainActivity extends AppCompatActivity {
 
+    //Move these constants later
+    public static float BEATS_PER_MINUTE = 120;
+
+    public static float BEATS_PER_MEASURE = 4;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -15,8 +22,8 @@ public class MainActivity extends AppCompatActivity {
 
         //TODO: take this out, for testing only
         SamplePlayer samplePlayer = new SamplePlayer(64);
-        SamplePlayer.SampleHandle handle = samplePlayer.newSample(this, R.raw.drum_8_blastcap);
+        SamplePlayer.SampleHandle handle = samplePlayer.newSample(this, R.raw.drum_8_blastcap, 16000);
 
-        samplePlayer.queueSample(handle, 0, 100);
+        handle.queueSample(200, -1);
     }
 }
