@@ -5,12 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.collabdj.R;
 import com.codepath.collabdj.activities.models.SoundSample;
+import com.codepath.collabdj.activities.utils.PlayPauseButton;
 
 import java.util.List;
 
@@ -68,7 +68,7 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<SoundSamplesAdapte
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView tvTitle;
-        public ImageButton ibPlay;
+        public PlayPauseButton ibPlayPause;
         public ImageView ivStatus;
 
         // Constructor that accepts the entire item row
@@ -77,13 +77,25 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<SoundSamplesAdapte
             super(itemView);
 
             tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
-            ibPlay = (ImageButton) itemView.findViewById(R.id.ibPlay);
+            ibPlayPause = (PlayPauseButton) itemView.findViewById(R.id.ibPlayPause);
             ivStatus = (ImageView) itemView.findViewById(R.id.ivStatus);
+
+            // Set listener on the `play/pause` button.
+            ibPlayPause.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Toggle the button image.
+                    ibPlayPause.toggleIsPlaying();
+                    int position = getAdapterPosition();
+                    mSamples.get(position).toggleIsPlaying();
+                }
+            });
         }
 
         // Sets the sound sample information into their respective views.
         public void bind(SoundSample soundSample) {
             tvTitle.setText(soundSample.getName());
+            ibPlayPause.setIsPlaying(soundSample.getIsPlaying());
         }
     }
 }
