@@ -61,6 +61,8 @@ public class SamplePlayer {
              *                           Pass in <= 0 if it should start playing immediately
              */
             protected PlayInstance(int loopAmount, long delayBeforePlaying) {
+                Log.v(TAG, "PlayInstance initialized for sample " + sampleId + " with loopAmount " + loopAmount + " and delay " + delayBeforePlaying  + " and period " + duration);
+
                 //set loop amount to + 1 since tryBeginPlaying actually needs the value +1, but < 0 means loop infinitely
                 if (loopAmount >= 0) {
                     loopAmount += 1;
@@ -91,6 +93,8 @@ public class SamplePlayer {
              * the sample again or for setting up the sample for being stopped.
              */
             protected void tryBeginPlaying() {
+                Log.v(TAG, "PlayInstance tryBeginPlaying() for sample " + sampleId + " has " + loopAmount + " loops left. (-1 means infinite)");
+
                 //no more loops to play
                 if (loopAmount == 0) {
                     stop();
@@ -113,6 +117,8 @@ public class SamplePlayer {
              * Removes this from the SampleHandle's list of queued samples.
              */
             protected void stop() {
+                Log.v(TAG, "PlayInstance stop() for sample " + sampleId);
+
                 sampleTask.cancel();
 
                 shouldBePlaying = false;
@@ -166,6 +172,8 @@ public class SamplePlayer {
          *                   or -1 to loop infinitely until queueStop() is called.
          */
         public void queueSample(long timestamp, int loopAmount) {
+            Log.v(TAG, "SampleHandle queueSample() sampleId " + sampleId + " with timestamp " + timestamp + " and loop amount " + loopAmount);
+
             playInstances.add(new PlayInstance(loopAmount, timestamp - getCurrentTimestamp()));
         }
 
@@ -176,6 +184,8 @@ public class SamplePlayer {
          * it wipes all queued play instances.
          */
         public void stop() {
+            Log.v(TAG, "SampleHandle stop() sampleId " + sampleId);
+
             //Create a copy since playInstance.stop() also handles removing itself from the playInstances set
             //Can't iterate and remove at the same time
             //It's expected that this should usually have only 1 item or so in it anyway so creating a copy isn't a big deal
@@ -187,16 +197,26 @@ public class SamplePlayer {
         }
 
         protected void playOnce() {
+            Log.v(TAG, "SampleHandle playOnce() sampleId " + sampleId);
+
             if (isLoaded) {
-                soundPool.play(sampleId, 1.0f, 1.0f, 0, 1, 1.0f);
+                Log.v(TAG, "SampleHandle IS loaded and really playing sampleId " + sampleId);
+                soundPool.play(sampleId, 1.0f, 1.0f, 0, 0, 1.0f);
+            }
+            else {
+                Log.v(TAG, "SampleHandle NOT loaded yet sampleId " + sampleId);
             }
         }
 
         protected void onSampleLoaded() {
+            Log.v(TAG, "SampleHandle onSampleLoaded() sampleId " + sampleId);
+
             isLoaded = true;
 
             for(PlayInstance playInstance : playInstances) {
                 if(playInstance.shouldBePlaying) {
+                    Log.v(TAG, "SampleHandle onSampleLoaded() and should be playing sampleId " + sampleId);
+
                     //if there was a way to play the sample at a specific point in time instead of from the start, do that
                     //In the future, SoundPool can be replaced with OpenAL or OpenSL for greater control
                     //I expect most sounds to load almost instantly so it should be fine
