@@ -52,7 +52,10 @@ public class SamplePlayer {
             protected TimerTask sampleTask;
 
             /**
-             * Creates a new play instance
+             * Creates a new play instance.
+             * You should immediately call startSchedule afterwards.
+             * Can't do it in the constructor itself.
+             *
              * @param loopAmount
              * @param delayBeforePlaying Duration in milliseconds to delay before actually playing the sample
              *                           Pass in <= 0 if it should start playing immediately
@@ -163,11 +166,7 @@ public class SamplePlayer {
          *                   or -1 to loop infinitely until queueStop() is called.
          */
         public void queueSample(long timestamp, int loopAmount) {
-            long now = getCurrentTimestamp();
-
-            long delay = timestamp - now;
-
-            playInstances.add(new PlayInstance(loopAmount, delay));
+            playInstances.add(new PlayInstance(loopAmount, timestamp - getCurrentTimestamp()));
         }
 
         /**
@@ -239,6 +238,8 @@ public class SamplePlayer {
                 }
             }
         });
+
+        timer = new Timer();
 
         sampleHandles = new HashMap<>();
         loadedSounds = new HashMap<>();

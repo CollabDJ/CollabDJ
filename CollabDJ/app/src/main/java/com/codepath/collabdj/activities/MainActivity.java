@@ -19,11 +19,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
 
         //TODO: take this out, for testing only
         SamplePlayer samplePlayer = new SamplePlayer(64);
         SamplePlayer.SampleHandle handle = samplePlayer.newSample(this, R.raw.drum_8_blastcap, 16000);
 
-        handle.queueSample(200, -1);
+        handle.queueSample(SamplePlayer.getCurrentTimestamp() + 10000, -1);
     }
 }
