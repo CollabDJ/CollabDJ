@@ -93,7 +93,7 @@ public class SamplePlayer {
              * the sample again or for setting up the sample for being stopped.
              */
             protected void tryBeginPlaying() {
-                Log.v(TAG, "PlayInstance tryBeginPlaying() for sample " + sampleId + " has " + loopAmount + " loops left. (-1 means infinite)");
+                Log.v(TAG, "PlayInstance tryBeginPlaying() for sample " + sampleId + " has " + loopAmount + " loops left. (-1 means infinite) Timestamp " + getCurrentTimestamp());
 
                 //no more loops to play
                 if (loopAmount == 0) {
