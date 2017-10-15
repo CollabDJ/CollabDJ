@@ -1,18 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.codepath.collabdj.activities.MainActivity">
+    tools:context="com.codepath.collabdj.activities.activities.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <!-- An invisible view aligned to the horizontal center of the parent. Allows other
+    views to be arranged on either side -->
+    <View
+        android:id="@+id/centerShimHorizontal"
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:visibility="invisible"
+        android:layout_centerHorizontal="true"/>
 
-</android.support.constraint.ConstraintLayout>
+    <!-- An invisible view aligned to the vertical center of the parent. Allows other
+    views to be arranged on either side -->
+    <View
+        android:id="@+id/centerShimVertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        android:layout_centerVertical="true"/>
+
+    <RelativeLayout
+        android:id="@+id/rlNewSong"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="40dp"
+        android:layout_toLeftOf="@id/centerShimHorizontal"
+        android:layout_toStartOf="@id/centerShimHorizontal"
+        android:layout_above="@id/centerShimVertical">
+
+
+        <ImageView
+            android:id="@+id/ivNewSong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_above="@+id/tvNewSong"
+            android:contentDescription="@string/new_song_description"
+            app:srcCompat="@drawable/placeholder_music" />
+
+        <TextView
+            android:id="@+id/tvNewSong"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="@string/new_song"/>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlOpenSong"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="40dp"
+        android:layout_toEndOf="@id/centerShimHorizontal"
+        android:layout_toRightOf="@id/centerShimHorizontal"
+        android:layout_above="@id/centerShimVertical">
+
+        <ImageView
+            android:id="@+id/ivOpenSong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_above="@+id/tvOpenSong"
+            android:contentDescription="@string/open_song_desciption"
+            app:srcCompat="@drawable/placeholder_music" />
+
+        <TextView
+            android:id="@+id/tvOpenSong"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="@string/open_song"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlJoinSession"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="40dp"
+        android:layout_toStartOf="@id/centerShimHorizontal"
+        android:layout_toLeftOf="@id/centerShimHorizontal"
+        android:layout_below="@id/centerShimVertical">
+
+        <ImageView
+            android:id="@+id/ivJoinSession"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_above="@+id/tvJoinSession"
+            android:contentDescription="@string/join_session_description"
+            app:srcCompat="@drawable/placeholder_music" />
+
+        <TextView
+            android:id="@+id/tvJoinSession"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="@string/join_session"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlSharedSongs"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="40dp"
+        android:layout_toEndOf="@id/centerShimHorizontal"
+        android:layout_toRightOf="@id/centerShimHorizontal"
+        android:layout_below="@id/centerShimVertical">
+
+        <ImageView
+            android:id="@+id/ivSharedSongs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_above="@+id/tvSharedSongs"
+            android:contentDescription="@string/shared_songs_description"
+            app:srcCompat="@drawable/placeholder_music" />
+
+        <TextView
+            android:id="@+id/tvSharedSongs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="@string/shared_songs"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>
