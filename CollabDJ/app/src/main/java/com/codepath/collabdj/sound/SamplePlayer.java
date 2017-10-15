@@ -12,8 +12,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by ilyaseletsky on 10/13/17.
@@ -49,7 +51,7 @@ public class SamplePlayer {
              * the end of a current loop iteration of the sample.
              * This should simply call tryBeginPlaying()
              */
-            protected TimerTask sampleTask;
+            protected ScheduledFuture<?> sampleTask;
 
             /**
              * Creates a new play instance.
@@ -77,14 +79,13 @@ public class SamplePlayer {
                 }
 
                 //set up the task
-                sampleTask = new TimerTask() {
-                    @Override
-                    public void run() {
-                        tryBeginPlaying();
-                    }
-                };
-
-                timer.schedule(sampleTask, delayBeforePlaying, duration);
+                sampleTask = timedTaskRunner.scheduleAtFixedRate(new Runnable() {
+                                                                     @Override
+                                                                     public void run() {
+                                                                         tryBeginPlaying();
+                                                                     }
+                                                                 },
+                        delayBeforePlaying, duration, TimeUnit.MILLISECONDS);
             }
 
             /**
@@ -119,7 +120,7 @@ public class SamplePlayer {
             protected void stop() {
                 Log.v(TAG, "PlayInstance stop() for sample " + sampleId);
 
-                sampleTask.cancel();
+                sampleTask.cancel(true);
 
                 shouldBePlaying = false;
                 loopAmount = 0;
@@ -228,7 +229,7 @@ public class SamplePlayer {
 
     SoundPool soundPool;
 
-    Timer timer;
+    ScheduledExecutorService timedTaskRunner;
 
     /**
      * Lookup of sampleId to SampleHandles
@@ -259,7 +260,7 @@ public class SamplePlayer {
             }
         });
 
-        timer = new Timer();
+        timedTaskRunner = Executors.newScheduledThreadPool(10);
 
         sampleHandles = new HashMap<>();
         loadedSounds = new HashMap<>();
