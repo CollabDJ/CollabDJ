@@ -227,6 +227,7 @@ public class SamplePlayer {
         }
     }
 
+    //TODO: Next week replace with OpenSL, SoundPool truncates sounds that are too long
     SoundPool soundPool;
 
     ScheduledExecutorService timedTaskRunner;

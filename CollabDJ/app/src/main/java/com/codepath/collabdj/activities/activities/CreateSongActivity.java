@@ -59,7 +59,7 @@ public class CreateSongActivity extends AppCompatActivity {
     private List<SoundSample> getSoundSamples() {
         ArrayList<SoundSample> testSoundSamples = new ArrayList<>();
         for (int i = 0; i < 50; i++) {
-            SoundSample soundSample = new SoundSample("Sample " + i, 0, "", 0.0, "");
+            SoundSample soundSample = new SoundSample("Sample " + i, 0, "", 0, "");
             testSoundSamples.add(soundSample);
         }
 

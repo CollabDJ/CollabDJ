@@ -11,17 +11,17 @@ public class SampleUsage {
 
     int soundSampleIndex;
     long startTime;
-    long endTime;
+    int loopTime;
 
     // Empty constructor needed by the Parcel library.
     public SampleUsage() {
 
     }
 
-    public SampleUsage(int soundSampleIndex, long startTime, long endTime) {
+    public SampleUsage(int soundSampleIndex, long startTime, int loopTime) {
         this.soundSampleIndex = soundSampleIndex;
         this.startTime = startTime;
-        this.endTime = endTime;
+        this.loopTime = loopTime;
     }
 
     public int getSoundSampleIndex() {
@@ -32,7 +32,7 @@ public class SampleUsage {
         return this.startTime;
     }
 
-    public long getEndTime() {
-        return this.endTime;
+    public long getLoopTime() {
+        return this.loopTime;
     }
 }
