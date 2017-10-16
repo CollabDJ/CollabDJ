@@ -5,7 +5,7 @@ import android.content.Context;
 import com.codepath.collabdj.sound.SamplePlayer;
 
 import static com.codepath.collabdj.activities.models.SoundSampleInstance.PlayState.LOOPING;
-import static com.codepath.collabdj.activities.models.SoundSampleInstance.PlayState.NOT_PLAYING;
+import static com.codepath.collabdj.activities.models.SoundSampleInstance.PlayState.STOPPED;
 
 /**
  * Created by ilyaseletsky on 10/15/17.
@@ -15,9 +15,10 @@ public class SoundSampleInstance {
     SoundSample soundSample;
 
     public enum PlayState {
-        NOT_PLAYING,
-        QUEUED,
-        LOOPING
+        STOP_QUEUED,
+        STOPPED,
+        LOOP_QUEUED,
+        LOOPING,
     }
 
     PlayState playState;
@@ -25,7 +26,7 @@ public class SoundSampleInstance {
 
     public SoundSampleInstance(SoundSample soundSample, SamplePlayer samplePlayer, Context context) {
         this.soundSample = soundSample;
-        playState = NOT_PLAYING;
+        playState = STOPPED;
 
         if (soundSample.getPath() != null) {
             sampleHandle = samplePlayer.newSample(soundSample.getPath(), soundSample.getDuration());
@@ -44,12 +45,12 @@ public class SoundSampleInstance {
     }
 
     public void queueSample(long timestamp, int loopAmount) {
-        playState = LOOPING;
+        playState = LOOPING;        //TODO: this should actually be set to LOOP_QUEUED and eventually the sample state will sync correctly
         sampleHandle.queueSample(timestamp, loopAmount);
     }
 
     public void stop() {
-        playState = NOT_PLAYING;
+        playState = STOPPED;        //TODO: this should actually be set to STOP_QUEUED and eventually the sample state will sync correctly
         sampleHandle.stop();
     }
 }

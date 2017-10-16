@@ -24,7 +24,8 @@ public class PlayPauseButton extends android.support.v7.widget.AppCompatImageBut
 
     public void setPlayState(SoundSampleInstance.PlayState playState) {
         switch(playState) {
-            case NOT_PLAYING:
+            case STOP_QUEUED:
+            case STOPPED:
                 setImageResource(android.R.drawable.ic_media_play);
                 break;
             default:
