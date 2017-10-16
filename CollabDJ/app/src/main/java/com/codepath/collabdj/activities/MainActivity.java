@@ -33,7 +33,15 @@ public class MainActivity extends AppCompatActivity {
 
         RelativeLayout rlOpenSong = (RelativeLayout) findViewById(R.id.rlOpenSong);
         RelativeLayout rlJoinSession = (RelativeLayout) findViewById(R.id.rlJoinSession);
-        RelativeLayout rlSharedSongs = (RelativeLayout) findViewById(R.id.rlSharedSongs);
 
+        RelativeLayout rlSharedSongs = (RelativeLayout) findViewById(R.id.rlSharedSongs);
+        rlSharedSongs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Launch SharedSongsActivity.
+                Intent i = new Intent(MainActivity.this, SharedSongsActivity.class);
+                startActivity(i);
+            }
+        });
     }
 }
