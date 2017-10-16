@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
  */
 
 public class SamplePlayer {
-    static String TAG = "SamplePlayer";
+    private static final String TAG = "SamplePlayer";
 
     /**
      * Pass these to Sample player to queue up a sample at some point in time.
@@ -98,7 +98,13 @@ public class SamplePlayer {
 
                 //no more loops to play
                 if (loopAmount == 0) {
-                    stop();
+                    Log.v(TAG, "PlayInstance no more loops for sample " + sampleId + " so killing the PlayInstance.");
+
+                    sampleTask.cancel(true);
+                    shouldBePlaying = false;
+
+                    playInstances.remove(this);
+
                     return;
                 }
 
@@ -120,12 +126,7 @@ public class SamplePlayer {
             protected void stop() {
                 Log.v(TAG, "PlayInstance stop() for sample " + sampleId);
 
-                sampleTask.cancel(true);
-
-                shouldBePlaying = false;
                 loopAmount = 0;
-
-                playInstances.remove(this);
             }
 
             /**
@@ -181,7 +182,7 @@ public class SamplePlayer {
          *                   or -1 to loop infinitely until queueStop() is called.
          */
         public void queueSample(long timestamp, int loopAmount) {
-            Log.v(TAG, "SampleHandle queueSample() sampleId " + sampleId + " with timestamp " + timestamp + " and loop amount " + loopAmount);
+            Log.v(TAG, "SampleHandle queueSample() sampleId " + sampleId + " with timestamp " + timestamp + " and loop amount " + loopAmount + " will play in " + (timestamp - getCurrentTimestamp()) + " ms");
 
             playInstances.add(new PlayInstance(loopAmount, timestamp - getCurrentTimestamp()));
         }
@@ -229,7 +230,9 @@ public class SamplePlayer {
                     //if there was a way to play the sample at a specific point in time instead of from the start, do that
                     //In the future, SoundPool can be replaced with OpenAL or OpenSL for greater control
                     //I expect most sounds to load almost instantly so it should be fine
-                    playOnce();
+
+                    //Actually don't play the sample, it seems to take forever to load.  Make it so samples can't be played while loading.
+                    //playOnce();
                 }
             }
         }

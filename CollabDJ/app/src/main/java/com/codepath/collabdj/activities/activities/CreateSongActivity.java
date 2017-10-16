@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.codepath.collabdj.R;
 import com.codepath.collabdj.activities.adapters.SoundSamplesAdapter;
@@ -15,16 +16,23 @@ import com.codepath.collabdj.sound.SamplePlayer;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.codepath.collabdj.sound.SamplePlayer.getCurrentTimestamp;
+
 public class CreateSongActivity extends AppCompatActivity implements SoundSamplesAdapter.SoundSamplePlayListener {
+    public static int BEATS_PER_MINUTE = 120;
+    public static int BEATS_PER_MEASURE = 4;
+    public static long MILLISECONDS_PER_MEASURE = 2 * 1000;
 
     // Tag for logging.
-    private final String TAG = CreateSongActivity.class.getName();
+    private static final String TAG = "CreateSongActivity";
 
     RecyclerView rvSamples;
     List<SoundSampleInstance> mSamples;
     SoundSamplesAdapter mAdapter;
 
     SamplePlayer samplePlayer;
+
+    long getStartTimestamp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,21 +57,59 @@ public class CreateSongActivity extends AppCompatActivity implements SoundSample
         // Set up the sound output
         samplePlayer = new SamplePlayer(64);
 
-        // Add the fake sound samples.
-        mSamples.addAll(getSoundSamples());
+        setInitialSoundSamples();
         mAdapter.notifyDataSetChanged();
 
+        //TODO: make it set this when the first sample is played to mark the start of the song
+        getStartTimestamp = getCurrentTimestamp();
     }
 
     // Creates 50 fake sound samples to test the grid layout.
-    private List<SoundSampleInstance> getSoundSamples() {
-        ArrayList<SoundSampleInstance> testSoundSamples = new ArrayList<>();
-        for (int i = 0; i < 50; i++) {
-            SoundSample soundSample = new SoundSample("Sample " + i, 0, "", 0, 0, "");
-            testSoundSamples.add(new SoundSampleInstance(soundSample));
-        }
+    private void setInitialSoundSamples() {
+        mSamples.add(new SoundSampleInstance(new SoundSample(
+                "BlastCap",
+                0,
+                null,
+                R.raw.drum_4_blastcap_start,
+                8000,
+                null),
+                samplePlayer, this));
 
-        return testSoundSamples;
+        mSamples.add(new SoundSampleInstance(new SoundSample(
+                "BlastCap 0",
+                0,
+                null,
+                R.raw.drum_4_blastcap_start_0,
+                8000,
+                null),
+                samplePlayer, this));
+
+        mSamples.add(new SoundSampleInstance(new SoundSample(
+                "BlastCap 1",
+                0,
+                null,
+                R.raw.drum_4_blastcap_start_1,
+                8000,
+                null),
+                samplePlayer, this));
+
+        mSamples.add(new SoundSampleInstance(new SoundSample(
+                "BlastCap",
+                0,
+                null,
+                R.raw.drum_4_blastcap_start,
+                8000,
+                null),
+                samplePlayer, this));
+
+        mSamples.add(new SoundSampleInstance(new SoundSample(
+                "BlastCap",
+                0,
+                null,
+                R.raw.drum_4_blastcap_start,
+                8000,
+                null),
+                samplePlayer, this));
     }
 
     @Override
@@ -83,10 +129,34 @@ public class CreateSongActivity extends AppCompatActivity implements SoundSample
 //        handle2.queueSample(SamplePlayer.getCurrentTimestamp() + 150000, 1);
     }
 
+    public long getCurrentMeasure() {
+        long res = (SamplePlayer.getCurrentTimestamp() - getStartTimestamp) / MILLISECONDS_PER_MEASURE;
+
+        Log.v(TAG, "getCurrentMeasure() " + res);
+
+        return res;
+    }
+
+    public long getCurrentMeasureTimestamp() {
+        long res = getStartTimestamp + (getCurrentMeasure() * MILLISECONDS_PER_MEASURE);
+
+        Log.v(TAG, "getCurrentMeasureTimestamp() " + res);
+
+        return res;
+    }
+
+    public long getNextMeasureTimestamp() {
+        long res = getCurrentMeasureTimestamp() + MILLISECONDS_PER_MEASURE;
+
+        Log.v(TAG, "getNextMeasureTimestamp() " + res);
+
+        return res;
+    }
+
     @Override
     public void playButtonPressed(SoundSampleInstance soundSampleInstance) {
         if (soundSampleInstance.getPlayState() == SoundSampleInstance.PlayState.NOT_PLAYING) {
-            soundSampleInstance.queueSample(SamplePlayer.getCurrentTimestamp() + 1000, -1);
+            soundSampleInstance.queueSample(getNextMeasureTimestamp(), -1);
         }
         else {
             soundSampleInstance.stop();

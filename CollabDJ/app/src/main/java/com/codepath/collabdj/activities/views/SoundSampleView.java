@@ -3,7 +3,6 @@ package com.codepath.collabdj.activities.views;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.RelativeLayout;
 
 import com.codepath.collabdj.activities.adapters.SoundSamplesAdapter;
@@ -30,7 +29,6 @@ public class SoundSampleView extends RelativeLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         //Update the sound sample state piechart
-        Log.d("SoundSampleView", "onDraw()");
 
         //TODO This will eventually be where the piechart gets updated every frame based on sound position
         viewHolder.ibPlayPause.setPlayState(viewHolder.getSoundSampleInstance().getPlayState());

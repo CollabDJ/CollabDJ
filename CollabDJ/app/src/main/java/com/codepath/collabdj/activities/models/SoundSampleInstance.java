@@ -1,5 +1,9 @@
 package com.codepath.collabdj.activities.models;
 
+import android.content.Context;
+
+import com.codepath.collabdj.sound.SamplePlayer;
+
 import static com.codepath.collabdj.activities.models.SoundSampleInstance.PlayState.LOOPING;
 import static com.codepath.collabdj.activities.models.SoundSampleInstance.PlayState.NOT_PLAYING;
 
@@ -17,10 +21,18 @@ public class SoundSampleInstance {
     }
 
     PlayState playState;
+    SamplePlayer.SampleHandle sampleHandle;
 
-    public SoundSampleInstance(SoundSample soundSample) {
+    public SoundSampleInstance(SoundSample soundSample, SamplePlayer samplePlayer, Context context) {
         this.soundSample = soundSample;
         playState = NOT_PLAYING;
+
+        if (soundSample.getPath() != null) {
+            sampleHandle = samplePlayer.newSample(soundSample.getPath(), soundSample.getDuration());
+        }
+        else {
+            sampleHandle = samplePlayer.newSample(context, soundSample.getResourceId(), soundSample.getDuration());
+        }
     }
 
     public SoundSample getSoundSample() {
@@ -33,9 +45,11 @@ public class SoundSampleInstance {
 
     public void queueSample(long timestamp, int loopAmount) {
         playState = LOOPING;
+        sampleHandle.queueSample(timestamp, loopAmount);
     }
 
     public void stop() {
         playState = NOT_PLAYING;
+        sampleHandle.stop();
     }
 }
