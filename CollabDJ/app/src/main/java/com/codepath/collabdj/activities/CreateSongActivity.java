@@ -110,6 +110,11 @@ public class CreateSongActivity extends AppCompatActivity implements SoundSample
                 8000,
                 null),
                 samplePlayer, this));
+
+        mSamples.add(new SoundSampleInstance(null, samplePlayer, this));
+        mSamples.add(new SoundSampleInstance(null, samplePlayer, this));
+        mSamples.add(new SoundSampleInstance(null, samplePlayer, this));
+        mSamples.add(new SoundSampleInstance(null, samplePlayer, this));
     }
 
     protected void createEmptyRow() {
