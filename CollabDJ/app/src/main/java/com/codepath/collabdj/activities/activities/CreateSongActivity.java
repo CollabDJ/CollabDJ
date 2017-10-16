@@ -64,8 +64,8 @@ public class CreateSongActivity extends AppCompatActivity implements SoundSample
         getStartTimestamp = getCurrentTimestamp();
     }
 
-    // Creates 50 fake sound samples to test the grid layout.
     private void setInitialSoundSamples() {
+        //For now hardcode this
         mSamples.add(new SoundSampleInstance(new SoundSample(
                 "BlastCap",
                 0,
@@ -112,6 +112,10 @@ public class CreateSongActivity extends AppCompatActivity implements SoundSample
                 samplePlayer, this));
     }
 
+    protected void createEmptyRow() {
+        //TODO: call this to set up an empty row of cells that will have the add button
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -155,7 +159,8 @@ public class CreateSongActivity extends AppCompatActivity implements SoundSample
 
     @Override
     public void playButtonPressed(SoundSampleInstance soundSampleInstance) {
-        if (soundSampleInstance.getPlayState() == SoundSampleInstance.PlayState.NOT_PLAYING) {
+        //TODO eventually if a stop is queued, make it possible to unstop a loop by resetting its loop count back from 0
+        if (soundSampleInstance.getPlayState() == SoundSampleInstance.PlayState.STOPPED) {
             soundSampleInstance.queueSample(getNextMeasureTimestamp(), -1);
         }
         else {
