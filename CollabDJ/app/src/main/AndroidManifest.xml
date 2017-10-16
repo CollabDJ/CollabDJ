@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.codepath.collabdj">
 
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,20 +12,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.codepath.collabdj.activities.activities.MainActivity">
+        <activity android:name=".activities.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.codepath.collabdj.activities.activities.CreateSongActivity"
-                   android:parentActivityName="com.codepath.collabdj.activities.activities.MainActivity">
+        <activity
+            android:name=".activities.activities.CreateSongActivity"
+            android:parentActivityName=".activities.activities.MainActivity">
+
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.codepath.collabdj.activities.activities.MainActivity"/>
+                android:value="com.codepath.collabdj.activities.activities.MainActivity" />
         </activity>
+        <activity android:name=".activities.activities.JoinSessionActivity"></activity>
+
+        <meta-data android:name="com.google.android.gms.vision.DEPEDENCIES" android:value="barcode"/>
     </application>
 
 </manifest>

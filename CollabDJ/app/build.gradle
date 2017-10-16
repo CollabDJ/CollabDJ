@@ -10,6 +10,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -27,9 +28,10 @@ dependencies {
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'org.parceler:parceler-api:1.1.6'
+    compile 'com.android.support:recyclerview-v7:26.+'
+    compile 'com.google.android.gms:play-services:11.4.2'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'org.parceler:parceler:1.1.6'
-    compile 'com.android.support:recyclerview-v7:26.+'
 }
 
 apply plugin: 'com.google.gms.google-services'
