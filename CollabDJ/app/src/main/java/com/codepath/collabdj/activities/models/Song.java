@@ -12,6 +12,9 @@ import java.util.List;
 @Parcel
 public class Song {
 
+    public static float BEATS_PER_MINUTE = 120;
+    public static float BEATS_PER_MEASURE = 4;
+
     String title;
     List<String> userNames;
     List<SoundSample> soundSampleList;

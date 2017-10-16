@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.collabdj.R;
-import com.codepath.collabdj.activities.models.SoundSample;
+import com.codepath.collabdj.activities.models.SoundSampleInstance;
 import com.codepath.collabdj.activities.utils.PlayPauseButton;
 
 import java.util.List;
@@ -23,10 +23,10 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<SoundSamplesAdapte
     // Tag for logging.
     private final String TAG = SoundSamplesAdapter.class.getName();
 
-    private List<SoundSample> mSamples;
+    private List<SoundSampleInstance> mSamples;
     private Context mContext;
 
-    public SoundSamplesAdapter(Context context, List<SoundSample> samples) {
+    public SoundSamplesAdapter(Context context, List<SoundSampleInstance> samples) {
         this.mContext = context;
         this.mSamples = samples;
     }
@@ -53,7 +53,7 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<SoundSamplesAdapte
     @Override
     public void onBindViewHolder(SoundSamplesAdapter.ViewHolder viewHolder, int position) {
         // Get the data model based on position.
-        SoundSample soundSample = mSamples.get(position);
+        SoundSampleInstance soundSample = mSamples.get(position);
         // Bind the data to the viewHolder.
         viewHolder.bind(soundSample);
     }
@@ -93,8 +93,8 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<SoundSamplesAdapte
         }
 
         // Sets the sound sample information into their respective views.
-        public void bind(SoundSample soundSample) {
-            tvTitle.setText(soundSample.getName());
+        public void bind(SoundSampleInstance soundSample) {
+            tvTitle.setText(soundSample.getSoundSample().getName());
             ibPlayPause.setIsPlaying(soundSample.getIsPlaying());
         }
     }

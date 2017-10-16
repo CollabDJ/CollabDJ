@@ -14,7 +14,6 @@ public class SoundSample {
     String path;
     long duration;
     String pathJsonDefinition;
-    boolean isPlaying;
 
     // Empty constructor needed by the Parcel library.
     public SoundSample() {
@@ -28,7 +27,6 @@ public class SoundSample {
         this.path = path;
         this.duration = duration;
         this.pathJsonDefinition = pathJsonDefinition;
-        this.isPlaying = false;
     }
 
     public String getName() {
@@ -48,15 +46,6 @@ public class SoundSample {
     }
 
     public String getPathJsonDefinition() {
-        return  this.pathJsonDefinition;
+        return this.pathJsonDefinition;
     }
-
-    public boolean getIsPlaying() {
-        return this.isPlaying;
-    }
-
-    public void toggleIsPlaying() {
-        this.isPlaying = !this.isPlaying;
-    }
-
 }
