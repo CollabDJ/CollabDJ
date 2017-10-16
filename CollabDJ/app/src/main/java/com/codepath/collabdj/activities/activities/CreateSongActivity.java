@@ -15,7 +15,7 @@ import com.codepath.collabdj.sound.SamplePlayer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CreateSongActivity extends AppCompatActivity {
+public class CreateSongActivity extends AppCompatActivity implements SoundSamplesAdapter.SoundSamplePlayListener {
 
     // Tag for logging.
     private final String TAG = CreateSongActivity.class.getName();
@@ -36,7 +36,7 @@ public class CreateSongActivity extends AppCompatActivity {
 
         rvSamples = (RecyclerView) findViewById(R.id.rvSamples);
         mSamples = new ArrayList<>();
-        mAdapter = new SoundSamplesAdapter(this, mSamples);
+        mAdapter = new SoundSamplesAdapter(this, mSamples, this);
         rvSamples.setAdapter(mAdapter);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
@@ -59,7 +59,7 @@ public class CreateSongActivity extends AppCompatActivity {
     private List<SoundSampleInstance> getSoundSamples() {
         ArrayList<SoundSampleInstance> testSoundSamples = new ArrayList<>();
         for (int i = 0; i < 50; i++) {
-            SoundSample soundSample = new SoundSample("Sample " + i, 0, "", 0, "");
+            SoundSample soundSample = new SoundSample("Sample " + i, 0, "", 0, 0, "");
             testSoundSamples.add(new SoundSampleInstance(soundSample));
         }
 
@@ -81,5 +81,15 @@ public class CreateSongActivity extends AppCompatActivity {
 //        handle0.queueSample(SamplePlayer.getCurrentTimestamp() + 32000, 1);
 //        handle1.queueSample(SamplePlayer.getCurrentTimestamp() + 96000, 1);
 //        handle2.queueSample(SamplePlayer.getCurrentTimestamp() + 150000, 1);
+    }
+
+    @Override
+    public void playButtonPressed(SoundSampleInstance soundSampleInstance) {
+        if (soundSampleInstance.getPlayState() == SoundSampleInstance.PlayState.NOT_PLAYING) {
+            soundSampleInstance.queueSample(SamplePlayer.getCurrentTimestamp() + 1000, -1);
+        }
+        else {
+            soundSampleInstance.stop();
+        }
     }
 }

@@ -127,6 +127,14 @@ public class SamplePlayer {
 
                 playInstances.remove(this);
             }
+
+            /**
+             * Returns the remaining delay of the timer.
+             * @return
+             */
+            protected long getRemainingDelay() {
+                return sampleTask.getDelay(TimeUnit.MILLISECONDS);
+            }
         }
 
         /**

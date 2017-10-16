@@ -1,5 +1,8 @@
 package com.codepath.collabdj.activities.models;
 
+import static com.codepath.collabdj.activities.models.SoundSampleInstance.PlayState.LOOPING;
+import static com.codepath.collabdj.activities.models.SoundSampleInstance.PlayState.NOT_PLAYING;
+
 /**
  * Created by ilyaseletsky on 10/15/17.
  */
@@ -7,22 +10,32 @@ package com.codepath.collabdj.activities.models;
 public class SoundSampleInstance {
     SoundSample soundSample;
 
-    boolean isPlaying;      //TODO: It may be better to make this an enum later to represent the sound sample being queued up to play
+    public enum PlayState {
+        NOT_PLAYING,
+        QUEUED,
+        LOOPING
+    }
+
+    PlayState playState;
 
     public SoundSampleInstance(SoundSample soundSample) {
         this.soundSample = soundSample;
-        isPlaying = false;
+        playState = NOT_PLAYING;
     }
 
     public SoundSample getSoundSample() {
         return this.soundSample;
     }
 
-    public boolean getIsPlaying() {
-        return this.isPlaying;
+    public PlayState getPlayState() {
+        return this.playState;
     }
 
-    public void toggleIsPlaying() {
-        this.isPlaying = !this.isPlaying;
+    public void queueSample(long timestamp, int loopAmount) {
+        playState = LOOPING;
+    }
+
+    public void stop() {
+        playState = NOT_PLAYING;
     }
 }

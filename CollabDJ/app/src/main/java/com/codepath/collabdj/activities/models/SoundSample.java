@@ -12,6 +12,7 @@ public class SoundSample {
     String name;
     int iconDrawableId;
     String path;
+    int resourceId;
     long duration;
     String pathJsonDefinition;
 
@@ -20,11 +21,16 @@ public class SoundSample {
 
     }
 
-    public SoundSample(String name, int iconDrawableId, String path, long duration,
+    public SoundSample(String name,
+                       int iconDrawableId,
+                       String path,
+                       int resourceId,
+                       long duration,
                        String pathJsonDefinition) {
         this.name = name;
         this.iconDrawableId = iconDrawableId;
         this.path = path;
+        this.resourceId = resourceId;
         this.duration = duration;
         this.pathJsonDefinition = pathJsonDefinition;
     }
@@ -39,6 +45,10 @@ public class SoundSample {
 
     public String getPath() {
         return this.path;
+    }
+
+    public int getResourceId() {
+        return this.resourceId;
     }
 
     public long getDuration() {

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.codepath.collabdj.R;
 import com.codepath.collabdj.activities.models.SoundSampleInstance;
 import com.codepath.collabdj.activities.utils.PlayPauseButton;
+import com.codepath.collabdj.activities.views.SoundSampleView;
 
 import java.util.List;
 
@@ -20,15 +21,27 @@ import java.util.List;
 
 public class SoundSamplesAdapter extends RecyclerView.Adapter<SoundSamplesAdapter.ViewHolder> {
 
+    public interface SoundSamplePlayListener {
+        /**
+         * Notifies the listener that the play button on a SoundSampleInstance was pressed
+         * @param soundSampleInstance
+         */
+        void playButtonPressed(SoundSampleInstance soundSampleInstance);
+    }
+
     // Tag for logging.
     private final String TAG = SoundSamplesAdapter.class.getName();
 
     private List<SoundSampleInstance> mSamples;
     private Context mContext;
+    private SoundSamplePlayListener soundSamplePlayListener;
 
-    public SoundSamplesAdapter(Context context, List<SoundSampleInstance> samples) {
+    public SoundSamplesAdapter(Context context,
+                               List<SoundSampleInstance> samples,
+                               SoundSamplePlayListener soundSamplePlayListener) {
         this.mContext = context;
         this.mSamples = samples;
+        this.soundSamplePlayListener = soundSamplePlayListener;
     }
 
     private Context getContext() {
@@ -76,6 +89,8 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<SoundSamplesAdapte
         public ViewHolder(View itemView) {
             super(itemView);
 
+            ((SoundSampleView)itemView).viewHolder = this;
+
             tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
             ibPlayPause = (PlayPauseButton) itemView.findViewById(R.id.ibPlayPause);
             ivStatus = (ImageView) itemView.findViewById(R.id.ivStatus);
@@ -84,18 +99,20 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<SoundSamplesAdapte
             ibPlayPause.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // Toggle the button image.
-                    ibPlayPause.toggleIsPlaying();
-                    int position = getAdapterPosition();
-                    mSamples.get(position).toggleIsPlaying();
+                    if (soundSamplePlayListener != null) {
+                        soundSamplePlayListener.playButtonPressed(getSoundSampleInstance());
+                    }
                 }
             });
+        }
+
+        public SoundSampleInstance getSoundSampleInstance() {
+            return mSamples.get(getAdapterPosition());
         }
 
         // Sets the sound sample information into their respective views.
         public void bind(SoundSampleInstance soundSample) {
             tvTitle.setText(soundSample.getSoundSample().getName());
-            ibPlayPause.setIsPlaying(soundSample.getIsPlaying());
         }
     }
 }
