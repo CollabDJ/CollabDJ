@@ -64,7 +64,7 @@ public class CreateSongActivity extends AppCompatActivity implements SoundSample
         getStartTimestamp = getCurrentTimestamp();
     }
 
-    // Creates 50 fake sound samples to test the grid layout.
+    // Creates initial sound samples to test the grid layout.
     private void setInitialSoundSamples() {
         mSamples.add(new SoundSampleInstance(new SoundSample(
                 "BlastCap",
@@ -110,6 +110,12 @@ public class CreateSongActivity extends AppCompatActivity implements SoundSample
                 8000,
                 null),
                 samplePlayer, this));
+
+        mSamples.add(new SoundSampleInstance(null, samplePlayer, this));
+        mSamples.add(new SoundSampleInstance(null, samplePlayer, this));
+        mSamples.add(new SoundSampleInstance(null, samplePlayer, this));
+        mSamples.add(new SoundSampleInstance(null, samplePlayer, this));
+
     }
 
     @Override

@@ -27,11 +27,13 @@ public class SoundSampleInstance {
         this.soundSample = soundSample;
         playState = NOT_PLAYING;
 
-        if (soundSample.getPath() != null) {
-            sampleHandle = samplePlayer.newSample(soundSample.getPath(), soundSample.getDuration());
-        }
-        else {
-            sampleHandle = samplePlayer.newSample(context, soundSample.getResourceId(), soundSample.getDuration());
+        // Temporary checks to allow creation of dummy samples on recycler view. This checks should go!
+        if (soundSample != null && samplePlayer != null) {
+            if (soundSample.getPath() != null) {
+                sampleHandle = samplePlayer.newSample(soundSample.getPath(), soundSample.getDuration());
+            } else {
+                sampleHandle = samplePlayer.newSample(context, soundSample.getResourceId(), soundSample.getDuration());
+            }
         }
     }
 

@@ -12,7 +12,7 @@ import com.codepath.collabdj.activities.adapters.SoundSamplesAdapter;
  */
 
 public class SoundSampleView extends RelativeLayout {
-    public SoundSamplesAdapter.ViewHolder viewHolder;
+    public SoundSamplesAdapter.ViewHolderSample viewHolder;
 
     public SoundSampleView(Context context) {
         super(context);
