@@ -64,6 +64,7 @@ public class CreateSongActivity extends AppCompatActivity implements SoundSample
         getStartTimestamp = getCurrentTimestamp();
     }
 
+    // Creates initial sound samples to test the grid layout.
     private void setInitialSoundSamples() {
         //For now hardcode this
         mSamples.add(new SoundSampleInstance(new SoundSample(
@@ -110,6 +111,12 @@ public class CreateSongActivity extends AppCompatActivity implements SoundSample
                 8000,
                 null),
                 samplePlayer, this));
+
+        mSamples.add(new SoundSampleInstance(null, samplePlayer, this));
+        mSamples.add(new SoundSampleInstance(null, samplePlayer, this));
+        mSamples.add(new SoundSampleInstance(null, samplePlayer, this));
+        mSamples.add(new SoundSampleInstance(null, samplePlayer, this));
+
     }
 
     protected void createEmptyRow() {

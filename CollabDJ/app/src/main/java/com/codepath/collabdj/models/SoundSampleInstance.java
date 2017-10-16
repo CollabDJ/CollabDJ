@@ -28,11 +28,13 @@ public class SoundSampleInstance {
         this.soundSample = soundSample;
         playState = STOPPED;
 
-        if (soundSample.getPath() != null) {
-            sampleHandle = samplePlayer.newSample(soundSample.getPath(), soundSample.getDuration());
-        }
-        else {
-            sampleHandle = samplePlayer.newSample(context, soundSample.getResourceId(), soundSample.getDuration());
+        // This checks are needed for now, to make the heterogenous recyclerview work with a dummy sample. It will go away.
+        if (soundSample != null && samplePlayer != null) {
+            if (soundSample.getPath() != null) {
+                sampleHandle = samplePlayer.newSample(soundSample.getPath(), soundSample.getDuration());
+            } else {
+                sampleHandle = samplePlayer.newSample(context, soundSample.getResourceId(), soundSample.getDuration());
+            }
         }
     }
 
