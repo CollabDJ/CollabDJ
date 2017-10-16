@@ -19,7 +19,7 @@ public class CreateSongActivity extends AppCompatActivity {
     private final String TAG = CreateSongActivity.class.getName();
 
     RecyclerView rvSamples;
-    List<SoundSample> mSamples;
+    List<Object> mSamples;
     SoundSamplesAdapter mAdapter;
 
     @Override
@@ -49,11 +49,15 @@ public class CreateSongActivity extends AppCompatActivity {
     }
 
     // Creates 50 fake sound samples to test the grid layout.
-    private List<SoundSample> getSoundSamples() {
-        ArrayList<SoundSample> testSoundSamples = new ArrayList<>();
-        for (int i = 0; i < 50; i++) {
+    private List<Object> getSoundSamples() {
+        ArrayList<Object> testSoundSamples = new ArrayList<>();
+
+        for (int i = 0; i < 25; i++) {
             SoundSample soundSample = new SoundSample("Sample " + i, 0, "", 0.0, "");
             testSoundSamples.add(soundSample);
+        }
+        for (int i = 0; i < 25; i++) {
+            testSoundSamples.add("Empty");
         }
 
         return testSoundSamples;
