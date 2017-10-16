@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.codepath.collabdj.activities.activities.MainActivity">
+    tools:context="com.codepath.collabdj.activities.MainActivity">
 
     <!-- An invisible view aligned to the horizontal center of the parent. Allows other
     views to be arranged on either side -->

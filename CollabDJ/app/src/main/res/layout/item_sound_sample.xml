@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.codepath.collabdj.views.SoundSampleView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#FFFFFF">
-
 
     <TextView
         android:id="@+id/tvTitle"
@@ -28,8 +28,8 @@
         android:layout_centerHorizontal="true"/>
 
 
-    <ImageButton
-        android:id="@+id/ibPlay"
+    <com.codepath.collabdj.utils.PlayPauseButton
+        android:id="@+id/ibPlayPause"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvTitle"
@@ -45,4 +45,4 @@
         android:layout_toRightOf="@id/centerShimHorizontal"
         android:layout_toEndOf="@id/centerShimHorizontal"
         app:srcCompat="@drawable/placeholder_music" />
-</RelativeLayout>
+</com.codepath.collabdj.views.SoundSampleView>

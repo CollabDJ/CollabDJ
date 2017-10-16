@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.activities.MainActivity">
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,17 +20,22 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.activities.CreateSongActivity"
-            android:parentActivityName=".activities.activities.MainActivity">
+            android:name=".activities.CreateSongActivity"
+            android:parentActivityName=".activities.MainActivity">
+            android:name=".activities.CreateSongActivity"
+            android:parentActivityName=".activities.MainActivity">
 
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.codepath.collabdj.activities.activities.MainActivity" />
+                android:value="com.codepath.collabdj.activities.MainActivity" />
         </activity>
-        <activity android:name=".activities.activities.JoinSessionActivity"></activity>
+        <activity android:name=".activities.JoinSessionActivity"></activity>
+        <activity android:name=".activities.SharedSongsActivity"></activity>
 
         <meta-data android:name="com.google.android.gms.vision.DEPEDENCIES" android:value="barcode"/>
+                android:value="com.codepath.collabdj.activities.MainActivity" />
+
     </application>
 
 </manifest>

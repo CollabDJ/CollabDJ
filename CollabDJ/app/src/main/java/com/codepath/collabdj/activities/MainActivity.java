@@ -1,4 +1,4 @@
-package com.codepath.collabdj.activities.activities;
+package com.codepath.collabdj.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -44,6 +44,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         RelativeLayout rlSharedSongs = (RelativeLayout) findViewById(R.id.rlSharedSongs);
-
+        rlSharedSongs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Launch SharedSongsActivity.
+                Intent i = new Intent(MainActivity.this, SharedSongsActivity.class);
+                startActivity(i);
+            }
+        });
     }
 }

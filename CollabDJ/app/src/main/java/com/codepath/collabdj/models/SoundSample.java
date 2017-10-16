@@ -1,4 +1,4 @@
-package com.codepath.collabdj.activities.models;
+package com.codepath.collabdj.models;
 
 import org.parceler.Parcel;
 
@@ -12,7 +12,8 @@ public class SoundSample {
     String name;
     int iconDrawableId;
     String path;
-    double duration;
+    int resourceId;
+    long duration;
     String pathJsonDefinition;
 
     // Empty constructor needed by the Parcel library.
@@ -20,11 +21,16 @@ public class SoundSample {
 
     }
 
-    public SoundSample(String name, int iconDrawableId, String path, double duration,
+    public SoundSample(String name,
+                       int iconDrawableId,
+                       String path,
+                       int resourceId,
+                       long duration,
                        String pathJsonDefinition) {
         this.name = name;
         this.iconDrawableId = iconDrawableId;
         this.path = path;
+        this.resourceId = resourceId;
         this.duration = duration;
         this.pathJsonDefinition = pathJsonDefinition;
     }
@@ -41,8 +47,15 @@ public class SoundSample {
         return this.path;
     }
 
-    public String getPathJsonDefinition() {
-        return  this.pathJsonDefinition;
+    public int getResourceId() {
+        return this.resourceId;
     }
 
+    public long getDuration() {
+        return this.duration;
+    }
+
+    public String getPathJsonDefinition() {
+        return this.pathJsonDefinition;
+    }
 }

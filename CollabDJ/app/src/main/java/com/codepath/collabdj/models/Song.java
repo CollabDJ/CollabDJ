@@ -1,4 +1,4 @@
-package com.codepath.collabdj.activities.models;
+package com.codepath.collabdj.models;
 
 import org.parceler.Parcel;
 
