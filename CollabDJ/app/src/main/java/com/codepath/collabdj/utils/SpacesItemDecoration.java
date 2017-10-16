@@ -1,4 +1,4 @@
-package com.codepath.collabdj.activities.utils;
+package com.codepath.collabdj.utils;
 
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;

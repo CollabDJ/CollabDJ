@@ -1,4 +1,4 @@
-package com.codepath.collabdj.activities.activities;
+package com.codepath.collabdj.activities;
 
 import android.content.Intent;
 import android.os.Bundle;

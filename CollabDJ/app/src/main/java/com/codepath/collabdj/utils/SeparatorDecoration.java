@@ -1,4 +1,4 @@
-package com.codepath.collabdj.activities.utils;
+package com.codepath.collabdj.utils;
 
 import android.content.Context;
 import android.content.res.Resources;

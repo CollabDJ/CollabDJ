@@ -1,4 +1,4 @@
-package com.codepath.collabdj.activities.adapters;
+package com.codepath.collabdj.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -9,9 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.collabdj.R;
-import com.codepath.collabdj.activities.models.SoundSampleInstance;
-import com.codepath.collabdj.activities.utils.PlayPauseButton;
-import com.codepath.collabdj.activities.views.SoundSampleView;
+import com.codepath.collabdj.models.SoundSampleInstance;
+import com.codepath.collabdj.utils.PlayPauseButton;
+import com.codepath.collabdj.views.SoundSampleView;
 
 import java.util.List;
 

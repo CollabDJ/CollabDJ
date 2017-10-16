@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.codepath.collabdj.activities.views.SoundSampleView
+<com.codepath.collabdj.views.SoundSampleView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
@@ -28,7 +28,7 @@
         android:layout_centerHorizontal="true"/>
 
 
-    <com.codepath.collabdj.activities.utils.PlayPauseButton
+    <com.codepath.collabdj.utils.PlayPauseButton
         android:id="@+id/ibPlayPause"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -45,4 +45,4 @@
         android:layout_toRightOf="@id/centerShimHorizontal"
         android:layout_toEndOf="@id/centerShimHorizontal"
         app:srcCompat="@drawable/placeholder_music" />
-</com.codepath.collabdj.activities.views.SoundSampleView>
+</com.codepath.collabdj.views.SoundSampleView>

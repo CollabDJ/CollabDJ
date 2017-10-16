@@ -1,11 +1,11 @@
-package com.codepath.collabdj.activities.models;
+package com.codepath.collabdj.models;
 
 import android.content.Context;
 
-import com.codepath.collabdj.sound.SamplePlayer;
+import com.codepath.collabdj.utils.SamplePlayer;
 
-import static com.codepath.collabdj.activities.models.SoundSampleInstance.PlayState.LOOPING;
-import static com.codepath.collabdj.activities.models.SoundSampleInstance.PlayState.STOPPED;
+import static com.codepath.collabdj.models.SoundSampleInstance.PlayState.LOOPING;
+import static com.codepath.collabdj.models.SoundSampleInstance.PlayState.STOPPED;
 
 /**
  * Created by ilyaseletsky on 10/15/17.

@@ -1,11 +1,11 @@
-package com.codepath.collabdj.activities.views;
+package com.codepath.collabdj.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 
-import com.codepath.collabdj.activities.adapters.SoundSamplesAdapter;
+import com.codepath.collabdj.adapters.SoundSamplesAdapter;
 
 /**
  * Created by ilyaseletsky on 10/15/17.

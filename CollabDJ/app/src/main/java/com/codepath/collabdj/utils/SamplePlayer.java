@@ -1,4 +1,4 @@
-package com.codepath.collabdj.sound;
+package com.codepath.collabdj.utils;
 
 import android.content.Context;
 import android.media.AudioManager;

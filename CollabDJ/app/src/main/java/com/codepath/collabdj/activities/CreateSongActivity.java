@@ -1,4 +1,4 @@
-package com.codepath.collabdj.activities.activities;
+package com.codepath.collabdj.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,16 +7,16 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.codepath.collabdj.R;
-import com.codepath.collabdj.activities.adapters.SoundSamplesAdapter;
-import com.codepath.collabdj.activities.models.SoundSample;
-import com.codepath.collabdj.activities.models.SoundSampleInstance;
-import com.codepath.collabdj.activities.utils.SpacesItemDecoration;
-import com.codepath.collabdj.sound.SamplePlayer;
+import com.codepath.collabdj.adapters.SoundSamplesAdapter;
+import com.codepath.collabdj.models.SoundSample;
+import com.codepath.collabdj.models.SoundSampleInstance;
+import com.codepath.collabdj.utils.SpacesItemDecoration;
+import com.codepath.collabdj.utils.SamplePlayer;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.codepath.collabdj.sound.SamplePlayer.getCurrentTimestamp;
+import static com.codepath.collabdj.utils.SamplePlayer.getCurrentTimestamp;
 
 public class CreateSongActivity extends AppCompatActivity implements SoundSamplesAdapter.SoundSamplePlayListener {
     public static int BEATS_PER_MINUTE = 120;

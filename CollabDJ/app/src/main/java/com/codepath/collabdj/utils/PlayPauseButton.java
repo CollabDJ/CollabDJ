@@ -1,9 +1,9 @@
-package com.codepath.collabdj.activities.utils;
+package com.codepath.collabdj.utils;
 
 import android.content.Context;
 import android.util.AttributeSet;
 
-import com.codepath.collabdj.activities.models.SoundSampleInstance;
+import com.codepath.collabdj.models.SoundSampleInstance;
 
 /**
  * Created by tiago on 10/15/17.
