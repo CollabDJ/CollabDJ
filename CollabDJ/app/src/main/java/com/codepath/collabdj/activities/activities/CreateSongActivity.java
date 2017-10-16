@@ -46,7 +46,6 @@ public class CreateSongActivity extends AppCompatActivity {
 
         // Add dividers to the staggered grid.
         SpacesItemDecoration decoration = new SpacesItemDecoration(5);
-        //SeparatorDecoration decoration = SeparatorDecoration.with(this).setMargin(1.5f).color(Color.GRAY).build();
         rvSamples.addItemDecoration(decoration);
 
         // Add the fake sound samples.
