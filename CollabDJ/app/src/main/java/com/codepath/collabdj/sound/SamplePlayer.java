@@ -305,13 +305,12 @@ public class SamplePlayer {
     public SampleHandle newSample(String path, long duration) {
         Integer sampleId = loadedSounds.get(path);
 
-        boolean isLoaded = sampleId != null;
-
-        if (!isLoaded) {
+        if (sampleId == null) {
             sampleId = soundPool.load(path, 1);
+            loadedSounds.put(path, sampleId);
         }
 
-        return newHandle(sampleId, isLoaded, duration);
+        return newHandle(sampleId, duration);
     }
 
     /**
@@ -328,24 +327,28 @@ public class SamplePlayer {
     public SampleHandle newSample(Context context, int resId, long duration) {
         Integer sampleId = loadedSoundResources.get(resId);
 
-        boolean isLoaded = sampleId != null;
-
-        if (!isLoaded) {
+        if (sampleId == null) {
             sampleId = soundPool.load(context, resId, 1);
+            loadedSoundResources.put(resId, sampleId);
         }
 
-        return newHandle(sampleId, isLoaded, duration);
+        return newHandle(sampleId, duration);
     }
 
-    protected SampleHandle newHandle(int sampleId, boolean isLoaded, long duration) {
-        SampleHandle sampleHandle = new SampleHandle(sampleId, isLoaded, duration);
-
+    protected SampleHandle newHandle(int sampleId, long duration) {
         List<SampleHandle> sampleHandlesList = sampleHandles.get(sampleId);
+
+        boolean isLoaded = false;
 
         if (sampleHandlesList == null) {
             sampleHandlesList = new ArrayList<>(1);
             sampleHandles.put(sampleId, sampleHandlesList);
         }
+        else {
+            isLoaded = sampleHandlesList.get(0).isLoaded;
+        }
+
+        SampleHandle sampleHandle = new SampleHandle(sampleId, isLoaded, duration);
 
         sampleHandlesList.add(sampleHandle);
 
