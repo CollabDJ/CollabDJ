@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.codepath.collabdj">
 
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -19,13 +22,20 @@
         <activity
             android:name=".activities.CreateSongActivity"
             android:parentActivityName=".activities.MainActivity">
+            android:name=".activities.CreateSongActivity"
+            android:parentActivityName=".activities.MainActivity">
 
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.codepath.collabdj.activities.MainActivity" />
         </activity>
+        <activity android:name=".activities.JoinSessionActivity"></activity>
         <activity android:name=".activities.SharedSongsActivity"></activity>
+
+        <meta-data android:name="com.google.android.gms.vision.DEPEDENCIES" android:value="barcode"/>
+                android:value="com.codepath.collabdj.activities.MainActivity" />
+
     </application>
 
 </manifest>
