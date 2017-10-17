@@ -90,3 +90,52 @@ Song JSON Schema:
 			}
 		]
 	}
+
+
+
+Messaging Protocol
+===================
+
+	Someone adds a sound sample
+		Broadcast a message:
+			Add Sound Sample Request
+			Sound Sample Name
+
+		Add Sound Sample Request Received
+			Ignored by everyone but master
+			Figure out the next free index to add a sound sample
+
+		Broadcast message:
+			Sound Sample Added
+			Sound Sample Name
+			Sound Sample Index
+
+	Somone queues up a sample to play
+		Broadcase a message:
+			Queue Sample
+			Measure #
+
+		Receive:
+			Update sample to be queued at Meausre #
+
+	Someone queues up a sample to stop
+		Broadcast a message:
+			Queue Stop
+			Measure #
+
+		Receive:
+			Upsate a sample to be queued to stop at Measure #
+
+	When someone leaves
+		If they were the master, choose the phone with lowest ip address or some other unique id in the P2P system to be new master
+
+	When someone joins
+		Get current measure number
+		Get list of current user names
+		Get list of samples and their playstate
+		Broadcast to everyone else your user name
+
+
+
+
+
