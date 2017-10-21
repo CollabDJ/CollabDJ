@@ -29,8 +29,10 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         /**
          * Notifies the listener that the play button on a SoundSampleInstance was pressed
          * @param soundSampleInstance
+         * @return returns the milliseconds per section so when a sample is queued to play it knows
+         *      how to display the pie chart percentage
          */
-        void playButtonPressed(SoundSampleInstance soundSampleInstance);
+        long playButtonPressed(SoundSampleInstance soundSampleInstance);
     }
 
     // Tag for logging.
@@ -113,6 +115,7 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public PlayPauseButton ibPlayPause;
         public ImageView ivStatus;
         public ProgressBar pbLoadingIndicator;
+        public long millisecondsPerSection;
 
         // Constructor that accepts the entire item row
         // and does the view lookups to find each subview.
@@ -132,7 +135,7 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 @Override
                 public void onClick(View view) {
                     if (soundSamplePlayListener != null) {
-                        soundSamplePlayListener.playButtonPressed(getSoundSampleInstance());
+                        millisecondsPerSection = soundSamplePlayListener.playButtonPressed(getSoundSampleInstance());
                     }
                 }
             });

@@ -11,26 +11,49 @@ import java.util.List;
 
 @Parcel
 public class Song {
+    /**
+     * Sounds can only start playing at the start of a section.
+     */
+    public static long DEFAULT_MILLISECONDS_PER_SONG_SECTION = 4 * 1000;
 
-    String title;
+    public String title;
     List<String> userNames;
     List<SoundSample> soundSampleList;
     List<SampleUsage> sampleUsageList;
+    long numMillisecondsPerSection;
 
     // Empty constructor needed by the Parcel library.
     public Song() {
 
     }
 
-    public Song(String title) {
-        this.title = title;
+    public Song(long numMillisecondsPerSection) {
         this.userNames = new ArrayList<>();
         this.soundSampleList = new ArrayList<>();
         this.sampleUsageList = new ArrayList<>();
+        this.numMillisecondsPerSection = numMillisecondsPerSection <= 0
+                ? DEFAULT_MILLISECONDS_PER_SONG_SECTION
+                : numMillisecondsPerSection;
     }
 
-    public String getTitle() {
-        return this.title;
+    public long getNumMillisecondsPerSection() {
+        return numMillisecondsPerSection;
+    }
+
+    public long getSectionTimestampFromStart(long section) {
+        return section * numMillisecondsPerSection;
+    }
+
+    public int getNumUserNames() {
+        return this.userNames.size();
+    }
+
+    public int getNumSoundSamples() {
+        return this.soundSampleList.size();
+    }
+
+    public int getNumSampleUsages() {
+        return this.sampleUsageList.size();
     }
 
     public String getUserName(int position) {
@@ -41,16 +64,8 @@ public class Song {
         return this.soundSampleList.get(position);
     }
 
-    public int getNumSoundSamples() {
-        return this.soundSampleList.size();
-    }
-
     public SampleUsage getSampleUsage(int position) {
         return this.sampleUsageList.get(position);
-    }
-
-    public int getNumSampleUsages() {
-        return this.sampleUsageList.size();
     }
 
     public void addUserName(String userName) {

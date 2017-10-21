@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.codepath.collabdj.R;
 import com.codepath.collabdj.adapters.SoundSamplesAdapter;
+import com.codepath.collabdj.models.Song;
 import com.codepath.collabdj.models.SoundSample;
 import com.codepath.collabdj.models.SoundSampleInstance;
 import com.codepath.collabdj.utils.SamplePlayer;
@@ -20,11 +21,6 @@ import static com.codepath.collabdj.utils.SamplePlayer.PlayInstanceState.STOPPED
 import static com.codepath.collabdj.utils.SamplePlayer.PlayInstanceState.STOP_QUEUED;
 
 public class CreateSongActivity extends AppCompatActivity implements SoundSamplesAdapter.SoundSamplePlayListener {
-    /**
-     * Sounds can only start playing at the start of a section.
-     */
-    public static long MILLISECONDS_PER_SONG_SECTION = 4 * 1000;
-
     // Tag for logging.
     private static final String TAG = "CreateSongActivity";
 
@@ -33,6 +29,7 @@ public class CreateSongActivity extends AppCompatActivity implements SoundSample
     SoundSamplesAdapter mAdapter;
 
     SamplePlayer samplePlayer;
+    Song song;
 
     boolean songStarted;
     long getStartTimestamp;
@@ -62,8 +59,6 @@ public class CreateSongActivity extends AppCompatActivity implements SoundSample
 
         setInitialSoundSamples();
         mAdapter.notifyDataSetChanged();
-
-        songStarted = false;
     }
 
     // Creates initial sound samples to test the grid layout.
@@ -143,40 +138,44 @@ public class CreateSongActivity extends AppCompatActivity implements SoundSample
     }
 
     public long getCurrentSection() {
-        long res = (SamplePlayer.getCurrentTimestamp() - getStartTimestamp) / MILLISECONDS_PER_SONG_SECTION;
+        if (song == null) {
+            Log.v(TAG, "getCurrentSection() called on song that hasn't started yet.  Returning 0.");
+
+            return 0;
+        }
+
+        long res = (SamplePlayer.getCurrentTimestamp() - getStartTimestamp) / song.getNumMillisecondsPerSection();
 
         Log.v(TAG, "getCurrentSection() " + res);
 
         return res;
     }
 
-    public long getCurrentSectionTimestamp() {
-        long res = getStartTimestamp + (getCurrentSection() * MILLISECONDS_PER_SONG_SECTION);
+    public long getSectionTimestamp(long section) {
+        if (song == null) {
+            Log.v(TAG, "getSectionTimestamp() called on song that hasn't started yet.  Returning 0.");
+
+            return 0;
+        }
+
+        long res = getStartTimestamp + (song.getSectionTimestampFromStart(section));
 
         Log.v(TAG, "getCurrentSectionTimestamp() " + res);
 
         return res;
     }
 
-    public long getNextSectionTimestamp() {
-        long res = getCurrentSectionTimestamp() + MILLISECONDS_PER_SONG_SECTION;
-
-        Log.v(TAG, "getNextSectionTimestamp() " + res);
-
-        return res;
-    }
-
     @Override
-    public void playButtonPressed(SoundSampleInstance soundSampleInstance) {
-        if(!songStarted) {
-            songStarted = true;
+    public long playButtonPressed(SoundSampleInstance soundSampleInstance) {
+        if(song == null) {
+            song = new Song(0);     //It could eventually be possible to set length per section
             getStartTimestamp = SamplePlayer.getCurrentTimestamp();
         }
 
         SamplePlayer.SampleHandle.PlayInstance playInstance = soundSampleInstance.getCurrentPlayInstance();
 
         if (playInstance == null || playInstance.getPlayState() == STOPPED) {
-            soundSampleInstance.queueSample(getNextSectionTimestamp(), -1);
+            soundSampleInstance.queueSample(getSectionTimestamp(getCurrentSection() + 1), -1);
         }
         else if (playInstance.getPlayState() == STOP_QUEUED) {
             playInstance.setLoopAmount(-1);
@@ -184,5 +183,7 @@ public class CreateSongActivity extends AppCompatActivity implements SoundSample
         else {
             soundSampleInstance.stop();
         }
+
+        return song.getNumMillisecondsPerSection();
     }
 }

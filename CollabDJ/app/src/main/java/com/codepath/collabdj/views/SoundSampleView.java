@@ -9,7 +9,6 @@ import android.widget.RelativeLayout;
 import com.codepath.collabdj.adapters.SoundSamplesAdapter;
 import com.codepath.collabdj.utils.SamplePlayer;
 
-import static com.codepath.collabdj.activities.CreateSongActivity.MILLISECONDS_PER_SONG_SECTION;
 import static com.codepath.collabdj.utils.SamplePlayer.PlayInstanceState.LOOP_QUEUED;
 
 /**
@@ -49,7 +48,7 @@ public class SoundSampleView extends RelativeLayout {
 
             float percentage = (float) playInstance.getRemainingDelay()
                     / (playInstance.getPlayState() == LOOP_QUEUED
-                        ? MILLISECONDS_PER_SONG_SECTION
+                        ? viewHolder.millisecondsPerSection
                         : (float) viewHolder.getSoundSampleInstance().getSoundSample().getDuration());
 
             //Hacked together for now, replace with pie chart
