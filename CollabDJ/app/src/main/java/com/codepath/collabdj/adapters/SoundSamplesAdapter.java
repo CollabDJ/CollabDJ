@@ -12,7 +12,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.codepath.collabdj.R;
-import com.codepath.collabdj.models.SoundSample;
 import com.codepath.collabdj.models.SoundSampleInstance;
 import com.codepath.collabdj.utils.PlayPauseButton;
 import com.codepath.collabdj.views.SoundSampleView;
@@ -167,11 +166,13 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             ibAddSample.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    int position = getAdapterPosition();
-                    SoundSample soundSample = new SoundSample("Fresh Sample", 0, null, 0, 0, null);
-                    SoundSampleInstance soundSampleInstance = new SoundSampleInstance(soundSample, null, getContext());
-                    mSamples.set(position, soundSampleInstance);
-                    notifyDataSetChanged();
+                    //TODO: Update this
+
+//                    int position = getAdapterPosition();
+//                    SoundSample soundSample = new SoundSample("Fresh Sample", 0, null, 0, 0, null);
+//                    SoundSampleInstance soundSampleInstance = new SoundSampleInstance(soundSample, null, getContext(), );
+//                    mSamples.set(position, soundSampleInstance);
+//                    notifyDataSetChanged();
                 }
             });
         }

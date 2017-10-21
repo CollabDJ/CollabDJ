@@ -45,51 +45,75 @@ public class Song {
     }
 
     public int getNumUserNames() {
-        return this.userNames.size();
+        synchronized (this.userNames) {
+            return this.userNames.size();
+        }
     }
 
     public int getNumSoundSamples() {
-        return this.soundSampleList.size();
+        synchronized (this.soundSampleList) {
+            return this.soundSampleList.size();
+        }
     }
 
     public int getNumSampleUsages() {
-        return this.sampleUsageList.size();
+        synchronized (this.sampleUsageList) {
+            return this.sampleUsageList.size();
+        }
     }
 
     public String getUserName(int position) {
-        return this.userNames.get(position);
+        synchronized (this.userNames) {
+            return this.userNames.get(position);
+        }
     }
 
     public SoundSample getSoundSample(int position) {
-        return this.soundSampleList.get(position);
+        synchronized (this.soundSampleList) {
+            return this.soundSampleList.get(position);
+        }
     }
 
     public SampleUsage getSampleUsage(int position) {
-        return this.sampleUsageList.get(position);
+        synchronized (this.sampleUsageList) {
+            return this.sampleUsageList.get(position);
+        }
     }
 
     public void addUserName(String userName) {
-        this.userNames.add(userName);
+        synchronized (this.userNames) {
+            this.userNames.add(userName);
+        }
     }
 
     public void addSoundSample(SoundSample soundSample) {
-        this.soundSampleList.add(soundSample);
+        synchronized (this.soundSampleList) {
+            this.soundSampleList.add(soundSample);
+        }
     }
 
     public void addSampleUsage(SampleUsage sampleUsage) {
-        this.sampleUsageList.add(sampleUsage);
+        synchronized (this.sampleUsageList) {
+            this.sampleUsageList.add(sampleUsage);
+        }
     }
 
     public String removeUserName(int position) {
-        return this.userNames.remove(position);
+        synchronized (this.userNames) {
+            return this.userNames.remove(position);
+        }
     }
 
     public SoundSample removeSoundSample(int position) {
-        return this.soundSampleList.remove(position);
+        synchronized (this.soundSampleList) {
+            return this.soundSampleList.remove(position);
+        }
     }
 
     public SampleUsage removeSampleUsage(int position) {
-        return this.sampleUsageList.remove(position);
+        synchronized (this.sampleUsageList) {
+            return this.sampleUsageList.remove(position);
+        }
     }
 
 }

@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.codepath.collabdj.R;
 import com.codepath.collabdj.adapters.SoundSamplesAdapter;
+import com.codepath.collabdj.models.SampleUsage;
 import com.codepath.collabdj.models.Song;
 import com.codepath.collabdj.models.SoundSample;
 import com.codepath.collabdj.models.SoundSampleInstance;
@@ -15,12 +16,20 @@ import com.codepath.collabdj.utils.SamplePlayer;
 import com.codepath.collabdj.utils.SpacesItemDecoration;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.codepath.collabdj.utils.SamplePlayer.PlayInstanceState.STOPPED;
 import static com.codepath.collabdj.utils.SamplePlayer.PlayInstanceState.STOP_QUEUED;
 
-public class CreateSongActivity extends AppCompatActivity implements SoundSamplesAdapter.SoundSamplePlayListener {
+public class CreateSongActivity
+        extends AppCompatActivity
+        implements SoundSamplesAdapter.SoundSamplePlayListener,
+            SoundSampleInstance.Listener
+{
+    public static final int NUM_COLUMNS = 3;
+
     // Tag for logging.
     private static final String TAG = "CreateSongActivity";
 
@@ -31,8 +40,17 @@ public class CreateSongActivity extends AppCompatActivity implements SoundSample
     SamplePlayer samplePlayer;
     Song song;
 
-    boolean songStarted;
-    long getStartTimestamp;
+    long songStartTimeStamp;
+
+    /**
+     * Tracks sample usages that have yet to be written to the song.
+     */
+    Map<SoundSampleInstance, SampleUsage> activeSampleUsages;
+
+    /**
+     * Reverse mapping of SoundSample to SoundSampleIndex in the song.
+     */
+    Map<SoundSample, Integer> soundSampleIndexMapping;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +64,10 @@ public class CreateSongActivity extends AppCompatActivity implements SoundSample
         mSamples = new ArrayList<>();
         mAdapter = new SoundSamplesAdapter(this, mSamples, this);
         rvSamples.setAdapter(mAdapter);
+        activeSampleUsages = new HashMap<>();
+        soundSampleIndexMapping = new HashMap<>();
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, NUM_COLUMNS);
         rvSamples.setLayoutManager(gridLayoutManager);
 
         // Add dividers to the staggered grid.
@@ -58,66 +78,88 @@ public class CreateSongActivity extends AppCompatActivity implements SoundSample
         samplePlayer = new SamplePlayer(64);
 
         setInitialSoundSamples();
+        createInitialEmptyCells();
         mAdapter.notifyDataSetChanged();
     }
 
     // Creates initial sound samples to test the grid layout.
     private void setInitialSoundSamples() {
         //For now hardcode this
-        mSamples.add(new SoundSampleInstance(new SoundSample(
+
+        List<SoundSample> initialSoundSamples = new ArrayList<>();
+
+        initialSoundSamples.add(new SoundSample(
                 "BlastCap",
                 0,
                 null,
                 R.raw.drum_4_blastcap_start,
                 8000,
-                null),
-                samplePlayer, this));
+                null));
 
-        mSamples.add(new SoundSampleInstance(new SoundSample(
+        initialSoundSamples.add(new SoundSample(
                 "BlastCap 0",
                 0,
                 null,
                 R.raw.drum_4_blastcap_start_0,
                 8000,
-                null),
-                samplePlayer, this));
+                null));
 
-        mSamples.add(new SoundSampleInstance(new SoundSample(
+        initialSoundSamples.add(new SoundSample(
                 "BlastCap 1",
                 0,
                 null,
                 R.raw.drum_4_blastcap_start_1,
                 8000,
-                null),
-                samplePlayer, this));
+                null));
 
-        mSamples.add(new SoundSampleInstance(new SoundSample(
+        initialSoundSamples.add(new SoundSample(
                 "BlastCap",
                 0,
                 null,
                 R.raw.drum_4_blastcap_start,
                 8000,
-                null),
-                samplePlayer, this));
+                null));
 
-        mSamples.add(new SoundSampleInstance(new SoundSample(
+        initialSoundSamples.add(new SoundSample(
                 "BlastCap",
                 0,
                 null,
                 R.raw.drum_4_blastcap_start,
                 8000,
-                null),
-                samplePlayer, this));
+                null));
 
-        mSamples.add(new SoundSampleInstance(null, samplePlayer, this));
-        mSamples.add(new SoundSampleInstance(null, samplePlayer, this));
-        mSamples.add(new SoundSampleInstance(null, samplePlayer, this));
-        mSamples.add(new SoundSampleInstance(null, samplePlayer, this));
+        for (SoundSample soundSample : initialSoundSamples) {
+            addSample(soundSample);
+        }
+    }
 
+    protected void addSample(SoundSample soundSample) {
+        soundSampleIndexMapping.put(soundSample, mSamples.size());
+
+        mSamples.add(new SoundSampleInstance(soundSample, samplePlayer, this, this));
+
+        if (song != null) {
+            song.addSoundSample(soundSample);
+        }
+    }
+
+    protected void createInitialEmptyCells() {
+        //create the remaining initial cells
+        for(int i = 0; i < mSamples.size() % NUM_COLUMNS; ++i) {
+            createEmptyCell();
+        }
+
+        createEmptyRow();
+    }
+
+    protected void createEmptyCell() {
+        mSamples.add(new SoundSampleInstance(null, samplePlayer, this, this));
     }
 
     protected void createEmptyRow() {
-        //TODO: call this to set up an empty row of cells that will have the add button
+        for(int i = 0; i < NUM_COLUMNS; ++i) {
+            createEmptyCell();
+        }
     }
 
     @Override
@@ -144,7 +186,7 @@ public class CreateSongActivity extends AppCompatActivity implements SoundSample
             return 0;
         }
 
-        long res = (SamplePlayer.getCurrentTimestamp() - getStartTimestamp) / song.getNumMillisecondsPerSection();
+        long res = (SamplePlayer.getCurrentTimestamp() - songStartTimeStamp) / song.getNumMillisecondsPerSection();
 
         Log.v(TAG, "getCurrentSection() " + res);
 
@@ -158,24 +200,33 @@ public class CreateSongActivity extends AppCompatActivity implements SoundSample
             return 0;
         }
 
-        long res = getStartTimestamp + (song.getSectionTimestampFromStart(section));
+        long res = songStartTimeStamp + (song.getSectionTimestampFromStart(section));
 
         Log.v(TAG, "getCurrentSectionTimestamp() " + res);
 
         return res;
     }
 
+    public void setupNewSong() {
+        song = new Song(0);     //It could eventually be possible to set length per section in settings before starting a song
+        songStartTimeStamp = SamplePlayer.getCurrentTimestamp();
+
+        //Go over every SoundSampleInstance already added
+        for(SoundSampleInstance soundSampleInstance : mSamples) {
+            song.addSoundSample(soundSampleInstance.getSoundSample());
+        }
+    }
+
     @Override
     public long playButtonPressed(SoundSampleInstance soundSampleInstance) {
         if(song == null) {
-            song = new Song(0);     //It could eventually be possible to set length per section
-            getStartTimestamp = SamplePlayer.getCurrentTimestamp();
+            setupNewSong();
         }
 
         SamplePlayer.SampleHandle.PlayInstance playInstance = soundSampleInstance.getCurrentPlayInstance();
 
         if (playInstance == null || playInstance.getPlayState() == STOPPED) {
-            soundSampleInstance.queueSample(getSectionTimestamp(getCurrentSection() + 1), -1);
+            soundSampleInstance.queueSample(getCurrentSection() + 1, song.getNumMillisecondsPerSection(), songStartTimeStamp, -1);
         }
         else if (playInstance.getPlayState() == STOP_QUEUED) {
             playInstance.setLoopAmount(-1);
@@ -185,5 +236,28 @@ public class CreateSongActivity extends AppCompatActivity implements SoundSample
         }
 
         return song.getNumMillisecondsPerSection();
+    }
+
+    @Override
+    public void startPlaying(SoundSampleInstance soundSampleInstance, long startSection) {
+        synchronized (activeSampleUsages) {
+            SampleUsage sampleUsage = new SampleUsage(soundSampleIndexMapping.get(soundSampleInstance.getSoundSample()), startSection);
+
+            activeSampleUsages.put(soundSampleInstance, sampleUsage);
+        }
+    }
+
+    @Override
+    public void stopPlaying(SoundSampleInstance soundSampleInstance, int numTimesPlayed) {
+        SampleUsage sampleUsage = null;
+
+        synchronized (activeSampleUsages) {
+            sampleUsage = activeSampleUsages.get(soundSampleInstance);
+            activeSampleUsages.remove(soundSampleInstance);
+        }
+
+        sampleUsage.loopTimes = numTimesPlayed;
+
+        song.addSampleUsage(sampleUsage);
     }
 }

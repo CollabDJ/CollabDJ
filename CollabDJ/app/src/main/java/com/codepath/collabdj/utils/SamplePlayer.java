@@ -38,6 +38,12 @@ public class SamplePlayer {
 
     public interface SampleHandleListener {
         /**
+         * Called when a play instance plays once.
+         * @param playInstance
+         */
+        void onPlayOnce(SampleHandle.PlayInstance playInstance);
+
+        /**
          * Called when a play instance finally stops.
          * @param playInstance
          */
@@ -129,10 +135,6 @@ public class SamplePlayer {
                 if (loopAmount == 0) {
                     Log.v(TAG, "PlayInstance no more loops for sample " + sampleId + " so killing the PlayInstance.");
 
-                    if(listener != null) {
-                        listener.onStop(this);
-                    }
-
                     kill();
 
                     return;
@@ -150,6 +152,10 @@ public class SamplePlayer {
                 }
 
                 shouldBePlaying = true;
+
+                if (listener != null) {
+                    listener.onPlayOnce(this);
+                }
 
                 playOnce();
             }
@@ -186,6 +192,10 @@ public class SamplePlayer {
 
                 sampleTask.cancel(true);
                 shouldBePlaying = false;
+
+                if(listener != null) {
+                    listener.onStop(this);
+                }
 
                 synchronized(playInstances) {
                     playInstances.remove(this);
@@ -346,7 +356,7 @@ public class SamplePlayer {
         }
     }
 
-    //TODO: Next week replace with OpenSL, SoundPool truncates sounds that are too long
+    //TODO: Some day replace with OpenSL, SoundPool truncates sounds that are too long and can't play sounds from the middle
     SoundPool soundPool;
 
     ScheduledExecutorService timedTaskRunner;
