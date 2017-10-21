@@ -41,8 +41,16 @@ public class Song {
         return this.soundSampleList.get(position);
     }
 
+    public int getNumSoundSamples() {
+        return this.soundSampleList.size();
+    }
+
     public SampleUsage getSampleUsage(int position) {
         return this.sampleUsageList.get(position);
+    }
+
+    public int getNumSampleUsages() {
+        return this.sampleUsageList.size();
     }
 
     public void addUserName(String userName) {

@@ -10,29 +10,29 @@ import org.parceler.Parcel;
 public class SampleUsage {
 
     int soundSampleIndex;
-    long startTime;
-    int loopTime;
+    long startSection;
+    int loopTimes;
 
     // Empty constructor needed by the Parcel library.
     public SampleUsage() {
 
     }
 
-    public SampleUsage(int soundSampleIndex, long startTime, int loopTime) {
+    public SampleUsage(int soundSampleIndex, long startSection, int loopTimes) {
         this.soundSampleIndex = soundSampleIndex;
-        this.startTime = startTime;
-        this.loopTime = loopTime;
+        this.startSection = startSection;
+        this.loopTimes = loopTimes;
     }
 
     public int getSoundSampleIndex() {
         return this.soundSampleIndex;
     }
 
-    public long getStartTime() {
-        return this.startTime;
+    public long getStartSection() {
+        return this.startSection;
     }
 
-    public long getLoopTime() {
-        return this.loopTime;
+    public int getLoopTimes() {
+        return this.loopTimes;
     }
 }
