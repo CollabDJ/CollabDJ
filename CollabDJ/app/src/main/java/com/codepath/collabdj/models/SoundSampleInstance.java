@@ -52,6 +52,8 @@ public class SoundSampleInstance implements SamplePlayer.SampleHandleListener {
             } else {
                 sampleHandle = samplePlayer.newSample(context, soundSample.getResourceId(), soundSample.getDuration());
             }
+
+            sampleHandle.listener = this;
         }
 
         queuedPlayInstances = new ArrayList<>();
@@ -114,32 +116,38 @@ public class SoundSampleInstance implements SamplePlayer.SampleHandleListener {
 
     @Override
     public void onPlayOnce(SamplePlayer.SampleHandle.PlayInstance playInstance) {
+        PlayInstanceInfo playInstanceInfo = null;
+
         //Synchronizing around queuedPlayInstances even though we're accessing playInstanceInfos since that's how it is everywhere else.
         //They're closely tied together as one.  Could even wrap them in an inner class and syncrhonize around that if I really wanted to.
         synchronized (queuedPlayInstances) {
-            PlayInstanceInfo playInstanceInfo = playInstanceInfos.get(playInstance);
-            assert(playInstanceInfo != null);
-
-            if (playInstanceInfo.numTimesPlayed == 0 && listener != null) {
-                listener.startPlaying(this, playInstanceInfo.startSection);
-            }
-
-            playInstanceInfo.numTimesPlayed += 1;
+            playInstanceInfo = playInstanceInfos.get(playInstance);
         }
+
+        assert(playInstanceInfo != null);
+
+        if (playInstanceInfo.numTimesPlayed == 0 && listener != null) {
+            listener.startPlaying(this, playInstanceInfo.startSection);
+        }
+
+        playInstanceInfo.numTimesPlayed += 1;
     }
 
     @Override
     public void onStop(SamplePlayer.SampleHandle.PlayInstance playInstance) {
-        synchronized (queuedPlayInstances) {
-            PlayInstanceInfo playInstanceInfo = playInstanceInfos.get(playInstance);
-            assert(playInstanceInfo != null);
+        PlayInstanceInfo playInstanceInfo = null;
 
-            if (playInstanceInfo.numTimesPlayed > 0 && listener != null) {
-                listener.stopPlaying(this, playInstanceInfo.numTimesPlayed);
-            }
+        synchronized (queuedPlayInstances) {
+            playInstanceInfo = playInstanceInfos.get(playInstance);
 
             queuedPlayInstances.remove(playInstance);
             playInstanceInfos.remove(playInstance);
+        }
+
+        assert(playInstanceInfo != null);
+
+        if (playInstanceInfo.numTimesPlayed > 0 && listener != null) {
+            listener.stopPlaying(this, playInstanceInfo.numTimesPlayed);
         }
     }
 
