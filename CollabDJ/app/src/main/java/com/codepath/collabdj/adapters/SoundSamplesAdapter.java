@@ -108,6 +108,7 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public class ViewHolderSample extends RecyclerView.ViewHolder {
 
         public TextView tvTitle;
+        public TextView tvPercent;  //TODO: replace with a piechart
         public PlayPauseButton ibPlayPause;
         public ImageView ivStatus;
 
@@ -119,6 +120,7 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             ((SoundSampleView)itemView).viewHolder = this;
 
             tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
+            tvPercent = (TextView) itemView.findViewById(R.id.tvPercent);
             ibPlayPause = (PlayPauseButton) itemView.findViewById(R.id.ibPlayPause);
             ivStatus = (ImageView) itemView.findViewById(R.id.ivStatus);
 
