@@ -36,12 +36,17 @@ public class SamplePlayer {
         LOOPING,
     }
 
-    public interface PlayInstanceListener {
+    public interface SampleHandleListener {
         /**
-         * Called when this play instance finally stops.
+         * Called when a play instance finally stops.
          * @param playInstance
          */
         void onStop(SampleHandle.PlayInstance playInstance);
+
+        /**
+         * Called when loaded
+         */
+        void onLoaded(SampleHandle sampleHandle);
     }
 
     /**
@@ -124,18 +129,11 @@ public class SamplePlayer {
                 if (loopAmount == 0) {
                     Log.v(TAG, "PlayInstance no more loops for sample " + sampleId + " so killing the PlayInstance.");
 
-                    sampleTask.cancel(true);
-                    shouldBePlaying = false;
-
-                    playState = STOPPED;
-
                     if(listener != null) {
                         listener.onStop(this);
                     }
 
-                    synchronized(playInstances) {
-                        playInstances.remove(this);
-                    }
+                    kill();
 
                     return;
                 }
@@ -162,9 +160,15 @@ public class SamplePlayer {
              * Removes this from the SampleHandle's list of queued samples.
              */
             public void stop() {
+                if (playState == LOOP_QUEUED) {
+                    Log.v(TAG, "PlayInstance stop() for sample " + sampleId + " which is only queued, so killing completely");
+                    kill();
+                    return;
+                }
+
                 if (loopAmount == 0) {
                     assert(playState == STOP_QUEUED || playState == STOPPED);
-                    Log.v(TAG, "PlayInstance stop() for sample " + sampleId);
+                    Log.v(TAG, "PlayInstance stop() for sample " + sampleId + " which already has 0 loops remaining so no effect.");
                     return;
                 }
 
@@ -173,6 +177,19 @@ public class SamplePlayer {
                 loopAmount = 0;
 
                 playState = STOP_QUEUED;
+            }
+
+            protected void kill() {
+                Log.v(TAG, "PlayInstance kill() for sample " + sampleId);
+
+                playState = STOPPED;
+
+                sampleTask.cancel(true);
+                shouldBePlaying = false;
+
+                synchronized(playInstances) {
+                    playInstances.remove(this);
+                }
             }
 
             public void setLoopAmount(int loopAmount) {
@@ -234,7 +251,7 @@ public class SamplePlayer {
          */
         protected long duration;
 
-        public PlayInstanceListener listener;
+        public SampleHandleListener listener;
 
         protected SampleHandle(int sampleId, boolean isLoaded, long duration) {
             this.isLoaded = isLoaded;
@@ -304,6 +321,10 @@ public class SamplePlayer {
 
             isLoaded = true;
 
+            if (listener != null) {
+                listener.onLoaded(this);
+            }
+
             synchronized (playInstances) {
                 for (PlayInstance playInstance : playInstances) {
                     if (playInstance.shouldBePlaying) {
@@ -318,6 +339,10 @@ public class SamplePlayer {
                     }
                 }
             }
+        }
+
+        public boolean isLoaded() {
+            return isLoaded;
         }
     }
 

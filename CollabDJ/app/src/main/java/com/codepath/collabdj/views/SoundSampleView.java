@@ -9,6 +9,9 @@ import android.widget.RelativeLayout;
 import com.codepath.collabdj.adapters.SoundSamplesAdapter;
 import com.codepath.collabdj.utils.SamplePlayer;
 
+import static com.codepath.collabdj.activities.CreateSongActivity.MILLISECONDS_PER_MEASURE;
+import static com.codepath.collabdj.utils.SamplePlayer.PlayInstanceState.LOOP_QUEUED;
+
 /**
  * Created by ilyaseletsky on 10/15/17.
  */
@@ -32,6 +35,9 @@ public class SoundSampleView extends RelativeLayout {
     protected void onDraw(Canvas canvas) {
         //Update the sound sample state piechart
 
+        viewHolder.pbLoadingIndicator.setVisibility(viewHolder.getSoundSampleInstance().isLoaded() ? INVISIBLE : VISIBLE);
+        viewHolder.ibPlayPause.setEnabled(viewHolder.getSoundSampleInstance().isLoaded());
+
         SamplePlayer.SampleHandle.PlayInstance playInstance = viewHolder.getSoundSampleInstance().getCurrentPlayInstance();
 
         if (playInstance == null) {
@@ -40,12 +46,18 @@ public class SoundSampleView extends RelativeLayout {
         }
         else {
             viewHolder.tvPercent.setVisibility(VISIBLE);
-            viewHolder.tvPercent.setText("" + (1.0f - ((float) playInstance.getRemainingDelay()
-                    / (float) viewHolder.getSoundSampleInstance().getSoundSample().getDuration())));      //Hacked together for now, replace with pie chart
+
+            float percentage = (float) playInstance.getRemainingDelay()
+                    / (playInstance.getPlayState() == LOOP_QUEUED
+                        ? MILLISECONDS_PER_MEASURE
+                        : (float) viewHolder.getSoundSampleInstance().getSoundSample().getDuration());
+
+            //Hacked together for now, replace with pie chart
+            viewHolder.tvPercent.setText(String.format("%1.2f", 1.0f - percentage));
 
             switch(playInstance.getPlayState()) {
                 case LOOP_QUEUED:
-                    viewHolder.tvPercent.setTextColor(Color.YELLOW);
+                    viewHolder.tvPercent.setTextColor(Color.BLUE);
                     break;
 
                 case LOOPING:

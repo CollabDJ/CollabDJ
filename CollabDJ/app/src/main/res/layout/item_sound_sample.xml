@@ -51,4 +51,9 @@
         android:layout_toRightOf="@id/centerShimHorizontal"
         android:layout_toEndOf="@id/centerShimHorizontal"
         app:srcCompat="@drawable/placeholder_music" />
+
+    <ProgressBar
+        android:id="@+id/pbLoadingIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </com.codepath.collabdj.views.SoundSampleView>

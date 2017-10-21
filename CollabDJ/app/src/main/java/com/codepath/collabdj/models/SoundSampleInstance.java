@@ -2,7 +2,6 @@ package com.codepath.collabdj.models;
 
 import android.content.Context;
 
-import com.codepath.collabdj.adapters.SoundSamplesAdapter;
 import com.codepath.collabdj.utils.SamplePlayer;
 
 import java.util.ArrayList;
@@ -14,7 +13,7 @@ import static com.codepath.collabdj.utils.SamplePlayer.PlayInstanceState.STOPPED
  * Created by ilyaseletsky on 10/15/17.
  */
 
-public class SoundSampleInstance implements SoundSamplesAdapter.SoundSamplePlayListener {
+public class SoundSampleInstance implements SamplePlayer.SampleHandleListener {
     SoundSample soundSample;
 
     SamplePlayer.SampleHandle sampleHandle;
@@ -83,10 +82,19 @@ public class SoundSampleInstance implements SoundSamplesAdapter.SoundSamplePlayL
         }
     }
 
+    public boolean isLoaded() {
+        return sampleHandle.isLoaded();
+    }
+
     @Override
-    public void playButtonPressed(SoundSampleInstance soundSampleInstance) {
+    public void onStop(SamplePlayer.SampleHandle.PlayInstance playInstance) {
         synchronized (queuedPlayInstances) {
-            queuedPlayInstances.remove(soundSampleInstance);
+            queuedPlayInstances.remove(playInstance);
         }
+    }
+
+    @Override
+    public void onLoaded(SamplePlayer.SampleHandle sampleHandle) {
+
     }
 }

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.codepath.collabdj.R;
@@ -111,6 +112,7 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public TextView tvPercent;  //TODO: replace with a piechart
         public PlayPauseButton ibPlayPause;
         public ImageView ivStatus;
+        public ProgressBar pbLoadingIndicator;
 
         // Constructor that accepts the entire item row
         // and does the view lookups to find each subview.
@@ -123,6 +125,7 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             tvPercent = (TextView) itemView.findViewById(R.id.tvPercent);
             ibPlayPause = (PlayPauseButton) itemView.findViewById(R.id.ibPlayPause);
             ivStatus = (ImageView) itemView.findViewById(R.id.ivStatus);
+            pbLoadingIndicator = (ProgressBar) itemView.findViewById(R.id.pbLoadingIndicator);
 
             // Set listener on the `play/pause` button.
             ibPlayPause.setOnClickListener(new View.OnClickListener() {
