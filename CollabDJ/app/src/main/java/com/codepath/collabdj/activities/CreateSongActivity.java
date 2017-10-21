@@ -10,20 +10,20 @@ import com.codepath.collabdj.R;
 import com.codepath.collabdj.adapters.SoundSamplesAdapter;
 import com.codepath.collabdj.models.SoundSample;
 import com.codepath.collabdj.models.SoundSampleInstance;
-import com.codepath.collabdj.utils.SpacesItemDecoration;
 import com.codepath.collabdj.utils.SamplePlayer;
+import com.codepath.collabdj.utils.SpacesItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.codepath.collabdj.utils.SamplePlayer.PlayInstanceState.STOPPED;
 import static com.codepath.collabdj.utils.SamplePlayer.PlayInstanceState.STOP_QUEUED;
-import static com.codepath.collabdj.utils.SamplePlayer.getCurrentTimestamp;
 
 public class CreateSongActivity extends AppCompatActivity implements SoundSamplesAdapter.SoundSamplePlayListener {
-    public static int BEATS_PER_MINUTE = 120;
-    public static int BEATS_PER_MEASURE = 4;
-    public static long MILLISECONDS_PER_MEASURE = 2 * 1000;
+    /**
+     * Sounds can only start playing at the start of a section.
+     */
+    public static long MILLISECONDS_PER_SONG_SECTION = 4 * 1000;
 
     // Tag for logging.
     private static final String TAG = "CreateSongActivity";
@@ -34,6 +34,7 @@ public class CreateSongActivity extends AppCompatActivity implements SoundSample
 
     SamplePlayer samplePlayer;
 
+    boolean songStarted;
     long getStartTimestamp;
 
     @Override
@@ -62,8 +63,7 @@ public class CreateSongActivity extends AppCompatActivity implements SoundSample
         setInitialSoundSamples();
         mAdapter.notifyDataSetChanged();
 
-        //TODO: make it set this when the first sample is played to mark the start of the song
-        getStartTimestamp = getCurrentTimestamp();
+        songStarted = false;
     }
 
     // Creates initial sound samples to test the grid layout.
@@ -142,36 +142,41 @@ public class CreateSongActivity extends AppCompatActivity implements SoundSample
 //        handle2.queueSample(SamplePlayer.getCurrentTimestamp() + 150000, 1);
     }
 
-    public long getCurrentMeasure() {
-        long res = (SamplePlayer.getCurrentTimestamp() - getStartTimestamp) / MILLISECONDS_PER_MEASURE;
+    public long getCurrentSection() {
+        long res = (SamplePlayer.getCurrentTimestamp() - getStartTimestamp) / MILLISECONDS_PER_SONG_SECTION;
 
-        Log.v(TAG, "getCurrentMeasure() " + res);
-
-        return res;
-    }
-
-    public long getCurrentMeasureTimestamp() {
-        long res = getStartTimestamp + (getCurrentMeasure() * MILLISECONDS_PER_MEASURE);
-
-        Log.v(TAG, "getCurrentMeasureTimestamp() " + res);
+        Log.v(TAG, "getCurrentSection() " + res);
 
         return res;
     }
 
-    public long getNextMeasureTimestamp() {
-        long res = getCurrentMeasureTimestamp() + MILLISECONDS_PER_MEASURE;
+    public long getCurrentSectionTimestamp() {
+        long res = getStartTimestamp + (getCurrentSection() * MILLISECONDS_PER_SONG_SECTION);
 
-        Log.v(TAG, "getNextMeasureTimestamp() " + res);
+        Log.v(TAG, "getCurrentSectionTimestamp() " + res);
+
+        return res;
+    }
+
+    public long getNextSectionTimestamp() {
+        long res = getCurrentSectionTimestamp() + MILLISECONDS_PER_SONG_SECTION;
+
+        Log.v(TAG, "getNextSectionTimestamp() " + res);
 
         return res;
     }
 
     @Override
     public void playButtonPressed(SoundSampleInstance soundSampleInstance) {
+        if(!songStarted) {
+            songStarted = true;
+            getStartTimestamp = SamplePlayer.getCurrentTimestamp();
+        }
+
         SamplePlayer.SampleHandle.PlayInstance playInstance = soundSampleInstance.getCurrentPlayInstance();
 
         if (playInstance == null || playInstance.getPlayState() == STOPPED) {
-            soundSampleInstance.queueSample(getNextMeasureTimestamp(), -1);
+            soundSampleInstance.queueSample(getNextSectionTimestamp(), -1);
         }
         else if (playInstance.getPlayState() == STOP_QUEUED) {
             playInstance.setLoopAmount(-1);
