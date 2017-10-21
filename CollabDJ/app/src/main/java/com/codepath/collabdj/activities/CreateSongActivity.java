@@ -16,6 +16,8 @@ import com.codepath.collabdj.utils.SamplePlayer;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.codepath.collabdj.utils.SamplePlayer.PlayInstanceState.STOPPED;
+import static com.codepath.collabdj.utils.SamplePlayer.PlayInstanceState.STOP_QUEUED;
 import static com.codepath.collabdj.utils.SamplePlayer.getCurrentTimestamp;
 
 public class CreateSongActivity extends AppCompatActivity implements SoundSamplesAdapter.SoundSamplePlayListener {
@@ -166,9 +168,13 @@ public class CreateSongActivity extends AppCompatActivity implements SoundSample
 
     @Override
     public void playButtonPressed(SoundSampleInstance soundSampleInstance) {
-        //TODO eventually if a stop is queued, make it possible to unstop a loop by resetting its loop count back from 0
-        if (soundSampleInstance.getPlayState() == SoundSampleInstance.PlayState.STOPPED) {
+        SamplePlayer.SampleHandle.PlayInstance playInstance = soundSampleInstance.getCurrentPlayInstance();
+
+        if (playInstance == null || playInstance.getPlayState() == STOPPED) {
             soundSampleInstance.queueSample(getNextMeasureTimestamp(), -1);
+        }
+        else if (playInstance.getPlayState() == STOP_QUEUED) {
+            playInstance.setLoopAmount(-1);
         }
         else {
             soundSampleInstance.stop();

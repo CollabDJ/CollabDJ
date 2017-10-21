@@ -31,7 +31,7 @@ public class SoundSampleView extends RelativeLayout {
         //Update the sound sample state piechart
 
         //TODO This will eventually be where the piechart gets updated every frame based on sound position
-        viewHolder.ibPlayPause.setPlayState(viewHolder.getSoundSampleInstance().getPlayState());
+        viewHolder.ibPlayPause.setPlayState(viewHolder.getSoundSampleInstance().getCurrentPlayState());
 
         super.onDraw(canvas);
 
