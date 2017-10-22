@@ -4,29 +4,46 @@ import android.content.Context;
 
 import com.codepath.collabdj.utils.SamplePlayer;
 
-import static com.codepath.collabdj.models.SoundSampleInstance.PlayState.LOOPING;
-import static com.codepath.collabdj.models.SoundSampleInstance.PlayState.STOPPED;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.codepath.collabdj.utils.SamplePlayer.PlayInstanceState.STOPPED;
 
 /**
  * Created by ilyaseletsky on 10/15/17.
  */
 
-public class SoundSampleInstance {
-    SoundSample soundSample;
+public class SoundSampleInstance implements SamplePlayer.SampleHandleListener {
+    public interface Listener {
+        void startPlaying(SoundSampleInstance soundSampleInstance, long startSection);
 
-    public enum PlayState {
-        STOP_QUEUED,
-        STOPPED,
-        LOOP_QUEUED,
-        LOOPING,
+        void stopPlaying(SoundSampleInstance soundSampleInstance, int numTimesPlayed);
     }
 
-    PlayState playState;
+    protected class PlayInstanceInfo {
+        PlayInstanceInfo(long startSection) {
+            this.startSection = startSection;
+
+            numTimesPlayed = 0;
+        }
+
+        long startSection;
+        int numTimesPlayed;
+    }
+
+    SoundSample soundSample;
+
     SamplePlayer.SampleHandle sampleHandle;
 
-    public SoundSampleInstance(SoundSample soundSample, SamplePlayer samplePlayer, Context context) {
+    List<SamplePlayer.SampleHandle.PlayInstance> queuedPlayInstances;
+    Map<SamplePlayer.SampleHandle.PlayInstance, PlayInstanceInfo> playInstanceInfos;
+
+    public Listener listener;
+
+    public SoundSampleInstance(SoundSample soundSample, SamplePlayer samplePlayer, Context context, Listener listener) {
         this.soundSample = soundSample;
-        playState = STOPPED;
 
         // This checks are needed for now, to make the heterogenous recyclerview work with a dummy sample. It will go away.
         if (soundSample != null && samplePlayer != null) {
@@ -35,24 +52,107 @@ public class SoundSampleInstance {
             } else {
                 sampleHandle = samplePlayer.newSample(context, soundSample.getResourceId(), soundSample.getDuration());
             }
+
+            sampleHandle.listener = this;
         }
+
+        queuedPlayInstances = new ArrayList<>();
+        playInstanceInfos = new HashMap<>();
+
+        this.listener = listener;
     }
 
     public SoundSample getSoundSample() {
         return this.soundSample;
     }
 
-    public PlayState getPlayState() {
-        return this.playState;
+    public SamplePlayer.PlayInstanceState getCurrentPlayState() {
+        SamplePlayer.SampleHandle.PlayInstance currentPlayInstance = getCurrentPlayInstance();
+
+        if(currentPlayInstance == null) {
+            return STOPPED;
+        }
+        else {
+            return currentPlayInstance.getPlayState();
+        }
     }
 
-    public void queueSample(long timestamp, int loopAmount) {
-        playState = LOOPING;        //TODO: this should actually be set to LOOP_QUEUED and eventually the sample state will sync correctly
-        sampleHandle.queueSample(timestamp, loopAmount);
+    public SamplePlayer.SampleHandle.PlayInstance getCurrentPlayInstance() {
+        synchronized (queuedPlayInstances) {
+            if (queuedPlayInstances.isEmpty()) {
+                return null;
+            }
+
+            for (SamplePlayer.SampleHandle.PlayInstance playInstance : queuedPlayInstances) {
+                if (playInstance.getPlayState() != STOPPED) {
+                    return playInstance;
+                }
+            }
+
+            return null;
+        }
+    }
+
+    public void queueSample(long section, long millisecondsPerSection, long songStartTime, int loopAmount) {
+        SamplePlayer.SampleHandle.PlayInstance playInstance = sampleHandle.queueSample(songStartTime + (section * millisecondsPerSection), loopAmount);
+
+        synchronized (queuedPlayInstances) {
+            queuedPlayInstances.add(playInstance);
+            playInstanceInfos.put(playInstance, new PlayInstanceInfo(section));
+        }
     }
 
     public void stop() {
-        playState = STOPPED;        //TODO: this should actually be set to STOP_QUEUED and eventually the sample state will sync correctly
-        sampleHandle.stop();
+        SamplePlayer.SampleHandle.PlayInstance currentPlayInstance = getCurrentPlayInstance();
+
+        if (currentPlayInstance != null) {
+            currentPlayInstance.stop();
+        }
+    }
+
+    public boolean isLoaded() {
+        return sampleHandle.isLoaded();
+    }
+
+    @Override
+    public void onPlayOnce(SamplePlayer.SampleHandle.PlayInstance playInstance) {
+        PlayInstanceInfo playInstanceInfo = null;
+
+        //Synchronizing around queuedPlayInstances even though we're accessing playInstanceInfos since that's how it is everywhere else.
+        //They're closely tied together as one.  Could even wrap them in an inner class and syncrhonize around that if I really wanted to.
+        synchronized (queuedPlayInstances) {
+            playInstanceInfo = playInstanceInfos.get(playInstance);
+        }
+
+        assert(playInstanceInfo != null);
+
+        if (playInstanceInfo.numTimesPlayed == 0 && listener != null) {
+            listener.startPlaying(this, playInstanceInfo.startSection);
+        }
+
+        playInstanceInfo.numTimesPlayed += 1;
+    }
+
+    @Override
+    public void onStop(SamplePlayer.SampleHandle.PlayInstance playInstance) {
+        PlayInstanceInfo playInstanceInfo = null;
+
+        synchronized (queuedPlayInstances) {
+            playInstanceInfo = playInstanceInfos.get(playInstance);
+
+            queuedPlayInstances.remove(playInstance);
+            playInstanceInfos.remove(playInstance);
+        }
+
+        assert(playInstanceInfo != null);
+
+        if (playInstanceInfo.numTimesPlayed > 0 && listener != null) {
+            listener.stopPlaying(this, playInstanceInfo.numTimesPlayed);
+        }
+    }
+
+    @Override
+    public void onLoaded(SamplePlayer.SampleHandle sampleHandle) {
+
     }
 }

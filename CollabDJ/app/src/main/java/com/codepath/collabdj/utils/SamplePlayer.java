@@ -17,6 +17,11 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import static com.codepath.collabdj.utils.SamplePlayer.PlayInstanceState.LOOPING;
+import static com.codepath.collabdj.utils.SamplePlayer.PlayInstanceState.LOOP_QUEUED;
+import static com.codepath.collabdj.utils.SamplePlayer.PlayInstanceState.STOPPED;
+import static com.codepath.collabdj.utils.SamplePlayer.PlayInstanceState.STOP_QUEUED;
+
 /**
  * Created by ilyaseletsky on 10/13/17.
  */
@@ -24,11 +29,37 @@ import java.util.concurrent.TimeUnit;
 public class SamplePlayer {
     private static final String TAG = "SamplePlayer";
 
+    public enum PlayInstanceState {
+        STOP_QUEUED,
+        STOPPED,
+        LOOP_QUEUED,
+        LOOPING,
+    }
+
+    public interface SampleHandleListener {
+        /**
+         * Called when a play instance plays once.
+         * @param playInstance
+         */
+        void onPlayOnce(SampleHandle.PlayInstance playInstance);
+
+        /**
+         * Called when a play instance finally stops.
+         * @param playInstance
+         */
+        void onStop(SampleHandle.PlayInstance playInstance);
+
+        /**
+         * Called when loaded
+         */
+        void onLoaded(SampleHandle sampleHandle);
+    }
+
     /**
      * Pass these to Sample player to queue up a sample at some point in time.
      */
     public class SampleHandle {
-        protected class PlayInstance {
+        public class PlayInstance {
             /**
              * How many more times should the sample loop.
              * This counts down every time the sample plays.
@@ -53,6 +84,8 @@ public class SamplePlayer {
              */
             protected ScheduledFuture<?> sampleTask;
 
+            protected PlayInstanceState playState;
+
             /**
              * Creates a new play instance.
              * You should immediately call startSchedule afterwards.
@@ -69,6 +102,8 @@ public class SamplePlayer {
                 if (loopAmount >= 0) {
                     loopAmount += 1;
                 }
+
+                playState = LOOP_QUEUED;
 
                 this.loopAmount = loopAmount;
 
@@ -100,20 +135,27 @@ public class SamplePlayer {
                 if (loopAmount == 0) {
                     Log.v(TAG, "PlayInstance no more loops for sample " + sampleId + " so killing the PlayInstance.");
 
-                    sampleTask.cancel(true);
-                    shouldBePlaying = false;
-
-                    playInstances.remove(this);
+                    kill();
 
                     return;
                 }
 
+                playState = LOOPING;
+
                 //decrement remaining loops if needed
                 if (loopAmount > 0) {
                     loopAmount -= 1;
+
+                    if (loopAmount <= 0) {
+                        playState = STOP_QUEUED;
+                    }
                 }
 
                 shouldBePlaying = true;
+
+                if (listener != null) {
+                    listener.onPlayOnce(this);
+                }
 
                 playOnce();
             }
@@ -123,18 +165,76 @@ public class SamplePlayer {
              * Sets everything up to be stopped.
              * Removes this from the SampleHandle's list of queued samples.
              */
-            protected void stop() {
+            public void stop() {
+                if (playState == LOOP_QUEUED) {
+                    Log.v(TAG, "PlayInstance stop() for sample " + sampleId + " which is only queued, so killing completely");
+                    kill();
+                    return;
+                }
+
+                if (loopAmount == 0) {
+                    assert(playState == STOP_QUEUED || playState == STOPPED);
+                    Log.v(TAG, "PlayInstance stop() for sample " + sampleId + " which already has 0 loops remaining so no effect.");
+                    return;
+                }
+
                 Log.v(TAG, "PlayInstance stop() for sample " + sampleId);
 
                 loopAmount = 0;
+
+                playState = STOP_QUEUED;
+            }
+
+            protected void kill() {
+                Log.v(TAG, "PlayInstance kill() for sample " + sampleId);
+
+                playState = STOPPED;
+
+                sampleTask.cancel(true);
+                shouldBePlaying = false;
+
+                if(listener != null) {
+                    listener.onStop(this);
+                }
+
+                synchronized(playInstances) {
+                    playInstances.remove(this);
+                }
+            }
+
+            public void setLoopAmount(int loopAmount) {
+                if (playState == STOPPED) {
+                    Log.v(TAG, "setLoopAmount(" + loopAmount + ") for sample " + sampleId + " when it's STOPPED.  No effect.");
+                    return;
+                }
+
+                if (loopAmount == 0) {
+                    Log.v(TAG, "setLoopAmount(" + loopAmount + ") for sample " + sampleId + " calling stop().");
+                    stop();
+                }
+                else {
+                    this.loopAmount = loopAmount;
+
+                    if (playState == STOP_QUEUED) {
+                        playState = LOOPING;
+                        Log.v(TAG, "setLoopAmount(" + loopAmount + ") for sample " + sampleId + " when it's STOP_QUEUED.  LOOPING again.");
+                    }
+                    else {
+                        Log.v(TAG, "setLoopAmount(" + loopAmount + ") for sample " + sampleId);
+                    }
+                }
             }
 
             /**
              * Returns the remaining delay of the timer.
              * @return
              */
-            protected long getRemainingDelay() {
+            public long getRemainingDelay() {
                 return sampleTask.getDelay(TimeUnit.MILLISECONDS);
+            }
+
+            public PlayInstanceState getPlayState() {
+                return playState;
             }
         }
 
@@ -161,6 +261,8 @@ public class SamplePlayer {
          */
         protected long duration;
 
+        public SampleHandleListener listener;
+
         protected SampleHandle(int sampleId, boolean isLoaded, long duration) {
             this.isLoaded = isLoaded;
             this.sampleId = sampleId;
@@ -181,10 +283,16 @@ public class SamplePlayer {
          *                   In song creation mode, this will most likely be either 0 to play once
          *                   or -1 to loop infinitely until queueStop() is called.
          */
-        public void queueSample(long timestamp, int loopAmount) {
+        public PlayInstance queueSample(long timestamp, int loopAmount) {
             Log.v(TAG, "SampleHandle queueSample() sampleId " + sampleId + " with timestamp " + timestamp + " and loop amount " + loopAmount + " will play in " + (timestamp - getCurrentTimestamp()) + " ms");
 
-            playInstances.add(new PlayInstance(loopAmount, timestamp - getCurrentTimestamp()));
+            PlayInstance playInstance = new PlayInstance(loopAmount, timestamp - getCurrentTimestamp());
+
+            synchronized (playInstances) {
+                playInstances.add(playInstance);
+            }
+
+            return playInstance;
         }
 
         /**
@@ -193,18 +301,18 @@ public class SamplePlayer {
          * It's assumed this will only be called in song creation mode and never in song playback mode since
          * it wipes all queued play instances.
          */
-        public void stop() {
-            Log.v(TAG, "SampleHandle stop() sampleId " + sampleId);
-
-            //Create a copy since playInstance.stop() also handles removing itself from the playInstances set
-            //Can't iterate and remove at the same time
-            //It's expected that this should usually have only 1 item or so in it anyway so creating a copy isn't a big deal
-            Set<PlayInstance> playInstancesCopy = new HashSet<>(playInstances);
-
-            for(PlayInstance playInstance : playInstancesCopy) {
-                playInstance.stop();
-            }
-        }
+//        public void stop() {
+//            Log.v(TAG, "SampleHandle stop() sampleId " + sampleId);
+//
+//            //Create a copy since playInstance.stop() also handles removing itself from the playInstances set
+//            //Can't iterate and remove at the same time
+//            //It's expected that this should usually have only 1 item or so in it anyway so creating a copy isn't a big deal
+//            Set<PlayInstance> playInstancesCopy = new HashSet<>(playInstances);
+//
+//            for(PlayInstance playInstance : playInstancesCopy) {
+//                playInstance.stop();
+//            }
+//        }
 
         protected void playOnce() {
             Log.v(TAG, "SampleHandle playOnce() sampleId " + sampleId);
@@ -223,22 +331,32 @@ public class SamplePlayer {
 
             isLoaded = true;
 
-            for(PlayInstance playInstance : playInstances) {
-                if(playInstance.shouldBePlaying) {
-                    Log.v(TAG, "SampleHandle onSampleLoaded() and should be playing sampleId " + sampleId);
+            if (listener != null) {
+                listener.onLoaded(this);
+            }
 
-                    //if there was a way to play the sample at a specific point in time instead of from the start, do that
-                    //In the future, SoundPool can be replaced with OpenAL or OpenSL for greater control
-                    //I expect most sounds to load almost instantly so it should be fine
+            synchronized (playInstances) {
+                for (PlayInstance playInstance : playInstances) {
+                    if (playInstance.shouldBePlaying) {
+                        Log.v(TAG, "SampleHandle onSampleLoaded() and should be playing sampleId " + sampleId);
 
-                    //Actually don't play the sample, it seems to take forever to load.  Make it so samples can't be played while loading.
-                    //playOnce();
+                        //if there was a way to play the sample at a specific point in time instead of from the start, do that
+                        //In the future, SoundPool can be replaced with OpenAL or OpenSL for greater control
+                        //I expect most sounds to load almost instantly so it should be fine
+
+                        //Actually don't play the sample, it seems to take forever to load.  Make it so samples can't be played while loading.
+                        //playOnce();
+                    }
                 }
             }
         }
+
+        public boolean isLoaded() {
+            return isLoaded;
+        }
     }
 
-    //TODO: Next week replace with OpenSL, SoundPool truncates sounds that are too long
+    //TODO: Some day replace with OpenSL, SoundPool truncates sounds that are too long and can't play sounds from the middle
     SoundPool soundPool;
 
     ScheduledExecutorService timedTaskRunner;

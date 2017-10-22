@@ -3,8 +3,6 @@ package com.codepath.collabdj.utils;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import com.codepath.collabdj.models.SoundSampleInstance;
-
 /**
  * Created by tiago on 10/15/17.
  */
@@ -22,7 +20,7 @@ public class PlayPauseButton extends android.support.v7.widget.AppCompatImageBut
         super(context, attrs, defStyleAttr);
     }
 
-    public void setPlayState(SoundSampleInstance.PlayState playState) {
+    public void setPlayState(SamplePlayer.PlayInstanceState playState) {
         switch(playState) {
             case STOP_QUEUED:
             case STOPPED:
