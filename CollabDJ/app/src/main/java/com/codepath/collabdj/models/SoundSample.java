@@ -8,7 +8,6 @@ import org.parceler.Parcel;
 
 @Parcel
 public class SoundSample {
-
     String name;
     int iconDrawableId;
     String path;

@@ -1,5 +1,8 @@
 package com.codepath.collabdj.models;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.parceler.Parcel;
 
 import java.util.ArrayList;
@@ -11,6 +14,15 @@ import java.util.List;
 
 @Parcel
 public class Song {
+    public static final String FIREBASE_SONG_DATABASE_ROOT = "sharedSongs";
+    public static final String FIREBASE_SONG_STORAGE_ROOT = "sharedSongs";
+
+    public static final String TITLE_JSON_NAME = "title";
+    public static final String MILLISECONDS_PER_SECTION_JSON_NAME = "millisecondsPerSection";
+    public static final String USER_NAMES_JSON_NAME = "userNames";
+    public static final String SOUND_SAMPLES_JSON_NAME = "soundSamples";
+    public static final String SOUND_SAMPLE_USAGES_JSON_NAME = "soundSampleUsages";
+
     /**
      * Sounds can only start playing at the start of a section.
      */
@@ -34,6 +46,40 @@ public class Song {
         this.numMillisecondsPerSection = numMillisecondsPerSection <= 0
                 ? DEFAULT_MILLISECONDS_PER_SONG_SECTION
                 : numMillisecondsPerSection;
+    }
+
+    public JSONObject getJSONObject() {
+        JSONObject res = new JSONObject();
+
+        try {
+            res.put(TITLE_JSON_NAME, title);
+            res.put(MILLISECONDS_PER_SECTION_JSON_NAME, getNumMillisecondsPerSection());
+
+            res.put(USER_NAMES_JSON_NAME, userNames);
+
+            if (!soundSampleList.isEmpty()) {
+                JSONArray soundSampleJsonArray = new JSONArray();
+
+                for(SoundSample soundSample : soundSampleList) {
+                    soundSampleJsonArray.put(soundSample.getName());
+                }
+
+                res.put(SOUND_SAMPLES_JSON_NAME, soundSampleJsonArray);
+            }
+
+            res.put(SOUND_SAMPLE_USAGES_JSON_NAME, sampleUsageList);
+
+//            JSONArray sampleUsageArray = new JSONArray();
+//
+//            for(SampleUsage sampleUsage : sampleUsageList) {
+//                sampleUsageArray
+//            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return res;
     }
 
     public long getNumMillisecondsPerSection() {
@@ -115,5 +161,4 @@ public class Song {
             return this.sampleUsageList.remove(position);
         }
     }
-
 }

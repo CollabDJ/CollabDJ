@@ -1,6 +1,8 @@
 package com.codepath.collabdj.activities;
 
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,16 +12,30 @@ import com.codepath.collabdj.R;
 import com.codepath.collabdj.adapters.SoundSamplesAdapter;
 import com.codepath.collabdj.models.SampleUsage;
 import com.codepath.collabdj.models.Song;
+import com.codepath.collabdj.models.SongListInfo;
 import com.codepath.collabdj.models.SoundSample;
 import com.codepath.collabdj.models.SoundSampleInstance;
 import com.codepath.collabdj.utils.SamplePlayer;
 import com.codepath.collabdj.utils.SpacesItemDecoration;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import org.json.JSONObject;
+
+import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.codepath.collabdj.models.Song.FIREBASE_SONG_DATABASE_ROOT;
+import static com.codepath.collabdj.models.Song.FIREBASE_SONG_STORAGE_ROOT;
 import static com.codepath.collabdj.utils.SamplePlayer.PlayInstanceState.STOPPED;
 import static com.codepath.collabdj.utils.SamplePlayer.PlayInstanceState.STOP_QUEUED;
 
@@ -213,8 +229,73 @@ public class CreateSongActivity
 
         //Go over every SoundSampleInstance already added
         for(SoundSampleInstance soundSampleInstance : mSamples) {
-            song.addSoundSample(soundSampleInstance.getSoundSample());
+            if(soundSampleInstance.getSoundSample() != null) {
+                song.addSoundSample(soundSampleInstance.getSoundSample());
+            }
         }
+    }
+
+    public UploadTask saveSongToCloud(String songName) {
+        if (song == null) {
+            return null;
+        }
+
+        song.title = songName;
+
+        JSONObject jsonObject = song.getJSONObject();
+
+        DatabaseReference firebaseDatabaseRoot = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference songDatabase = firebaseDatabaseRoot.child(FIREBASE_SONG_DATABASE_ROOT);
+
+        DatabaseReference newSongRef = songDatabase.push();
+
+        String songPath = FIREBASE_SONG_STORAGE_ROOT + "/" + newSongRef.getKey();
+
+        newSongRef.setValue(new SongListInfo(song.title, new Date(), songPath));
+
+        StorageReference firebaseStorageRoot = FirebaseStorage.getInstance().getReference();
+        StorageReference fileStorage = firebaseStorageRoot.child(songPath);
+        return fileStorage.putBytes(jsonObject.toString().getBytes());
+    }
+
+    public void saveSongLocally(String filename) {
+        if (song == null) {
+            return;
+        }
+
+        JSONObject jsonObject = song.getJSONObject();
+
+        try {
+            FileOutputStream outputFile = openFileOutput(filename, 0);
+            outputFile.write(jsonObject.toString().getBytes());
+            outputFile.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        //TODO: for now save the song to cloud, later show an alert dialog asking if the user wants to quit without saving
+
+        saveSongLocally("Test");
+        UploadTask uploadTask = saveSongToCloud("Test");
+
+        // Register observers to listen for when the download is done or if it fails
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+                exception.printStackTrace();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+            }
+        });
     }
 
     @Override
