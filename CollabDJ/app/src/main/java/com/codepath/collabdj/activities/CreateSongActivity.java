@@ -11,8 +11,8 @@ import android.util.Log;
 import com.codepath.collabdj.R;
 import com.codepath.collabdj.adapters.SoundSamplesAdapter;
 import com.codepath.collabdj.models.SampleUsage;
+import com.codepath.collabdj.models.SharedSong;
 import com.codepath.collabdj.models.Song;
-import com.codepath.collabdj.models.SongListInfo;
 import com.codepath.collabdj.models.SoundSample;
 import com.codepath.collabdj.models.SoundSampleInstance;
 import com.codepath.collabdj.utils.SamplePlayer;
@@ -251,7 +251,7 @@ public class CreateSongActivity
 
         String songPath = FIREBASE_SONG_STORAGE_ROOT + "/" + newSongRef.getKey();
 
-        newSongRef.setValue(new SongListInfo(song.title, new Date(), songPath));
+        newSongRef.setValue(new SharedSong(song.title, new Date(), songPath));
 
         StorageReference firebaseStorageRoot = FirebaseStorage.getInstance().getReference();
         StorageReference fileStorage = firebaseStorageRoot.child(songPath);
