@@ -2,9 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.codepath.collabdj">
 
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -31,12 +31,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.codepath.collabdj.activities.MainActivity" />
         </activity>
-        <activity android:name=".activities.JoinSessionActivity"></activity>
-        <activity android:name=".activities.SharedSongsActivity"></activity>
+        <activity android:name=".activities.JoinSessionActivity" />
+        <activity android:name=".activities.SharedSongsActivity" />
 
-        <meta-data android:name="com.google.android.gms.vision.DEPEDENCIES" android:value="barcode"/>
-                android:value="com.codepath.collabdj.activities.MainActivity" />
-
+        <meta-data
+            android:name="com.google.android.gms.vision.DEPEDENCIES"
+            android:value="barcode" />
+        android:value="com.codepath.collabdj.activities.MainActivity" />
+        <activity android:name=".activities.PlaySongActivity"></activity>
     </application>
 
 </manifest>

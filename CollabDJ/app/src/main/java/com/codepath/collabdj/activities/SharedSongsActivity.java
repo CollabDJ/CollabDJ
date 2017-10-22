@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -43,18 +44,33 @@ public class SharedSongsActivity extends AppCompatActivity {
         sharedSongsAdapter = new SharedSongsAdapter(this, sharedSongs);
         lvItems.setAdapter(sharedSongsAdapter);
 
-        String url = "https://collabdj-1337.firebaseio.com/";
+        String url = "https://collabdj-1337.firebaseio.com/songs.json";
 
         AsyncHttpClient client = new AsyncHttpClient();
 
         client.get(url, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                JSONArray sharedSongsJsonResults = null;
-
                 try {
-                    sharedSongsJsonResults = response.getJSONArray("results");
-                    sharedSongs.addAll(SharedSong.fromJSONArray(sharedSongsJsonResults));
+                    for(Iterator<String> iterator = response.keys(); iterator.hasNext();){
+                        String key = iterator.next();
+                        sharedSongs.add(new SharedSong(response.getJSONObject(key)));
+                    }
+
+                    sharedSongsAdapter.notifyDataSetChanged();
+                    Log.d("DEBUG", sharedSongs.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                try {
+                    for(int i=0; i<response.length(); i++){
+                        sharedSongs.add(new SharedSong(response.getJSONObject(i)));
+                    }
+
                     sharedSongsAdapter.notifyDataSetChanged();
                     Log.d("DEBUG", sharedSongs.toString());
                 } catch (JSONException e) {

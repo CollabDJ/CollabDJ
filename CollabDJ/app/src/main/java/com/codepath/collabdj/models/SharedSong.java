@@ -1,18 +1,14 @@
 package com.codepath.collabdj.models;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.parceler.Parcel;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 /**
  * Created by chenrangong on 10/21/17.
  */
 
-@Parcel
 public class SharedSong {
     String title;
     Date createdTime;
@@ -53,18 +49,5 @@ public class SharedSong {
         String createdTime = jsonObject.getString("createdTime");
 
         this.pathToData = jsonObject.getString("pathToData");
-    }
-
-    public static ArrayList<SharedSong> fromJSONArray(JSONArray array){
-        ArrayList<SharedSong> results = new ArrayList<>();
-
-        for(int i = 0; i < array.length(); i++){
-            try {
-                results.add(new SharedSong(array.getJSONObject(i)));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return results;
     }
 }
