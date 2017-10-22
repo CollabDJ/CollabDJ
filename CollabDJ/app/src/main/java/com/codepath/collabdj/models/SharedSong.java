@@ -11,13 +11,13 @@ import java.util.Date;
 
 public class SharedSong {
     String title;
-    Date createdTime;
-    String pathToData;
+    Date creationDate;
+    String storageLocation;
 
     public SharedSong(String title, Date createdTime, String pathToData){
         this.title = title;
-        this.createdTime = createdTime;
-        this.pathToData = pathToData;
+        this.creationDate = createdTime;
+        this.storageLocation = pathToData;
     }
 
     public String getTitle() {
@@ -25,11 +25,11 @@ public class SharedSong {
     }
 
     public Date getCreatedTime() {
-        return createdTime;
+        return creationDate;
     }
 
     public String getPathToData() {
-        return pathToData;
+        return storageLocation;
     }
 
     public void setTitle(String title) {
@@ -37,17 +37,18 @@ public class SharedSong {
     }
 
     public void setCreatedTime(Date createdTime) {
-        this.createdTime = createdTime;
+        this.creationDate = createdTime;
     }
 
     public void setPathToData(String pathToData) {
-        this.pathToData = pathToData;
+        this.storageLocation = pathToData;
     }
 
     public SharedSong(JSONObject jsonObject) throws JSONException{
         this.title = jsonObject.getString("title");
-        String createdTime = jsonObject.getString("createdTime");
-
-        this.pathToData = jsonObject.getString("pathToData");
+        String time = jsonObject.getJSONObject("creationDate").getString("time");
+        long timeLong = Long.parseLong(time);
+        this.creationDate = new Date(timeLong);
+        this.storageLocation = jsonObject.getString("storageLocation");
     }
 }

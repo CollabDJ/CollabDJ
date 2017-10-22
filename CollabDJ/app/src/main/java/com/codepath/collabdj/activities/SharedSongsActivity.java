@@ -44,7 +44,7 @@ public class SharedSongsActivity extends AppCompatActivity {
         sharedSongsAdapter = new SharedSongsAdapter(this, sharedSongs);
         lvItems.setAdapter(sharedSongsAdapter);
 
-        String url = "https://collabdj-1337.firebaseio.com/songs.json";
+        String url = "https://collabdj-1337.firebaseio.com/sharedSongs.json";
 
         AsyncHttpClient client = new AsyncHttpClient();
 
