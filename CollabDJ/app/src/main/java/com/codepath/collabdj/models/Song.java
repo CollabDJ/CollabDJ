@@ -16,6 +16,7 @@ import java.util.List;
 public class Song {
     public static final String FIREBASE_SONG_DATABASE_ROOT = "sharedSongs";
     public static final String FIREBASE_SONG_STORAGE_ROOT = "sharedSongs";
+    public static final String LOCAL_SONG_STORAGE_ROOT = "savedSongs";
 
     public static final String TITLE_JSON_NAME = "title";
     public static final String MILLISECONDS_PER_SECTION_JSON_NAME = "millisecondsPerSection";
@@ -67,13 +68,13 @@ public class Song {
                 res.put(SOUND_SAMPLES_JSON_NAME, soundSampleJsonArray);
             }
 
-            res.put(SOUND_SAMPLE_USAGES_JSON_NAME, sampleUsageList);
+            JSONArray sampleUsageArray = new JSONArray();
 
-//            JSONArray sampleUsageArray = new JSONArray();
-//
-//            for(SampleUsage sampleUsage : sampleUsageList) {
-//                sampleUsageArray
-//            }
+            for(SampleUsage sampleUsage : sampleUsageList) {
+                sampleUsageArray.put(sampleUsage.getJSONObject());
+            }
+
+            res.put(SOUND_SAMPLE_USAGES_JSON_NAME, sampleUsageArray);
 
         } catch (JSONException e) {
             e.printStackTrace();

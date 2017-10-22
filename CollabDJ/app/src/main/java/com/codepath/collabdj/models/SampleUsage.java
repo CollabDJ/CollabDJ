@@ -1,5 +1,7 @@
 package com.codepath.collabdj.models;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.parceler.Parcel;
 
 /**
@@ -29,5 +31,19 @@ public class SampleUsage {
 
     public long getStartSection() {
         return this.startSection;
+    }
+
+    public JSONObject getJSONObject() {
+        JSONObject res = new JSONObject();
+
+        try {
+            res.put("soundSampleIndex", soundSampleIndex);
+            res.put("startSection", startSection);
+            res.put("loopTimes", loopTimes);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return res;
     }
 }
