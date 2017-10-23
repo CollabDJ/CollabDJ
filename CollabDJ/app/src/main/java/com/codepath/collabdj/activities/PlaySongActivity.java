@@ -1,5 +1,7 @@
 package com.codepath.collabdj.activities;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -20,6 +22,13 @@ public class PlaySongActivity extends AppCompatActivity {
 
     List<SoundSampleInstance> soundSampleInstances;
     long songStartTime;
+
+    public static void launch(Song song, Context context) {
+        Intent i = new Intent(context, PlaySongActivity.class);
+        i.putExtra(PlaySongActivity.SONG_KEY, song);
+
+        context.startActivity(i);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

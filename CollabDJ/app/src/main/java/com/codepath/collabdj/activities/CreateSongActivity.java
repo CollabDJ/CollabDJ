@@ -193,6 +193,7 @@ public class CreateSongActivity
     public void setupNewSong() {
         song = new Song(0);     //It could eventually be possible to set length per section in settings before starting a song
         songStartTimeStamp = SamplePlayer.getCurrentTimestamp();
+        song.title = "TitleGoesHere";
 
         //Go over every SoundSampleInstance already added
         for(SoundSampleInstance soundSampleInstance : mSamples) {
