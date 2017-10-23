@@ -1,13 +1,21 @@
 package com.codepath.collabdj.activities;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.codepath.collabdj.R;
 import com.codepath.collabdj.adapters.SharedSongsAdapter;
 import com.codepath.collabdj.models.SharedSong;
+import com.codepath.collabdj.models.Song;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -43,6 +51,13 @@ public class SharedSongsActivity extends AppCompatActivity {
         sharedSongs = new ArrayList<>();
         sharedSongsAdapter = new SharedSongsAdapter(this, sharedSongs);
         lvItems.setAdapter(sharedSongsAdapter);
+
+        lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                openSong(sharedSongs.get(position));
+            }
+        });
 
         String url = "https://collabdj-1337.firebaseio.com/sharedSongs.json";
 
@@ -81,6 +96,34 @@ public class SharedSongsActivity extends AppCompatActivity {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
 
+            }
+        });
+    }
+
+    void openSong(SharedSong sharedSong) {
+        StorageReference firebaseStorageRoot = FirebaseStorage.getInstance().getReference();
+        StorageReference fileStorage = firebaseStorageRoot.child(sharedSong.getPathToData());
+
+        final long ONE_MEGABYTE = 1024 * 1024;
+        fileStorage.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                try {
+                    JSONObject jsonObject = new JSONObject(new String(bytes));
+
+                    Song song = new Song(jsonObject);
+
+                    PlaySongActivity.launch(song, SharedSongsActivity.this);
+                }
+                catch(Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any error
+                exception.printStackTrace();
             }
         });
     }
