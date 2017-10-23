@@ -32,6 +32,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
         RelativeLayout rlOpenSong = (RelativeLayout) findViewById(R.id.rlOpenSong);
+        rlOpenSong.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Launch OpenSongsActivity.
+                Intent i = new Intent(MainActivity.this, OpenSongsActivity.class);
+                startActivity(i);
+            }
+        });
 
         RelativeLayout rlJoinSession = (RelativeLayout) findViewById(R.id.rlJoinSession);
         rlJoinSession.setOnClickListener(new View.OnClickListener() {
