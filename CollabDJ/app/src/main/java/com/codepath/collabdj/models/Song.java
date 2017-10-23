@@ -3,7 +3,6 @@ package com.codepath.collabdj.models;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.parceler.Parcel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,7 +12,7 @@ import java.util.List;
  * Created by tiago on 10/12/17.
  */
 
-@Parcel
+//@Parcel
 public class Song implements Serializable {
     public static final String FIREBASE_SONG_DATABASE_ROOT = "sharedSongs";
     public static final String FIREBASE_SONG_STORAGE_ROOT = "sharedSongs";
@@ -83,7 +82,7 @@ public class Song implements Serializable {
             res.put(TITLE_JSON_NAME, title);
             res.put(MILLISECONDS_PER_SECTION_JSON_NAME, getNumMillisecondsPerSection());
 
-            res.put(USER_NAMES_JSON_NAME, userNames);
+            res.put(USER_NAMES_JSON_NAME, new JSONArray(userNames));
 
             if (!soundSampleList.isEmpty()) {
                 JSONArray soundSampleJsonArray = new JSONArray();

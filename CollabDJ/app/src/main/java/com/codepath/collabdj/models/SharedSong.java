@@ -3,13 +3,14 @@ package com.codepath.collabdj.models;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by chenrangong on 10/21/17.
  */
 
-public class SharedSong {
+public class SharedSong implements Serializable {
     String title;
     Date createdTime;
     String pathToDate;

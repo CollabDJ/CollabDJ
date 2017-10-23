@@ -2,14 +2,15 @@ package com.codepath.collabdj.models;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.parceler.Parcel;
+
+import java.io.Serializable;
 
 /**
  * Created by tiago on 10/12/17.
  */
 
-@Parcel
-public class SampleUsage {
+//@Parcel
+public class SampleUsage implements Serializable {
 
     int soundSampleIndex;
     long startSection;
