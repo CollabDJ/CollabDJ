@@ -36,7 +36,6 @@ import java.util.Map;
 
 import static com.codepath.collabdj.models.Song.FIREBASE_SONG_DATABASE_ROOT;
 import static com.codepath.collabdj.models.Song.FIREBASE_SONG_STORAGE_ROOT;
-import static com.codepath.collabdj.models.Song.LOCAL_SONG_STORAGE_ROOT;
 import static com.codepath.collabdj.utils.SamplePlayer.PlayInstanceState.STOPPED;
 import static com.codepath.collabdj.utils.SamplePlayer.PlayInstanceState.STOP_QUEUED;
 
@@ -281,7 +280,7 @@ public class CreateSongActivity
         //TODO: for now save the song to cloud, later show an alert dialog asking if the user wants to quit without saving
 
         saveSongLocally("Test");
-        UploadTask uploadTask = saveSongToCloud(LOCAL_SONG_STORAGE_ROOT + "/Test");
+        UploadTask uploadTask = saveSongToCloud("Test");
 
         // Register observers to listen for when the download is done or if it fails
         uploadTask.addOnFailureListener(new OnFailureListener() {

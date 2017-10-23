@@ -35,7 +35,7 @@ public class OpenSongsActivity extends AppCompatActivity {
     public ArrayList<SharedSong> getAllSongs(){
 
         ArrayList<SharedSong> localSongs = new ArrayList<SharedSong>();
-        File parentFile = new File("Localsongs");
+        File parentFile = new File("/");
         if(parentFile.exists()){
             File[] files = parentFile.listFiles();
             for(File file : files){
