@@ -3,10 +3,16 @@ package com.codepath.collabdj.activities;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.codepath.collabdj.R;
 import com.codepath.collabdj.adapters.SoundSamplesAdapter;
@@ -69,10 +75,31 @@ public class CreateSongActivity
      */
     Map<SoundSample, Integer> soundSampleIndexMapping;
 
+    /**
+     * Hamburger menu references.
+     */
+    private DrawerLayout mDrawer;
+    private Toolbar toolbar;
+    private NavigationView nvDrawer;
+    private ActionBarDrawerToggle drawerToggle;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_song);
+
+        // Set a toolbar to replace the ActionBar.
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // Find our drawer view.
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        // Find our navigationView.
+        nvDrawer = (NavigationView) findViewById(R.id.nvView);
+        // Setup drawer view.
+        setupDrawerView(nvDrawer);
+
 
         // Enable up icon.
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -314,5 +341,36 @@ public class CreateSongActivity
         sampleUsage.loopTimes = numTimesPlayed;
 
         song.addSampleUsage(sampleUsage);
+    }
+
+    private void setupDrawerView(NavigationView navigationView) {
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        selectDrawerItem(menuItem);
+                        return true;
+                    }
+                }
+        );
+    }
+
+    private void selectDrawerItem(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.nav_first_element:
+                Toast.makeText(CreateSongActivity.this, "First element selected!", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.nav_second_element:
+                Toast.makeText(CreateSongActivity.this, "Second element selected!", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.nav_third_element:
+                Toast.makeText(CreateSongActivity.this, "Third element selected!", Toast.LENGTH_LONG).show();
+                break;
+            default:
+                Toast.makeText(CreateSongActivity.this, "Default case selected!", Toast.LENGTH_LONG).show();
+        }
+
+        menuItem.setChecked(true);
+        mDrawer.closeDrawers();
     }
 }
