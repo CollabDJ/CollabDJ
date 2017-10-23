@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
  */
 
 @Parcel
-public class Song {
+public class Song implements Serializable {
     public static final String FIREBASE_SONG_DATABASE_ROOT = "sharedSongs";
     public static final String FIREBASE_SONG_STORAGE_ROOT = "sharedSongs";
     public static final String LOCAL_SONG_STORAGE_ROOT = "savedSongs";
@@ -47,6 +48,32 @@ public class Song {
         this.numMillisecondsPerSection = numMillisecondsPerSection <= 0
                 ? DEFAULT_MILLISECONDS_PER_SONG_SECTION
                 : numMillisecondsPerSection;
+    }
+
+    public Song(JSONObject jsonObject) throws JSONException {
+        title = jsonObject.getString(TITLE_JSON_NAME);
+        numMillisecondsPerSection = jsonObject.getLong(MILLISECONDS_PER_SECTION_JSON_NAME);
+
+        JSONArray jsonUserNames = jsonObject.getJSONArray(USER_NAMES_JSON_NAME);
+        userNames = new ArrayList<>(jsonUserNames.length());
+
+        for(int i = 0; i < jsonUserNames.length(); ++i) {
+            userNames.add(jsonUserNames.getString(i));
+        }
+
+        JSONArray jsonSoundSamples = jsonObject.getJSONArray(SOUND_SAMPLES_JSON_NAME);
+        soundSampleList = new ArrayList<>(jsonSoundSamples.length());
+
+        for(int i = 0; i < jsonSoundSamples.length(); ++i) {
+            soundSampleList.add(SoundSample.SOUND_SAMPLES.get(jsonSoundSamples.getString(i)));
+        }
+
+        JSONArray jsonSoundSampleUsages = jsonObject.getJSONArray(SOUND_SAMPLE_USAGES_JSON_NAME);
+        sampleUsageList = new ArrayList<>(jsonSoundSampleUsages.length());
+
+        for(int i = 0; i < jsonSoundSampleUsages.length(); ++i) {
+            sampleUsageList.add(new SampleUsage(jsonSoundSampleUsages.getJSONObject(i)));
+        }
     }
 
     public JSONObject getJSONObject() {
