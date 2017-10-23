@@ -1,9 +1,7 @@
 package com.codepath.collabdj.activities;
 
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -13,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.codepath.collabdj.R;
 import com.codepath.collabdj.adapters.SoundSamplesAdapter;
@@ -24,8 +21,6 @@ import com.codepath.collabdj.models.SoundSample;
 import com.codepath.collabdj.models.SoundSampleInstance;
 import com.codepath.collabdj.utils.SamplePlayer;
 import com.codepath.collabdj.utils.SpacesItemDecoration;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -36,6 +31,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -277,42 +273,41 @@ public class CreateSongActivity
         try {
             File dir = getFilesDir();
             File file = new File(dir + "/localsongs/", filename);
-            if(file.getParentFile().mkdirs()){
-                file.createNewFile();
-                FileOutputStream outputFile = new FileOutputStream(file);
-                outputFile.write(jsonObject.toString().getBytes());
-                outputFile.flush();
-                outputFile.close();
-            }
+            file.getParentFile().mkdirs();
 
+            file.createNewFile();
+            FileOutputStream outputFile = new FileOutputStream(file);
+            outputFile.write(jsonObject.toString().getBytes());
+            outputFile.flush();
+            outputFile.close();
         }
         catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        //TODO: for now save the song to cloud, later show an alert dialog asking if the user wants to quit without saving
-
-        saveSongLocally("Test");
-        UploadTask uploadTask = saveSongToCloud("Test");
-
-        // Register observers to listen for when the download is done or if it fails
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
-                exception.printStackTrace();
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                Uri downloadUrl = taskSnapshot.getDownloadUrl();
-            }
-        });
-    }
+//    @Override
+//    public void onBackPressed() {
+//        //TODO: for now save the song to cloud, later show an alert dialog asking if the user wants to quit without saving
+//
+//        saveSongLocally("Test");
+//        UploadTask uploadTask = saveSongToCloud("Test");
+//
+//        // Register observers to listen for when the download is done or if it fails
+//        uploadTask.addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception exception) {
+//                // Handle unsuccessful uploads
+//                exception.printStackTrace();
+//            }
+//        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//            @Override
+//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+//                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+//            }
+//        });
+//    }
 
     @Override
     public long playButtonPressed(SoundSampleInstance soundSampleInstance) {
@@ -370,19 +365,25 @@ public class CreateSongActivity
         );
     }
 
+    private String getTestSongTitle() {
+        String title = song == null ? "Song" : song.title;
+
+        return title + " " + new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss").format(new Date());
+    }
+
     private void selectDrawerItem(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_first_element:
-                Toast.makeText(CreateSongActivity.this, "First element selected!", Toast.LENGTH_LONG).show();
+                saveSongToCloud(getTestSongTitle());
                 break;
             case R.id.nav_second_element:
-                Toast.makeText(CreateSongActivity.this, "Second element selected!", Toast.LENGTH_LONG).show();
+                saveSongLocally(getTestSongTitle());
                 break;
             case R.id.nav_third_element:
-                Toast.makeText(CreateSongActivity.this, "Third element selected!", Toast.LENGTH_LONG).show();
+                //Toast.makeText(CreateSongActivity.this, "Third element selected!", Toast.LENGTH_LONG).show();
                 break;
             default:
-                Toast.makeText(CreateSongActivity.this, "Default case selected!", Toast.LENGTH_LONG).show();
+                //Toast.makeText(CreateSongActivity.this, "Default case selected!", Toast.LENGTH_LONG).show();
         }
 
         menuItem.setChecked(true);
