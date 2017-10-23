@@ -31,11 +31,8 @@
     * Open from cloud load saved songs from cloud
     
 4. **Saving**
-    * You can save locally or to the cloud
-    * <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/HamburgerMenu.jpg">Hamburger Menu Wireframe</a>
-
-5. **Joining friends**
-    
+    * There is a hamburge menu on the creat song page with options saving locally or in cloud.
+    * <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/HamburgerMenu.jpg">Hamburger Menu Wireframe</a>   
 
 **Optional**
 
