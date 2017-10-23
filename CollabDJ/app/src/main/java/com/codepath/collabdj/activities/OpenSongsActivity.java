@@ -8,6 +8,7 @@ import com.codepath.collabdj.R;
 import com.codepath.collabdj.adapters.SharedSongsAdapter;
 import com.codepath.collabdj.models.SharedSong;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class OpenSongsActivity extends AppCompatActivity {
@@ -27,10 +28,21 @@ public class OpenSongsActivity extends AppCompatActivity {
         sharedSongsAdapter = new SharedSongsAdapter(this, sharedSongs);
         lvItems.setAdapter(sharedSongsAdapter);
 
-
+        sharedSongs = getAllSongs();
+        sharedSongsAdapter.notifyDataSetChanged();
     }
 
-    public void getSongs(){
+    public ArrayList<SharedSong> getAllSongs(){
 
+        ArrayList<SharedSong> localSongs = new ArrayList<SharedSong>();
+        File parentFile = new File("Localsongs");
+        if(parentFile.exists()){
+            File[] files = parentFile.listFiles();
+            for(File file : files){
+                SharedSong song = new SharedSong(file.getName(), null, file.getPath());
+                localSongs.add(song);
+            }
+        }
+        return localSongs;
     }
 }

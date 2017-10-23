@@ -11,8 +11,8 @@ import android.util.Log;
 import com.codepath.collabdj.R;
 import com.codepath.collabdj.adapters.SoundSamplesAdapter;
 import com.codepath.collabdj.models.SampleUsage;
+import com.codepath.collabdj.models.SharedSong;
 import com.codepath.collabdj.models.Song;
-import com.codepath.collabdj.models.SongListInfo;
 import com.codepath.collabdj.models.SoundSample;
 import com.codepath.collabdj.models.SoundSampleInstance;
 import com.codepath.collabdj.utils.SamplePlayer;
@@ -251,7 +251,7 @@ public class CreateSongActivity
 
         String songPath = FIREBASE_SONG_STORAGE_ROOT + "/" + newSongRef.getKey();
 
-        newSongRef.setValue(new SongListInfo(song.title, new Date(), songPath));
+        newSongRef.setValue(new SharedSong(song.title, new Date(), songPath));
 
         StorageReference firebaseStorageRoot = FirebaseStorage.getInstance().getReference();
         StorageReference fileStorage = firebaseStorageRoot.child(songPath);
@@ -280,7 +280,7 @@ public class CreateSongActivity
         //TODO: for now save the song to cloud, later show an alert dialog asking if the user wants to quit without saving
 
         saveSongLocally("Test");
-        UploadTask uploadTask = saveSongToCloud("Test");
+        UploadTask uploadTask = saveSongToCloud("Localsongs/Test");
 
         // Register observers to listen for when the download is done or if it fails
         uploadTask.addOnFailureListener(new OnFailureListener() {
