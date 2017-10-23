@@ -2,8 +2,7 @@ package com.codepath.collabdj.models;
 
 import com.codepath.collabdj.R;
 
-import org.parceler.Parcel;
-
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -14,8 +13,8 @@ import java.util.Map;
  * Created by tiago on 10/12/17.
  */
 
-@Parcel
-public class SoundSample {
+//@Parcel
+public class SoundSample implements Serializable {
     String name;
     int iconDrawableId;
     String path;

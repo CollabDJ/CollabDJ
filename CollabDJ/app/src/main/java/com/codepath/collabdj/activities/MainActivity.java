@@ -58,6 +58,38 @@ public class MainActivity extends AppCompatActivity {
                 // Launch SharedSongsActivity.
                 Intent i = new Intent(MainActivity.this, SharedSongsActivity.class);
                 startActivity(i);
+
+                //For now hardcoding this to download a file from firebase
+//                StorageReference firebaseStorageRoot = FirebaseStorage.getInstance().getReference();
+//                StorageReference fileStorage = firebaseStorageRoot.child("sharedSongs").child("-Kx6-90iwpzjjQRzIGhU");
+//
+//                final long ONE_MEGABYTE = 1024 * 1024;
+//                fileStorage.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+//                    @Override
+//                    public void onSuccess(byte[] bytes) {
+//                        try {
+//                            JSONObject jsonObject = new JSONObject(new String(bytes));
+//
+//                            Song song = new Song(jsonObject);
+//
+//                            // Data is returned in bytes array
+//
+//                            Intent i = new Intent(MainActivity.this, PlaySongActivity.class);
+//                            i.putExtra(PlaySongActivity.SONG_KEY, song);
+//
+//                            startActivity(i);
+//                        }
+//                        catch(Exception e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }).addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception exception) {
+//                        // Handle any error
+//                        exception.printStackTrace();
+//                    }
+//                });
             }
         });
     }
