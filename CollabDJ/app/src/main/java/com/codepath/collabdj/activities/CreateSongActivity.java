@@ -1,5 +1,6 @@
 package com.codepath.collabdj.activities;
 
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -95,6 +96,11 @@ public class CreateSongActivity
 
         // Find our drawer view.
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerToggle = setupDrawerToggle();
+
+        // Tie DrawerLayout events to the ActionBarToggle.
+        mDrawer.addDrawerListener(drawerToggle);
+
         // Find our navigationView.
         nvDrawer = (NavigationView) findViewById(R.id.nvView);
         // Setup drawer view.
@@ -124,6 +130,15 @@ public class CreateSongActivity
         setInitialSoundSamples();
         createInitialEmptyCells();
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (drawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     // Creates initial sound samples to test the grid layout.
@@ -372,5 +387,21 @@ public class CreateSongActivity
 
         menuItem.setChecked(true);
         mDrawer.closeDrawers();
+    }
+
+    private ActionBarDrawerToggle setupDrawerToggle() {
+        return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open, R.string.drawer_close);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
     }
 }
