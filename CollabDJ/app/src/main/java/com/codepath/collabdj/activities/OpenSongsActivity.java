@@ -14,28 +14,27 @@ import java.util.ArrayList;
 public class OpenSongsActivity extends AppCompatActivity {
     private static final String TAG = "SharedSongsActivity";
 
-    ArrayList<SharedSong> sharedSongs;
-    SharedSongsAdapter sharedSongsAdapter;
-    ListView lvItems;
+    ArrayList<SharedSong> localSongs;
+    SharedSongsAdapter localSongsAdapter;
+    ListView localsonglvItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_open_songs);
 
-        lvItems = (ListView) findViewById(R.id.localSongsLV);
-        sharedSongs = new ArrayList<>();
-        sharedSongsAdapter = new SharedSongsAdapter(this, sharedSongs);
-        lvItems.setAdapter(sharedSongsAdapter);
+        localsonglvItems = (ListView) findViewById(R.id.localSongsLV);
+        localSongs = getAllSongs();
+        localSongsAdapter = new SharedSongsAdapter(this, localSongs);
+        localsonglvItems.setAdapter(localSongsAdapter);
 
-        sharedSongs = getAllSongs();
-        sharedSongsAdapter.notifyDataSetChanged();
+        localSongsAdapter.notifyDataSetChanged();
     }
 
     public ArrayList<SharedSong> getAllSongs(){
-
+        File dir = getFilesDir();
         ArrayList<SharedSong> localSongs = new ArrayList<SharedSong>();
-        File parentFile = new File("/");
+        File parentFile = new File(dir+"/localsongs/");
         if(parentFile.exists()){
             File[] files = parentFile.listFiles();
             for(File file : files){

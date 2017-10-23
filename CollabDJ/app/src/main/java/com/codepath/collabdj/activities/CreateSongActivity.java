@@ -27,6 +27,7 @@ import com.google.firebase.storage.UploadTask;
 
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
@@ -266,9 +267,16 @@ public class CreateSongActivity
         JSONObject jsonObject = song.getJSONObject();
 
         try {
-            FileOutputStream outputFile = openFileOutput(filename, 0);
-            outputFile.write(jsonObject.toString().getBytes());
-            outputFile.close();
+            File dir = getFilesDir();
+            File file = new File(dir + "/localsongs/", filename);
+            if(file.getParentFile().mkdirs()){
+                file.createNewFile();
+                FileOutputStream outputFile = new FileOutputStream(file);
+                outputFile.write(jsonObject.toString().getBytes());
+                outputFile.flush();
+                outputFile.close();
+            }
+
         }
         catch (Exception e) {
             e.printStackTrace();
