@@ -105,45 +105,11 @@ public class CreateSongActivity
 
         List<SoundSample> initialSoundSamples = new ArrayList<>();
 
-        initialSoundSamples.add(new SoundSample(
-                "BlastCap",
-                0,
-                null,
-                R.raw.drum_4_blastcap_start,
-                8000,
-                null));
-
-        initialSoundSamples.add(new SoundSample(
-                "BlastCap 0",
-                0,
-                null,
-                R.raw.drum_4_blastcap_start_0,
-                8000,
-                null));
-
-        initialSoundSamples.add(new SoundSample(
-                "BlastCap 1",
-                0,
-                null,
-                R.raw.drum_4_blastcap_start_1,
-                8000,
-                null));
-
-        initialSoundSamples.add(new SoundSample(
-                "BlastCap",
-                0,
-                null,
-                R.raw.drum_4_blastcap_start,
-                8000,
-                null));
-
-        initialSoundSamples.add(new SoundSample(
-                "BlastCap",
-                0,
-                null,
-                R.raw.drum_4_blastcap_start,
-                8000,
-                null));
+        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("BlastCap"));
+        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("BlastCap 0"));
+        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("BlastCap 1"));
+        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("BlastCap"));
+        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("BlastCap"));
 
         for (SoundSample soundSample : initialSoundSamples) {
             addSample(soundSample);

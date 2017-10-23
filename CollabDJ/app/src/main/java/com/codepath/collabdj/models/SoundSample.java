@@ -1,6 +1,14 @@
 package com.codepath.collabdj.models;
 
+import com.codepath.collabdj.R;
+
 import org.parceler.Parcel;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by tiago on 10/12/17.
@@ -14,6 +22,44 @@ public class SoundSample {
     int resourceId;
     long duration;
     String pathJsonDefinition;
+
+    public static final Map<String, SoundSample> SOUND_SAMPLES = initSamplesMap();
+
+    private static final Map<String, SoundSample> initSamplesMap() {
+        HashMap<String, SoundSample> res = new HashMap<String, SoundSample>();
+
+        List<SoundSample> soundSamples = new ArrayList<>();
+
+        soundSamples.add(new SoundSample(
+                "BlastCap",
+                0,
+                null,
+                R.raw.drum_4_blastcap_start,
+                8000,
+                null));
+
+        soundSamples.add(new SoundSample(
+                "BlastCap 0",
+                0,
+                null,
+                R.raw.drum_4_blastcap_start_0,
+                8000,
+                null));
+
+        soundSamples.add(new SoundSample(
+                "BlastCap 1",
+                0,
+                null,
+                R.raw.drum_4_blastcap_start_1,
+                8000,
+                null));
+
+        for (SoundSample soundSample : soundSamples) {
+            res.put(soundSample.getName(), soundSample);
+        }
+
+        return Collections.unmodifiableMap(res);
+    }
 
     // Empty constructor needed by the Parcel library.
     public SoundSample() {

@@ -25,6 +25,12 @@ public class SampleUsage {
         this.startSection = startSection;
     }
 
+    public SampleUsage(JSONObject jsonObject) throws JSONException {
+        soundSampleIndex = jsonObject.getInt("soundSampleIndex");
+        startSection = jsonObject.getLong("startSection");
+        loopTimes = jsonObject.getInt("loopTimes");;
+    }
+
     public int getSoundSampleIndex() {
         return this.soundSampleIndex;
     }
