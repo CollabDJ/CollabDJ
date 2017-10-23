@@ -16,4 +16,8 @@
 
     <!-- Strings for RecyclerView items -->
     <string name="new_sample_title">Add sample</string>
+
+    <!-- Strings for hamburger menu -->
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 </resources>

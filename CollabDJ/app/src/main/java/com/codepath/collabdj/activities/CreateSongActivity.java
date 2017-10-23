@@ -1,12 +1,19 @@
 package com.codepath.collabdj.activities;
 
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.codepath.collabdj.R;
 import com.codepath.collabdj.adapters.SoundSamplesAdapter;
@@ -69,10 +76,36 @@ public class CreateSongActivity
      */
     Map<SoundSample, Integer> soundSampleIndexMapping;
 
+    /**
+     * Hamburger menu references.
+     */
+    private DrawerLayout mDrawer;
+    private Toolbar toolbar;
+    private NavigationView nvDrawer;
+    private ActionBarDrawerToggle drawerToggle;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_song);
+
+        // Set a toolbar to replace the ActionBar.
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // Find our drawer view.
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerToggle = setupDrawerToggle();
+
+        // Tie DrawerLayout events to the ActionBarToggle.
+        mDrawer.addDrawerListener(drawerToggle);
+
+        // Find our navigationView.
+        nvDrawer = (NavigationView) findViewById(R.id.nvView);
+        // Setup drawer view.
+        setupDrawerView(nvDrawer);
+
 
         // Enable up icon.
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -97,6 +130,15 @@ public class CreateSongActivity
         setInitialSoundSamples();
         createInitialEmptyCells();
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (drawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     // Creates initial sound samples to test the grid layout.
@@ -315,5 +357,52 @@ public class CreateSongActivity
         sampleUsage.loopTimes = numTimesPlayed;
 
         song.addSampleUsage(sampleUsage);
+    }
+
+    private void setupDrawerView(NavigationView navigationView) {
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        selectDrawerItem(menuItem);
+                        return true;
+                    }
+                }
+        );
+    }
+
+    private void selectDrawerItem(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.nav_first_element:
+                Toast.makeText(CreateSongActivity.this, "First element selected!", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.nav_second_element:
+                Toast.makeText(CreateSongActivity.this, "Second element selected!", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.nav_third_element:
+                Toast.makeText(CreateSongActivity.this, "Third element selected!", Toast.LENGTH_LONG).show();
+                break;
+            default:
+                Toast.makeText(CreateSongActivity.this, "Default case selected!", Toast.LENGTH_LONG).show();
+        }
+
+        menuItem.setChecked(true);
+        mDrawer.closeDrawers();
+    }
+
+    private ActionBarDrawerToggle setupDrawerToggle() {
+        return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open, R.string.drawer_close);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
     }
 }
