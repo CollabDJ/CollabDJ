@@ -49,6 +49,17 @@ public class Song {
                 : numMillisecondsPerSection;
     }
 
+    public Song(JSONObject jsonObject) throws JSONException {
+        JSONArray jsonUserNames = jsonObject.getJSONArray(USER_NAMES_JSON_NAME);
+        userNames = new ArrayList<>(jsonUserNames.length());
+
+        for(int i = 0; i < jsonUserNames.length(); ++i) {
+            userNames.add(jsonUserNames.getString(i));
+        }
+
+        this.soundSampleList = new ArrayList<>();
+    }
+
     public JSONObject getJSONObject() {
         JSONObject res = new JSONObject();
 
