@@ -9,7 +9,7 @@
     * <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/HomeScreen.jpg">Home Screen Wireframe</a>
     * Create a new song
     * Open existing song
-    * Join a friend's song making session
+    * Join a friend's song 
     * Look at saved songs
 
 2. **Create a new song** page opens the song making screen with a blank song
@@ -21,17 +21,18 @@
     * Samples only start playing at the right times to stay in sync
     * <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/SamplesScreen.jpg">Samples Screen Wireframe</a>
 
-3. **Open existing song** page opens a menu to view past saved songs
+3. **Open song** page opens a menu to view past locally saved songs
     * Opens the song making screen with sound samples queued up from a previous session
-    * Open from cloud load saved songs from cloud
+    * Open from load saved songs locally
     * <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/OpenSong.jpg">Open Song Wireframe</a>
 
+3. **Shared song** page opens a menu to view all shared songs in cloud
+    * Opens the song making screen with sound samples queued up from a previous session
+    * Open from cloud load saved songs from cloud
+    
 4. **Saving**
-    * You can save locally or to the cloud
-    * <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/HamburgerMenu.jpg">Hamburger Menu Wireframe</a>
-
-5. **Joining friends**
-    * You can join friends by typing in the IP address of their session (The prettier way is under the optional stories)
+    * There is a hamburge menu on the creat song page with options saving locally or in cloud.
+    * <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/HamburgerMenu.jpg">Hamburger Menu Wireframe</a>   
 
 **Optional**
 
@@ -40,6 +41,7 @@
     * Some way to add new samples
 
 2. **Joining friends**
+    * You can load your friend's song by scanning the song's QR code
     * Clicking QR code button in the song screen opens the QR code for other people to scan
     * <a href="https://github.com/CollabDJ/CollabDJ/blob/master/CollabDJWireframes/QRCode.jpg">QRCode Wireframe</a>
     * Friends can scan your QR code from the home menu by pushing Join Session
