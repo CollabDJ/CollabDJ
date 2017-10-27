@@ -23,6 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_centerInParent="true"
                 android:layout_toLeftOf="@+id/newSongShim"
                 android:layout_toStartOf="@+id/newSongShim"
@@ -42,12 +43,14 @@
                 android:id="@+id/tvNewSong"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_centerInParent="true"
                 android:layout_toEndOf="@+id/newSongShim"
                 android:layout_toRightOf="@+id/newSongShim"
                 android:text="@string/new_song"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textSize="24sp" />
 
         </RelativeLayout>
 
@@ -63,6 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_centerInParent="true"
                 android:layout_toLeftOf="@+id/openSongShim"
                 android:layout_toStartOf="@+id/openSongShim"
@@ -83,12 +87,14 @@
                 android:id="@+id/tvOpenSong"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_centerInParent="true"
                 android:layout_toEndOf="@+id/openSongShim"
                 android:layout_toRightOf="@+id/openSongShim"
                 android:text="@string/open_song"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textSize="24sp" />
 
         </RelativeLayout>
 
@@ -104,6 +110,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_centerInParent="true"
                 android:layout_toLeftOf="@+id/sharedSongsShim"
                 android:layout_toStartOf="@+id/sharedSongsShim"
@@ -123,12 +130,14 @@
                 android:id="@+id/tvSharedSongs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_centerInParent="true"
                 android:layout_toEndOf="@+id/sharedSongsShim"
                 android:layout_toRightOf="@+id/sharedSongsShim"
                 android:text="@string/shared_songs"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textSize="24sp" />
 
         </RelativeLayout>
 
