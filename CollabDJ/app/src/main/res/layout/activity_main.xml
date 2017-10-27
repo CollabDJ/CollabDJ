@@ -6,92 +6,132 @@
     android:layout_height="match_parent"
     tools:context="com.codepath.collabdj.activities.MainActivity">
 
-    <!-- An invisible view aligned to the horizontal center of the parent. Allows other
-    views to be arranged on either side -->
-    <!--<View
-        android:id="@+id/centerShimHorizontal"
-        android:layout_height="match_parent"
-        android:layout_width="0dp"
-        android:visibility="invisible"
-        android:layout_centerHorizontal="true"/>-->
-
-    <TableLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_centerInParent="true">
 
-        <TableRow
+        <RelativeLayout
             android:id="@+id/rlNewSong"
+            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/ivNewSong"
-                android:layout_width="200dp"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerInParent="true"
+                android:layout_toLeftOf="@+id/newSongShim"
+                android:layout_toStartOf="@+id/newSongShim"
                 android:contentDescription="@string/new_song_description"
                 app:srcCompat="@drawable/ic_new_song" />
+
+            <View
+                android:id="@+id/newSongShim"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/ivNewSong"
+                android:layout_alignTop="@+id/ivNewSong"
+                android:layout_centerHorizontal="true"
+                android:visibility="invisible" />
 
             <TextView
                 android:id="@+id/tvNewSong"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_toEndOf="@+id/newSongShim"
+                android:layout_toRightOf="@+id/newSongShim"
                 android:text="@string/new_song"
                 android:textAlignment="center" />
 
-        </TableRow>
+        </RelativeLayout>
 
 
-        <TableRow
+        <RelativeLayout
             android:id="@+id/rlOpenSong"
+            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/ivOpenSong"
-                android:layout_width="200dp"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerInParent="true"
+                android:layout_toLeftOf="@+id/openSongShim"
+                android:layout_toStartOf="@+id/openSongShim"
                 android:contentDescription="@string/open_song_desciption"
+                android:scaleType="centerInside"
                 app:srcCompat="@drawable/ic_saved_songs" />
+
+            <View
+                android:id="@+id/openSongShim"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/ivOpenSong"
+                android:layout_alignTop="@+id/ivOpenSong"
+                android:layout_centerHorizontal="true"
+                android:visibility="invisible" />
 
             <TextView
                 android:id="@+id/tvOpenSong"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_toEndOf="@+id/openSongShim"
+                android:layout_toRightOf="@+id/openSongShim"
                 android:text="@string/open_song"
                 android:textAlignment="center" />
 
-        </TableRow>
+        </RelativeLayout>
 
 
-        <TableRow
+        <RelativeLayout
             android:id="@+id/rlSharedSongs"
+            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/ivSharedSongs"
-                android:layout_width="200dp"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerInParent="true"
+                android:layout_toLeftOf="@+id/sharedSongsShim"
+                android:layout_toStartOf="@+id/sharedSongsShim"
                 android:contentDescription="@string/shared_songs_description"
                 app:srcCompat="@drawable/ic_shared_songs" />
+
+            <View
+                android:id="@+id/sharedSongsShim"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/ivSharedSongs"
+                android:layout_alignTop="@+id/ivSharedSongs"
+                android:layout_centerHorizontal="true"
+                android:visibility="invisible" />
 
             <TextView
                 android:id="@+id/tvSharedSongs"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_toEndOf="@+id/sharedSongsShim"
+                android:layout_toRightOf="@+id/sharedSongsShim"
                 android:text="@string/shared_songs"
                 android:textAlignment="center" />
 
-        </TableRow>
+        </RelativeLayout>
 
-    </TableLayout>
+    </LinearLayout>
 
 </RelativeLayout>
