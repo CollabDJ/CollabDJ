@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/background_image_lights" />
+    <include layout="@layout/background_image_lights_dark" />
 
     <!-- This RelativeLayout represents the contents of the screen  -->
     <RelativeLayout
