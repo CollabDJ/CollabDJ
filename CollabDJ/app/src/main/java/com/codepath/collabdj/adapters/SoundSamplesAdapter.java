@@ -13,8 +13,8 @@ import android.widget.TextView;
 
 import com.codepath.collabdj.R;
 import com.codepath.collabdj.models.SoundSampleInstance;
+import com.codepath.collabdj.views.SoundSamplePieChart;
 import com.codepath.collabdj.views.SoundSampleView;
-import com.github.mikephil.charting.charts.PieChart;
 
 import java.util.List;
 
@@ -110,7 +110,7 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public class ViewHolderSample extends RecyclerView.ViewHolder {
 
         public TextView tvTitle;
-        public PieChart pcPercent;
+        public SoundSamplePieChart pcPercent;
         public ImageView ivPlayPause;
         public ImageView ivIcon;
         public ProgressBar pbLoadingIndicator;
@@ -126,12 +126,10 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             soundSampleView.viewHolder = this;
 
             tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
-            pcPercent = (PieChart) itemView.findViewById(R.id.pcPercent);
+            pcPercent = (SoundSamplePieChart) itemView.findViewById(R.id.pcPercent);
             ivPlayPause = (ImageView) itemView.findViewById(R.id.ivPlayPause);
             ivIcon = (ImageView) itemView.findViewById(R.id.ivIcon);
             pbLoadingIndicator = (ProgressBar) itemView.findViewById(R.id.pbLoadingIndicator);
-
-            soundSampleView.configurePieChart();
 
             // Set listener on the `play/pause` button.
             itemView.setOnClickListener(new View.OnClickListener() {

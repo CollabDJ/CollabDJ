@@ -4,11 +4,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="#0000">
     <!-- For some reason onDraw isn't called without a background color so add a transparent one -->
 
-    <com.github.mikephil.charting.charts.PieChart
+    <com.codepath.collabdj.views.SoundSamplePieChart
         android:id="@+id/pcPercent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
