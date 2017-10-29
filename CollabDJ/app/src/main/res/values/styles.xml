@@ -8,4 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="LightsBackground">
+        <item name="android:background">@drawable/bg_lights</item>
+        <item name="android:foreground">@drawable/bg_gradient</item>
+    </style>
+
 </resources>
