@@ -10,10 +10,22 @@ import android.support.multidex.MultiDex;
 
 public class CollabDjApplication extends Application {
 
+    private static Context staticContextRef;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        staticContextRef = this;
+    }
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
     }
 
+    public static Context getContext(){
+        return staticContextRef;
+    }
 }

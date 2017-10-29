@@ -6,6 +6,8 @@ import android.graphics.Color;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 
+import com.codepath.collabdj.CollabDjApplication;
+import com.codepath.collabdj.R;
 import com.codepath.collabdj.adapters.SoundSamplesAdapter;
 import com.codepath.collabdj.utils.SamplePlayer;
 import com.github.mikephil.charting.data.PieData;
@@ -38,14 +40,20 @@ public class SoundSampleView extends RelativeLayout {
 
     public void setPiechartValue(float value) {
         List<PieEntry> pieEntries = new ArrayList<>(1);
-        pieEntries.add(new PieEntry(value, 0));
-        pieEntries.add(new PieEntry(1.f - value, 1));
+        pieEntries.add(new PieEntry(value));
+        pieEntries.add(new PieEntry(1.f - value));
+        //pieEntries.add(new PieEntry(1.f - value, 1));
 
         PieDataSet dataSet = new PieDataSet(pieEntries, null);
+        dataSet.setColors(new int[] {R.color.pieSampleLoopQueued, R.color.pieSampleEmpty}, CollabDjApplication.getContext());
 
         PieData pieData = new PieData(dataSet);
 
-        viewHolder.pcPercent.setHoleRadius(0.f);
+        viewHolder.pcPercent.setTouchEnabled(false);
+        viewHolder.pcPercent.getLegend().setEnabled(false);
+        viewHolder.pcPercent.setDescription(null);
+        viewHolder.pcPercent.setDrawHoleEnabled(false);
+        viewHolder.pcPercent.setTransparentCircleRadius(0.f);
 
         viewHolder.pcPercent.setData(pieData);
         viewHolder.pcPercent.invalidate();
