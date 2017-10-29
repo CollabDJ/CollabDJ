@@ -46,7 +46,7 @@ public class SoundSampleView extends RelativeLayout {
         filledEntry.setY(value);
         emptyEntry.setY(1.f - value);
 
-        dataSet.setColors(new int[] {R.color.pieSampleEmpty, colorResource}, CollabDjApplication.getContext());
+        dataSet.setColors(new int[] {colorResource, R.color.pieSampleEmpty}, CollabDjApplication.getContext());
         viewHolder.pcPercent.notifyDataSetChanged();
         viewHolder.pcPercent.invalidate();
     }
@@ -58,15 +58,16 @@ public class SoundSampleView extends RelativeLayout {
         viewHolder.pcPercent.setTouchEnabled(false);
         viewHolder.pcPercent.getLegend().setEnabled(false);
         viewHolder.pcPercent.setDescription(null);
-        viewHolder.pcPercent.setDrawHoleEnabled(false);
+        viewHolder.pcPercent.setHoleRadius(90.f);
         viewHolder.pcPercent.setTransparentCircleRadius(0.f);
+        viewHolder.pcPercent.setHoleColor(Color.TRANSPARENT);
 
         filledEntry = new PieEntry(0.f);
         emptyEntry = new PieEntry(1.f);
 
         List<PieEntry> pieEntries = new ArrayList<>(2);
-        pieEntries.add(filledEntry);
         pieEntries.add(emptyEntry);
+        pieEntries.add(filledEntry);
 
         dataSet = new PieDataSet(pieEntries, null);
         dataSet.setDrawValues(false);
@@ -93,12 +94,10 @@ public class SoundSampleView extends RelativeLayout {
         SamplePlayer.SampleHandle.PlayInstance playInstance = viewHolder.getSoundSampleInstance().getCurrentPlayInstance();
 
         if (playInstance == null) {
-            viewHolder.tvPercent.setVisibility(INVISIBLE);
             viewHolder.pcPercent.setVisibility(INVISIBLE);
-            viewHolder.ivPlayPause.setImageResource(android.R.drawable.ic_media_play);
+            viewHolder.ivPlayPause.setImageResource(R.drawable.ic_play);
         }
         else {
-            viewHolder.tvPercent.setVisibility(VISIBLE);
             viewHolder.pcPercent.setVisibility(VISIBLE);
 
             float percentage = (float) playInstance.getRemainingDelay()
@@ -124,30 +123,13 @@ public class SoundSampleView extends RelativeLayout {
 
             setPiechartValue(percentage, colorResourceValue);
 
-            //Hacked together for now, replace with pie chart
-            viewHolder.tvPercent.setText(String.format("%1.2f", 1.0f - percentage));
-
-            switch(playInstance.getPlayState()) {
-                case LOOP_QUEUED:
-                    viewHolder.tvPercent.setTextColor(Color.BLUE);
-                    break;
-
-                case LOOPING:
-                    viewHolder.tvPercent.setTextColor(Color.GREEN);
-                    break;
-
-                case STOP_QUEUED:
-                    viewHolder.tvPercent.setTextColor(Color.RED);
-                    break;
-            }
-
             switch(playInstance.getPlayState()) {
                 case STOP_QUEUED:
                 case STOPPED:
-                    viewHolder.ivPlayPause.setImageResource(android.R.drawable.ic_media_play);
+                    viewHolder.ivPlayPause.setImageResource(R.drawable.ic_play);
                     break;
                 default:
-                    viewHolder.ivPlayPause.setImageResource(android.R.drawable.ic_media_pause);
+                    viewHolder.ivPlayPause.setImageResource(R.drawable.ic_pause);
                     break;
             }
         }

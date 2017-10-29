@@ -8,12 +8,11 @@
     android:background="#0000">
     <!-- For some reason onDraw isn't called without a background color so add a transparent one -->
 
-
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/pcPercent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#777" />
+        android:alpha=".3" />
 
     <TextView
         android:id="@+id/tvTitle"
@@ -22,34 +21,19 @@
         android:text="Title"
         android:textAlignment="center" />
 
-
-    <TextView
-        android:id="@+id/tvPercent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="100" />
-
-    <!--<com.codepath.collabdj.utils.PlayPauseButton
-        android:id="@+id/ibPlayPause"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/ic_media_play" />-->
-
     <ImageView
         android:id="@+id/ivPlayPause"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_centerInParent="true"
-        app:srcCompat="@drawable/placeholder_music" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:srcCompat="@drawable/ic_play" />
 
     <ImageView
         android:id="@+id/ivIcon"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        app:srcCompat="@drawable/placeholder_music" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha=".2"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/ic_notes_glowing" />
 
     <ProgressBar
         android:id="@+id/pbLoadingIndicator"

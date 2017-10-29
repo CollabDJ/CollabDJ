@@ -111,7 +111,6 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         public TextView tvTitle;
         public PieChart pcPercent;
-        public TextView tvPercent;  //TODO: replace with a piechart
         public ImageView ivPlayPause;
         public ImageView ivIcon;
         public ProgressBar pbLoadingIndicator;
@@ -128,7 +127,6 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
             tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
             pcPercent = (PieChart) itemView.findViewById(R.id.pcPercent);
-            tvPercent = (TextView) itemView.findViewById(R.id.tvPercent);
             ivPlayPause = (ImageView) itemView.findViewById(R.id.ivPlayPause);
             ivIcon = (ImageView) itemView.findViewById(R.id.ivIcon);
             pbLoadingIndicator = (ProgressBar) itemView.findViewById(R.id.pbLoadingIndicator);

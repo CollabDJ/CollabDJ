@@ -48,7 +48,7 @@ public class CreateSongActivity
         implements SoundSamplesAdapter.SoundSamplePlayListener,
             SoundSampleInstance.Listener
 {
-    public static final int NUM_COLUMNS = 2;
+    public static final int NUM_COLUMNS = 3;
 
     // Tag for logging.
     private static final String TAG = "CreateSongActivity";
