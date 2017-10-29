@@ -13,8 +13,8 @@ import android.widget.TextView;
 
 import com.codepath.collabdj.R;
 import com.codepath.collabdj.models.SoundSampleInstance;
-import com.codepath.collabdj.utils.PlayPauseButton;
 import com.codepath.collabdj.views.SoundSampleView;
+import com.github.mikephil.charting.charts.PieChart;
 
 import java.util.List;
 
@@ -110,9 +110,10 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public class ViewHolderSample extends RecyclerView.ViewHolder {
 
         public TextView tvTitle;
+        public PieChart pcPercent;
         public TextView tvPercent;  //TODO: replace with a piechart
-        public PlayPauseButton ibPlayPause;
-        public ImageView ivStatus;
+        public ImageView ivPlayPause;
+        public ImageView ivIcon;
         public ProgressBar pbLoadingIndicator;
         public long millisecondsPerSection;
 
@@ -124,20 +125,23 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             ((SoundSampleView)itemView).viewHolder = this;
 
             tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
+            pcPercent = (PieChart) itemView.findViewById(R.id.pcPercent);
             tvPercent = (TextView) itemView.findViewById(R.id.tvPercent);
-            ibPlayPause = (PlayPauseButton) itemView.findViewById(R.id.ibPlayPause);
-            ivStatus = (ImageView) itemView.findViewById(R.id.ivStatus);
+            ivPlayPause = (ImageView) itemView.findViewById(R.id.ivPlayPause);
+            ivIcon = (ImageView) itemView.findViewById(R.id.ivIcon);
             pbLoadingIndicator = (ProgressBar) itemView.findViewById(R.id.pbLoadingIndicator);
 
             // Set listener on the `play/pause` button.
-            ibPlayPause.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (soundSamplePlayListener != null) {
+                    if (soundSamplePlayListener != null && getSoundSampleInstance().isLoaded()) {
                         millisecondsPerSection = soundSamplePlayListener.playButtonPressed(getSoundSampleInstance());
                     }
                 }
             });
+
+            // Set up the dataset on the piechart
         }
 
         public SoundSampleInstance getSoundSampleInstance() {
