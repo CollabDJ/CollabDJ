@@ -52,7 +52,6 @@
                 android:layout_toRightOf="@+id/newSongShim"
                 android:text="@string/new_song"
                 android:textAlignment="center"
-                android:textColor="@android:color/white"
                 android:textSize="24sp" />
 
         </RelativeLayout>
@@ -97,7 +96,6 @@
                 android:layout_toRightOf="@+id/openSongShim"
                 android:text="@string/open_song"
                 android:textAlignment="center"
-                android:textColor="@android:color/white"
                 android:textSize="24sp" />
 
         </RelativeLayout>
@@ -141,7 +139,6 @@
                 android:layout_toRightOf="@+id/sharedSongsShim"
                 android:text="@string/shared_songs"
                 android:textAlignment="center"
-                android:textColor="@android:color/white"
                 android:textSize="24sp" />
 
         </RelativeLayout>
