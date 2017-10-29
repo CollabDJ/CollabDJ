@@ -38,18 +38,16 @@ public class SoundSampleView extends RelativeLayout {
         super(context, attrs, defStyleAttr);
     }
 
+    PieEntry filledEntry;
+    PieEntry emptyEntry;
+    PieDataSet dataSet;
+
     public void setPiechartValue(float value, int colorResource) {
-        List<PieEntry> pieEntries = new ArrayList<>(1);
-        pieEntries.add(new PieEntry(value));
-        pieEntries.add(new PieEntry(1.f - value));
-        //pieEntries.add(new PieEntry(1.f - value, 1));
+        filledEntry.setY(value);
+        emptyEntry.setY(1.f - value);
 
-        PieDataSet dataSet = new PieDataSet(pieEntries, null);
-        dataSet.setColors(new int[] {R.color.pieSampleLoopQueued, R.color.pieSampleEmpty}, CollabDjApplication.getContext());
-
-        PieData pieData = new PieData(dataSet);
-
-        viewHolder.pcPercent.setData(pieData);
+        dataSet.setColors(new int[] {R.color.pieSampleEmpty, colorResource}, CollabDjApplication.getContext());
+        viewHolder.pcPercent.notifyDataSetChanged();
         viewHolder.pcPercent.invalidate();
     }
 
@@ -62,6 +60,21 @@ public class SoundSampleView extends RelativeLayout {
         viewHolder.pcPercent.setDescription(null);
         viewHolder.pcPercent.setDrawHoleEnabled(false);
         viewHolder.pcPercent.setTransparentCircleRadius(0.f);
+
+        filledEntry = new PieEntry(0.f);
+        emptyEntry = new PieEntry(1.f);
+
+        List<PieEntry> pieEntries = new ArrayList<>(2);
+        pieEntries.add(filledEntry);
+        pieEntries.add(emptyEntry);
+
+        dataSet = new PieDataSet(pieEntries, null);
+        dataSet.setDrawValues(false);
+
+        PieData pieData = new PieData(dataSet);
+
+        viewHolder.pcPercent.setData(pieData);
+        viewHolder.pcPercent.invalidate();
     }
 
     //Making the samples be squares
