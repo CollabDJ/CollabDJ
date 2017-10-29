@@ -122,7 +122,9 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public ViewHolderSample(View itemView) {
             super(itemView);
 
-            ((SoundSampleView)itemView).viewHolder = this;
+            SoundSampleView soundSampleView = (SoundSampleView) itemView;
+
+            soundSampleView.viewHolder = this;
 
             tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
             pcPercent = (PieChart) itemView.findViewById(R.id.pcPercent);
@@ -130,6 +132,8 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             ivPlayPause = (ImageView) itemView.findViewById(R.id.ivPlayPause);
             ivIcon = (ImageView) itemView.findViewById(R.id.ivIcon);
             pbLoadingIndicator = (ProgressBar) itemView.findViewById(R.id.pbLoadingIndicator);
+
+            soundSampleView.configurePieChart();
 
             // Set listener on the `play/pause` button.
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -140,8 +144,6 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     }
                 }
             });
-
-            // Set up the dataset on the piechart
         }
 
         public SoundSampleInstance getSoundSampleInstance() {

@@ -38,7 +38,7 @@ public class SoundSampleView extends RelativeLayout {
         super(context, attrs, defStyleAttr);
     }
 
-    public void setPiechartValue(float value) {
+    public void setPiechartValue(float value, int colorResource) {
         List<PieEntry> pieEntries = new ArrayList<>(1);
         pieEntries.add(new PieEntry(value));
         pieEntries.add(new PieEntry(1.f - value));
@@ -49,14 +49,19 @@ public class SoundSampleView extends RelativeLayout {
 
         PieData pieData = new PieData(dataSet);
 
+        viewHolder.pcPercent.setData(pieData);
+        viewHolder.pcPercent.invalidate();
+    }
+
+    /**
+     * Call this in the view holder constructor when things are all getting set up
+     */
+    public void configurePieChart() {
         viewHolder.pcPercent.setTouchEnabled(false);
         viewHolder.pcPercent.getLegend().setEnabled(false);
         viewHolder.pcPercent.setDescription(null);
         viewHolder.pcPercent.setDrawHoleEnabled(false);
         viewHolder.pcPercent.setTransparentCircleRadius(0.f);
-
-        viewHolder.pcPercent.setData(pieData);
-        viewHolder.pcPercent.invalidate();
     }
 
     //Making the samples be squares
@@ -76,17 +81,35 @@ public class SoundSampleView extends RelativeLayout {
 
         if (playInstance == null) {
             viewHolder.tvPercent.setVisibility(INVISIBLE);
+            viewHolder.pcPercent.setVisibility(INVISIBLE);
             viewHolder.ivPlayPause.setImageResource(android.R.drawable.ic_media_play);
         }
         else {
             viewHolder.tvPercent.setVisibility(VISIBLE);
+            viewHolder.pcPercent.setVisibility(VISIBLE);
 
             float percentage = (float) playInstance.getRemainingDelay()
                     / (playInstance.getPlayState() == LOOP_QUEUED
                         ? viewHolder.millisecondsPerSection
                         : (float) viewHolder.getSoundSampleInstance().getSoundSample().getDuration());
 
-            setPiechartValue(percentage);
+            int colorResourceValue = 0;
+
+            switch(playInstance.getPlayState()) {
+                case LOOP_QUEUED:
+                    colorResourceValue = R.color.pieSampleLoopQueued;
+                    break;
+
+                case LOOPING:
+                    colorResourceValue = R.color.pieSampleLooping;
+                    break;
+
+                case STOP_QUEUED:
+                    colorResourceValue = R.color.pieSampleStopQueued;
+                    break;
+            }
+
+            setPiechartValue(percentage, colorResourceValue);
 
             //Hacked together for now, replace with pie chart
             viewHolder.tvPercent.setText(String.format("%1.2f", 1.0f - percentage));
