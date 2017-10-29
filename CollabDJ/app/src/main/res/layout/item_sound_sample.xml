@@ -8,25 +8,6 @@
     android:background="#0000">
     <!-- For some reason onDraw isn't called without a background color so add a transparent one -->
 
-    <com.codepath.collabdj.views.SoundSamplePieChart
-        android:id="@+id/pcPercent"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:alpha=".3" />
-
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Title"
-        android:textAlignment="center" />
-
-    <ImageView
-        android:id="@+id/ivPlayPause"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:srcCompat="@drawable/ic_play" />
-
     <ImageView
         android:id="@+id/ivIcon"
         android:layout_width="match_parent"
@@ -35,9 +16,30 @@
         android:scaleType="fitCenter"
         app:srcCompat="@drawable/ic_notes_glowing" />
 
+    <com.codepath.collabdj.views.SoundSamplePieChart
+        android:id="@+id/pcPercent"
+        app:layout_widthPercent="75%"
+        app:layout_heightPercent="75%"
+        android:layout_centerInParent="true"
+        android:alpha=".2" />
+
+    <ImageView
+        android:id="@+id/ivPlayPause"
+        app:layout_widthPercent="40%"
+        app:layout_heightPercent="40%"
+        android:layout_centerInParent="true"
+        app:srcCompat="@drawable/ic_play" />
+
     <ProgressBar
         android:id="@+id/pbLoadingIndicator"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Title"
+        android:textAlignment="center" />
 
 </com.codepath.collabdj.views.SoundSampleView>

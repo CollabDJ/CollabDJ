@@ -2,8 +2,8 @@ package com.codepath.collabdj.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
-import android.widget.RelativeLayout;
 
 import com.codepath.collabdj.R;
 import com.codepath.collabdj.adapters.SoundSamplesAdapter;
@@ -15,7 +15,7 @@ import static com.codepath.collabdj.utils.SamplePlayer.PlayInstanceState.LOOP_QU
  * Created by ilyaseletsky on 10/15/17.
  */
 
-public class SoundSampleView extends RelativeLayout {
+public class SoundSampleView extends PercentRelativeLayout {
     public SoundSamplesAdapter.ViewHolderSample viewHolder;
 
     public SoundSampleView(Context context) {

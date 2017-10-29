@@ -45,7 +45,7 @@ public class SoundSamplePieChart extends PieChart {
         setTouchEnabled(false);
         getLegend().setEnabled(false);
         setDescription(null);
-        setHoleRadius(90.f);
+        setHoleRadius(50.f);
         setTransparentCircleRadius(0.f);
         setHoleColor(Color.TRANSPARENT);
 
