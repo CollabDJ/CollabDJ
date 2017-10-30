@@ -70,7 +70,7 @@ public class CreateSongActivity
     /**
      * Reverse mapping of SoundSample to SoundSampleIndex in the song.
      */
-    Map<SoundSample, Integer> soundSampleIndexMapping;
+    Map<SoundSampleInstance, Integer> soundSampleIndexMapping;
 
     /**
      * Hamburger menu references.
@@ -155,13 +155,59 @@ public class CreateSongActivity
     }
 
     protected void addSample(SoundSample soundSample) {
-        soundSampleIndexMapping.put(soundSample, mSamples.size());
+        SoundSampleInstance soundSampleInstance = new SoundSampleInstance(soundSample, samplePlayer, this, this);
 
-        mSamples.add(new SoundSampleInstance(soundSample, samplePlayer, this, this));
+        soundSampleIndexMapping.put(soundSampleInstance, mSamples.size());
+        mSamples.add(soundSampleInstance);
 
         if (song != null) {
             song.addSoundSample(soundSample);
         }
+    }
+
+    /**
+     * Called by the add sound sample dialog fragment
+     * @param soundSample
+     */
+    public void onAddNewSample(SoundSample soundSample) {
+        int firstEmptyCellIndex = findFirstEmptyCell();
+
+        //If for some reason didn't find an empty cell just add one
+        if (firstEmptyCellIndex < 0) {
+            addSample(soundSample);
+            createInitialEmptyCells();
+        }
+        else {
+            SoundSampleInstance soundSampleInstance = new SoundSampleInstance(soundSample, samplePlayer, this, this);
+
+            mSamples.set(firstEmptyCellIndex, soundSampleInstance);
+            soundSampleIndexMapping.put(soundSampleInstance, firstEmptyCellIndex);
+
+            //check if we need a new empty row
+            int numEmptyCells = mSamples.size() - firstEmptyCellIndex - 1;
+
+            if (numEmptyCells < NUM_COLUMNS) {
+                createEmptyRow();
+            }
+        }
+
+        mAdapter.notifyDataSetChanged();
+    }
+
+    protected int findFirstEmptyCell() {
+        int firstEmptyCellIndex = -1;
+
+        //Find the first empty cell by looking from the back
+        for(int i = mSamples.size() - 1; i >= 0; --i) {
+            if (mSamples.get(i).getSoundSample() == null) {
+                firstEmptyCellIndex = i;
+            }
+            else {
+                break;
+            }
+        }
+
+        return firstEmptyCellIndex;
     }
 
     protected void createInitialEmptyCells() {
@@ -332,9 +378,17 @@ public class CreateSongActivity
     }
 
     @Override
+    public void addSamplePressed() {
+        //TODO: Present the add sample dialog here
+
+        //For now just hardcode it to add this
+        onAddNewSample(SoundSample.SOUND_SAMPLES.get("BlastCap"));
+    }
+
+    @Override
     public void startPlaying(SoundSampleInstance soundSampleInstance, long startSection) {
         synchronized (activeSampleUsages) {
-            SampleUsage sampleUsage = new SampleUsage(soundSampleIndexMapping.get(soundSampleInstance.getSoundSample()), startSection);
+            SampleUsage sampleUsage = new SampleUsage(soundSampleIndexMapping.get(soundSampleInstance), startSection);
 
             activeSampleUsages.put(soundSampleInstance, sampleUsage);
         }

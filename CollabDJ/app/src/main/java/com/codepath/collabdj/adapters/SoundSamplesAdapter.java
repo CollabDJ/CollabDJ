@@ -31,6 +31,8 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
          *      how to display the pie chart percentage
          */
         long playButtonPressed(SoundSampleInstance soundSampleInstance);
+
+        void addSamplePressed();
     }
 
     // Tag for logging.
@@ -163,11 +165,9 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    int position = getAdapterPosition();
-//                    SoundSample soundSample = new SoundSample("Fresh Sample", 0, null, 0, 0, null);
-//                    SoundSampleInstance soundSampleInstance = new SoundSampleInstance(soundSample, null, getContext(), );
-//                    mSamples.set(position, soundSampleInstance);
-//                    notifyDataSetChanged();
+                    if (soundSamplePlayListener != null) {
+                        soundSamplePlayListener.addSamplePressed();
+                    }
                 }
             });
         }
