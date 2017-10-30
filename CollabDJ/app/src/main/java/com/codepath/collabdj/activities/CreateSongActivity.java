@@ -146,7 +146,7 @@ public class CreateSongActivity
         initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("BlastCap"));
         initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("BlastCap 0"));
         initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("BlastCap 1"));
-        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("BlastCap"));
+        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("Eighth Gnarler E"));
         initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("BlastCap"));
 
         for (SoundSample soundSample : initialSoundSamples) {
