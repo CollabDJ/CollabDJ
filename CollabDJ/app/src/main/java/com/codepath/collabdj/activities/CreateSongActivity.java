@@ -48,7 +48,7 @@ import static com.codepath.collabdj.utils.SamplePlayer.PlayInstanceState.STOP_QU
 public class CreateSongActivity
         extends AppCompatActivity
         implements SoundSamplesAdapter.SoundSamplePlayListener,
-            SoundSampleInstance.Listener
+            SoundSampleInstance.Listener, AddSoundSampleDialogFragment.AddSoundSampleDialogListener
 {
     public static final int NUM_COLUMNS = 3;
 
@@ -106,9 +106,6 @@ public class CreateSongActivity
 
         // Enable up icon.
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        // TODO: REMOVE THIS! FOR TEST ONLY!
-        showAddSoundSampleDialog();
 
         rvSamples = (RecyclerView) findViewById(R.id.rvSamples);
         mSamples = new ArrayList<>();
@@ -384,9 +381,10 @@ public class CreateSongActivity
     @Override
     public void addSamplePressed() {
         //TODO: Present the add sample dialog here
+        showAddSoundSampleDialog();
 
         //For now just hardcode it to add this
-        onAddNewSample(SoundSample.SOUND_SAMPLES.get("BlastCap"));
+        //onAddNewSample(SoundSample.SOUND_SAMPLES.get("BlastCap"));
     }
 
     @Override
@@ -467,7 +465,12 @@ public class CreateSongActivity
 
     private void showAddSoundSampleDialog() {
         FragmentManager fm = getSupportFragmentManager();
-        AddSoundSampleDialogFragment addSoundSampleDialogFragment = AddSoundSampleDialogFragment.newInstance("Hello!");
+        AddSoundSampleDialogFragment addSoundSampleDialogFragment = AddSoundSampleDialogFragment.newInstance();
         addSoundSampleDialogFragment.show(fm, "fragment_add_sound_sample");
+    }
+
+    @Override
+    public void onSoundSampleAdded(String title) {
+        onAddNewSample(SoundSample.SOUND_SAMPLES.get(title));
     }
 }

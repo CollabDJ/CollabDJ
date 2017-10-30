@@ -20,4 +20,5 @@
     <!-- Strings for hamburger menu -->
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="add_new_sample">Add  a sound sample</string>
 </resources>
