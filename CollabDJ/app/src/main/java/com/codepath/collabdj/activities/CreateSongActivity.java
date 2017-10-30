@@ -434,7 +434,7 @@ public class CreateSongActivity
     private String getTestSongTitle() {
         String title = song == null ? "Song" : song.title;
 
-        return title + " " + new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss").format(new Date());
+        return title + " " + new SimpleDateFormat("EEE, MMM d, yyyy hh:mm aaa").format(new Date());
     }
 
     private void selectDrawerItem(MenuItem menuItem) {
@@ -445,9 +445,9 @@ public class CreateSongActivity
             case R.id.nav_second_element:
                 saveSongLocally(getTestSongTitle());
                 break;
-            case R.id.nav_third_element:
+            /*case R.id.nav_third_element:
                 //Toast.makeText(CreateSongActivity.this, "Third element selected!", Toast.LENGTH_LONG).show();
-                break;
+                break;*/
             default:
                 //Toast.makeText(CreateSongActivity.this, "Default case selected!", Toast.LENGTH_LONG).show();
         }
