@@ -53,6 +53,14 @@ public class SoundSample implements Serializable {
                 8000,
                 null));
 
+        soundSamples.add(new SoundSample(
+                "Eighth Gnarler E",
+                0,
+                null,
+                R.raw.synth_2_eighth_gnarler_e,
+                2000,
+                null));
+
         for (SoundSample soundSample : soundSamples) {
             res.put(soundSample.getName(), soundSample);
         }

@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.codepath.collabdj.R;
 import com.codepath.collabdj.models.SampleUsage;
 import com.codepath.collabdj.models.Song;
@@ -34,6 +36,12 @@ public class PlaySongActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_song);
+
+        // Find the ImageView to display the GIF
+        ImageView ivGif = (ImageView) findViewById(R.id.ivGif);
+        // Display the GIF (from raw resource) into the ImageView
+        Glide.with(this).load(R.raw.background_play).asGif()
+                .into(ivGif);
 
         song = (Song) getIntent().getSerializableExtra(SONG_KEY);
 

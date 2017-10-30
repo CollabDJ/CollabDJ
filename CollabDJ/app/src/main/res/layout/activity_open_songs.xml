@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context="com.codepath.collabdj.activities.OpenSongsActivity">
 
+    <include layout="@layout/background_image_lights_dark" />
+
     <ListView
         android:id="@+id/localSongsLV"
         android:layout_width="match_parent"

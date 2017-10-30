@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#2f2f2f</color>
+    <color name="colorPrimaryDark">#202020</color>
+    <color name="colorAccent">#DDD</color>
+
+    <color name="gradientStart">#B2000000</color>
+    <color name="gradientEnd">#B22f2f2f</color>
+
+    <color name="gradientStartDark">#F2000000</color>
+    <color name="gradientEndDark">#F22f2f2f</color>
+
+    <color name="pieSampleLoopQueued">#FFFF00</color>
+    <color name="pieSampleLooping">#00FF00</color>
+    <color name="pieSampleStopQueued">#FF0000</color>
+    <color name="pieSampleEmpty">#0000</color>
 </resources>
