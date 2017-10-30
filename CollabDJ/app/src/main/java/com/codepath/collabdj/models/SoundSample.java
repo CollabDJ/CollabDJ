@@ -85,6 +85,38 @@ public class SoundSample implements Serializable {
                 4000,
                 null));
 
+        soundSamples.add(new SoundSample(
+                "Airship Rising E1",
+                0,
+                null,
+                R.raw.synth_4_airship_rising_e1,
+                4000,
+                null));
+
+        soundSamples.add(new SoundSample(
+                "Airship Rising C2",
+                0,
+                null,
+                R.raw.synth_4_airship_rising_c2,
+                4000,
+                null));
+
+        soundSamples.add(new SoundSample(
+                "Pulsating Chords C1",
+                0,
+                null,
+                R.raw.synth_4_pulsating_chords_c1,
+                4000,
+                null));
+
+        soundSamples.add(new SoundSample(
+                "Pulsating Chords C2",
+                0,
+                null,
+                R.raw.synth_4_pulsating_chords_c2,
+                4000,
+                null));
+
         for (SoundSample soundSample : soundSamples) {
             res.put(soundSample.getName(), soundSample);
         }

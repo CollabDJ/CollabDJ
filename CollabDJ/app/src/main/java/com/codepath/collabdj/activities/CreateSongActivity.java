@@ -151,6 +151,10 @@ public class CreateSongActivity
         initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("1970 Analog Arp B"));
         initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("Glass Motion E0"));
         initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("Glass Motion C"));
+        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("Airship Rising E1"));
+        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("Airship Rising C2"));
+        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("Pulsating Chords C1"));
+        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("Pulsating Chords C2"));
 
         for (SoundSample soundSample : initialSoundSamples) {
             addSample(soundSample);
