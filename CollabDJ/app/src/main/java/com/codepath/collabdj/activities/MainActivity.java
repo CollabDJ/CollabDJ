@@ -1,8 +1,11 @@
 package com.codepath.collabdj.activities;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Property;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -17,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Attach click listeners to each RelativeLayout.
         setupClickListeners();
+        setupAnimations();
     }
 
     private void setupClickListeners() {
@@ -82,5 +86,31 @@ public class MainActivity extends AppCompatActivity {
 //                });
             }
         });
+    }
+
+    private void setupAnimations() {
+        setupPulsatingAnimation(findViewById(R.id.ivNewSong));
+        setupPulsatingAnimation(findViewById(R.id.tvNewSong));
+
+        setupPulsatingAnimation(findViewById(R.id.ivOpenSong));
+        setupPulsatingAnimation(findViewById(R.id.tvOpenSong));
+
+        setupPulsatingAnimation(findViewById(R.id.ivSharedSongs));
+        setupPulsatingAnimation(findViewById(R.id.tvSharedSongs));
+    }
+
+    private void setupPulsatingAnimation(View view)
+    {
+        setupPulsatingAnimation(view, View.SCALE_X);
+        setupPulsatingAnimation(view, View.SCALE_Y);
+    }
+
+    private void setupPulsatingAnimation(View dimension, Property property)
+    {
+        ObjectAnimator scaleAnim = ObjectAnimator.ofFloat(dimension, property, 1.0f, 1.05f);
+        scaleAnim.setDuration(500);
+        scaleAnim.setRepeatCount(ValueAnimator.INFINITE);
+        scaleAnim.setRepeatMode(ValueAnimator.REVERSE);
+        scaleAnim.start();
     }
 }
