@@ -3,6 +3,7 @@ package com.codepath.collabdj.activities;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 
 import com.codepath.collabdj.R;
 import com.codepath.collabdj.adapters.SoundSamplesAdapter;
+import com.codepath.collabdj.fragments.AddSoundSampleDialogFragment;
 import com.codepath.collabdj.models.SampleUsage;
 import com.codepath.collabdj.models.SharedSong;
 import com.codepath.collabdj.models.Song;
@@ -102,9 +104,11 @@ public class CreateSongActivity
         // Setup drawer view.
         setupDrawerView(nvDrawer);
 
-
         // Enable up icon.
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // TODO: REMOVE THIS! FOR TEST ONLY!
+        showAddSoundSampleDialog();
 
         rvSamples = (RecyclerView) findViewById(R.id.rvSamples);
         mSamples = new ArrayList<>();
@@ -405,5 +409,11 @@ public class CreateSongActivity
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         drawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    private void showAddSoundSampleDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        AddSoundSampleDialogFragment addSoundSampleDialogFragment = AddSoundSampleDialogFragment.newInstance("Hello!");
+        addSoundSampleDialogFragment.show(fm, "fragment_add_sound_sample");
     }
 }
