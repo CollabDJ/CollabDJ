@@ -68,6 +68,7 @@ public class SoundSampleView extends PercentRelativeLayout {
                     colorResourceValue = R.color.pieSampleLooping;
                     break;
 
+                case STOPPED:
                 case STOP_QUEUED:
                     colorResourceValue = R.color.pieSampleStopQueued;
                     break;
