@@ -148,6 +148,9 @@ public class CreateSongActivity
         initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("BlastCap 1"));
         initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("Eighth Gnarler E"));
         initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("BlastCap"));
+        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("1970 Analog Arp B"));
+        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("Glass Motion E0"));
+        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("Glass Motion C"));
 
         for (SoundSample soundSample : initialSoundSamples) {
             addSample(soundSample);

@@ -61,6 +61,30 @@ public class SoundSample implements Serializable {
                 2000,
                 null));
 
+        soundSamples.add(new SoundSample(
+                "1970 Analog Arp B",
+                0,
+                null,
+                R.raw.synth_2_1970_analog_arp_b,
+                2000,
+                null));
+
+        soundSamples.add(new SoundSample(
+                "Glass Motion E0",
+                0,
+                null,
+                R.raw.synth_4_glass_motion_e0,
+                4000,
+                null));
+
+        soundSamples.add(new SoundSample(
+                "Glass Motion C",
+                0,
+                null,
+                R.raw.synth_4_glass_motion_c,
+                4000,
+                null));
+
         for (SoundSample soundSample : soundSamples) {
             res.put(soundSample.getName(), soundSample);
         }
