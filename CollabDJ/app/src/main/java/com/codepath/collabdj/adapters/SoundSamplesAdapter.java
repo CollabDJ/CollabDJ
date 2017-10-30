@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -155,21 +154,15 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     // Used to cache the views within the item layout for fast access.
     public class ViewHolderEmpty extends RecyclerView.ViewHolder {
 
-        public ImageButton ibAddSample;
-
         // Constructor that accepts the entire item row
         // and does the view lookups to find each subview.
         public ViewHolderEmpty(View itemView) {
             super(itemView);
 
-            ibAddSample = (ImageButton) itemView.findViewById(R.id.ibAddSample);
-
             // Set listener on the `add` button.
-            ibAddSample.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //TODO: Update this
-
 //                    int position = getAdapterPosition();
 //                    SoundSample soundSample = new SoundSample("Fresh Sample", 0, null, 0, 0, null);
 //                    SoundSampleInstance soundSampleInstance = new SoundSampleInstance(soundSample, null, getContext(), );
