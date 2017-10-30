@@ -66,4 +66,10 @@ public class PlaySongActivity extends AppCompatActivity {
                     sampleUsage.loopTimes);
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        samplePlayer.kill();
+    }
 }

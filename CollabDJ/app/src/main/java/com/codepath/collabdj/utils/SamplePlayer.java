@@ -476,4 +476,9 @@ public class SamplePlayer {
     public static long getCurrentTimestamp() {
         return new Date().getTime();
     }
+
+    public void kill() {
+        soundPool.release();
+        soundPool = null;
+    }
 }

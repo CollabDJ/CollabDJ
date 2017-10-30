@@ -130,6 +130,12 @@ public class CreateSongActivity
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        samplePlayer.kill();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
@@ -145,10 +151,15 @@ public class CreateSongActivity
         List<SoundSample> initialSoundSamples = new ArrayList<>();
 
         initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("BlastCap"));
-        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("BlastCap 0"));
-        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("BlastCap 1"));
         initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("Eighth Gnarler E"));
         initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("BlastCap"));
+        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("1970 Analog Arp B"));
+        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("Glass Motion E0"));
+        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("Glass Motion C"));
+        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("Airship Rising E1"));
+        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("Airship Rising C2"));
+        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("Pulsating Chords C1"));
+        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("Pulsating Chords C2"));
 
         for (SoundSample soundSample : initialSoundSamples) {
             addSample(soundSample);
@@ -405,7 +416,7 @@ public class CreateSongActivity
             activeSampleUsages.remove(soundSampleInstance);
         }
 
-        sampleUsage.loopTimes = numTimesPlayed;
+        sampleUsage.loopTimes = numTimesPlayed - 1;
 
         song.addSampleUsage(sampleUsage);
     }
@@ -425,7 +436,7 @@ public class CreateSongActivity
     private String getTestSongTitle() {
         String title = song == null ? "Song" : song.title;
 
-        return title + " " + new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss").format(new Date());
+        return title + " " + new SimpleDateFormat("EEE, MMM d, yyyy hh:mm aaa").format(new Date());
     }
 
     private void selectDrawerItem(MenuItem menuItem) {
@@ -436,9 +447,9 @@ public class CreateSongActivity
             case R.id.nav_second_element:
                 saveSongLocally(getTestSongTitle());
                 break;
-            case R.id.nav_third_element:
+            /*case R.id.nav_third_element:
                 //Toast.makeText(CreateSongActivity.this, "Third element selected!", Toast.LENGTH_LONG).show();
-                break;
+                break;*/
             default:
                 //Toast.makeText(CreateSongActivity.this, "Default case selected!", Toast.LENGTH_LONG).show();
         }
