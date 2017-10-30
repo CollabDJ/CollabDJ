@@ -129,6 +129,12 @@ public class CreateSongActivity
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        samplePlayer.kill();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
