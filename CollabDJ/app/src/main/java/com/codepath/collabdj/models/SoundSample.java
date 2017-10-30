@@ -38,22 +38,6 @@ public class SoundSample implements Serializable {
                 null));
 
         soundSamples.add(new SoundSample(
-                "BlastCap 0",
-                0,
-                null,
-                R.raw.drum_4_blastcap_start_0,
-                8000,
-                null));
-
-        soundSamples.add(new SoundSample(
-                "BlastCap 1",
-                0,
-                null,
-                R.raw.drum_4_blastcap_start_1,
-                8000,
-                null));
-
-        soundSamples.add(new SoundSample(
                 "Eighth Gnarler E",
                 0,
                 null,

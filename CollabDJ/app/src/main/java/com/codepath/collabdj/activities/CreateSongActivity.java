@@ -144,8 +144,6 @@ public class CreateSongActivity
         List<SoundSample> initialSoundSamples = new ArrayList<>();
 
         initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("BlastCap"));
-        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("BlastCap 0"));
-        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("BlastCap 1"));
         initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("Eighth Gnarler E"));
         initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("BlastCap"));
         initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("1970 Analog Arp B"));
@@ -410,7 +408,7 @@ public class CreateSongActivity
             activeSampleUsages.remove(soundSampleInstance);
         }
 
-        sampleUsage.loopTimes = numTimesPlayed;
+        sampleUsage.loopTimes = numTimesPlayed - 1;
 
         song.addSampleUsage(sampleUsage);
     }
