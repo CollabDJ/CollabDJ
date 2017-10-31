@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.codepath.collabdj.R;
 import com.codepath.collabdj.models.SoundSampleInstance;
+import com.codepath.collabdj.utils.AnimationUtils;
 import com.codepath.collabdj.views.SoundSamplePieChart;
 import com.codepath.collabdj.views.SoundSampleView;
 
@@ -137,6 +138,9 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 @Override
                 public void onClick(View view) {
                     if (soundSamplePlayListener != null && getSoundSampleInstance().isLoaded()) {
+                        //Make the play pause button pulse a bit
+                        AnimationUtils.setupPulsatingAnimation(ivPlayPause, 250, 3, 1.f, 1.2f);
+
                         millisecondsPerSection = soundSamplePlayListener.playButtonPressed(getSoundSampleInstance());
                     }
                 }
@@ -156,16 +160,21 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     // Used to cache the views within the item layout for fast access.
     public class ViewHolderEmpty extends RecyclerView.ViewHolder {
 
+        public ImageView ivPlus;
+
         // Constructor that accepts the entire item row
         // and does the view lookups to find each subview.
         public ViewHolderEmpty(View itemView) {
             super(itemView);
+
+            ivPlus = (ImageView) itemView.findViewById(R.id.ivPlus);
 
             // Set listener on the `add` button.
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (soundSamplePlayListener != null) {
+                        AnimationUtils.setupPulsatingAnimation(ivPlus, 250, 3, 1.f, 1.2f);
                         soundSamplePlayListener.addSamplePressed();
                     }
                 }
