@@ -1,17 +1,22 @@
 package com.codepath.collabdj.activities;
 
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.codepath.collabdj.R;
 import com.codepath.collabdj.adapters.SoundSamplesAdapter;
@@ -338,6 +343,8 @@ public class CreateSongActivity
             return;
         }
 
+        song.title = filename;
+
         JSONObject jsonObject = song.getJSONObject();
 
         try {
@@ -455,13 +462,72 @@ public class CreateSongActivity
         return title + " " + new SimpleDateFormat("EEE, MMM d, yyyy hh:mm aaa").format(new Date());
     }
 
+    private interface SaveSongDialogListener {
+        void onTitleSet(String title);
+    }
+
+    private void saveSongDialog(String initialString, final SaveSongDialogListener titleSetHandler) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Enter Song Title");
+
+        // Set up the input
+        final EditText input = new EditText(this);
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        input.setText(initialString);
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                titleSetHandler.onTitleSet(input.getText().toString());
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    private void showNoSongToast() {
+        Toast.makeText(this, "No song data yet.  Start making a song and then save it.", Toast.LENGTH_LONG).show();
+    }
+
     private void selectDrawerItem(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_first_element:
-                saveSongToCloud(getTestSongTitle());
+                if (song != null) {
+                    saveSongDialog(song.title, new SaveSongDialogListener() {
+                        @Override
+                        public void onTitleSet(String title) {
+                            saveSongToCloud(title);
+                        }
+                    });
+                }
+                else {
+                    showNoSongToast();
+                }
+
                 break;
             case R.id.nav_second_element:
-                saveSongLocally(getTestSongTitle());
+                if (song != null) {
+                    saveSongDialog(song.title, new SaveSongDialogListener() {
+                        @Override
+                        public void onTitleSet(String title) {
+                            saveSongLocally(title);
+                        }
+                    });
+                }
+                else {
+                    showNoSongToast();
+                }
+
                 break;
             /*case R.id.nav_third_element:
                 //Toast.makeText(CreateSongActivity.this, "Third element selected!", Toast.LENGTH_LONG).show();
