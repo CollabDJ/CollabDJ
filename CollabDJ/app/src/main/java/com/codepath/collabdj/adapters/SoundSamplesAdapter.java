@@ -154,6 +154,10 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         // Sets the sound sample information into their respective views.
         public void bind(SoundSampleInstance soundSample) {
             tvTitle.setText(soundSample.getSoundSample().getName());
+
+            int iconResource = soundSample.getSoundSample().getIconDrawableId();
+
+            ivIcon.setImageResource(iconResource == 0 ? R.drawable.ic_notes_glowing : iconResource);
         }
     }
 
