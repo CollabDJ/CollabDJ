@@ -198,6 +198,10 @@ public class CreateSongActivity
             mSamples.set(firstEmptyCellIndex, soundSampleInstance);
             soundSampleIndexMapping.put(soundSampleInstance, firstEmptyCellIndex);
 
+            if (song != null) {
+                song.addSoundSample(soundSample);
+            }
+
             //check if we need a new empty row
             int numEmptyCells = mSamples.size() - firstEmptyCellIndex - 1;
 
