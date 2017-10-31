@@ -96,6 +96,7 @@ public class CreateSongActivity
         // Set a toolbar to replace the ActionBar.
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         // Find our drawer view.
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);

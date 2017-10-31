@@ -40,6 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Title"
+        android:textStyle="bold"
         android:textAlignment="center" />
 
 </com.codepath.collabdj.views.SoundSampleView>
