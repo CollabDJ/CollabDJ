@@ -139,7 +139,7 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 public void onClick(View view) {
                     if (soundSamplePlayListener != null && getSoundSampleInstance().isLoaded()) {
                         //Make the play pause button pulse a bit
-                        AnimationUtils.setupPulsatingAnimation(ivPlayPause, 250, 3, 1.f, 1.2f);
+                        AnimationUtils.setupPulsatingAnimation(ivPlayPause, 100, 1, 1.f, 1.4f);
 
                         millisecondsPerSection = soundSamplePlayListener.playButtonPressed(getSoundSampleInstance());
                     }
@@ -174,7 +174,7 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 @Override
                 public void onClick(View view) {
                     if (soundSamplePlayListener != null) {
-                        AnimationUtils.setupPulsatingAnimation(ivPlus, 250, 3, 1.f, 1.2f);
+                        AnimationUtils.setupPulsatingAnimation(ivPlus, 100, 5, 1.f, 1.4f);
                         soundSamplePlayListener.addSamplePressed();
                     }
                 }
