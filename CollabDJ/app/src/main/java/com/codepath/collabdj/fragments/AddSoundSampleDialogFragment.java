@@ -14,6 +14,7 @@ import com.codepath.collabdj.R;
 import com.codepath.collabdj.models.SoundSample;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -57,6 +58,15 @@ public class AddSoundSampleDialogFragment extends DialogFragment {
         for (Map.Entry<String, SoundSample> entry : map.entrySet()) {
             mItems.add(entry.getKey());
         }
+
+        //alphabetically sort the samples
+        mItems.sort(new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return o1.compareTo(o2);
+            }
+        });
+
         lvAddSamples = (ListView) view.findViewById(R.id.lvAddSample);
         ArrayAdapter<String> itemsAdapter =
                 new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, mItems);

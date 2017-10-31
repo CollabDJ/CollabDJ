@@ -151,15 +151,18 @@ public class CreateSongActivity
         List<SoundSample> initialSoundSamples = new ArrayList<>();
 
         initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("BlastCap"));
-        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("Eighth Gnarler E"));
-        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("BlastCap"));
-        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("1970 Analog Arp B"));
-        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("Glass Motion E0"));
-        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("Glass Motion C"));
-        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("Airship Rising E1"));
-        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("Airship Rising C2"));
         initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("Pulsating Chords C1"));
-        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("Pulsating Chords C2"));
+        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("Glass Motion E0"));
+        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("Eighth Gnarler E"));
+
+//        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("BlastCap"));
+//        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("1970 Analog Arp B"));
+//        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("Glass Motion E0"));
+//        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("Glass Motion C"));
+//        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("Airship Rising E1"));
+//        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("Airship Rising C2"));
+//
+//        initialSoundSamples.add(SoundSample.SOUND_SAMPLES.get("Pulsating Chords C2"));
 
         for (SoundSample soundSample : initialSoundSamples) {
             addSample(soundSample);
@@ -198,7 +201,7 @@ public class CreateSongActivity
             //check if we need a new empty row
             int numEmptyCells = mSamples.size() - firstEmptyCellIndex - 1;
 
-            if (numEmptyCells < NUM_COLUMNS) {
+            if (numEmptyCells < NUM_COLUMNS * 2) {
                 createEmptyRow();
             }
         }
@@ -228,6 +231,10 @@ public class CreateSongActivity
             createEmptyCell();
         }
 
+        createEmptyRow();
+        createEmptyRow();
+        createEmptyRow();
+        createEmptyRow();
         createEmptyRow();
     }
 
