@@ -20,6 +20,8 @@ public class SoundSampleInstance implements SamplePlayer.SampleHandleListener {
         void startPlaying(SoundSampleInstance soundSampleInstance, long startSection);
 
         void stopPlaying(SoundSampleInstance soundSampleInstance, int numTimesPlayed);
+
+        void onLoaded(SoundSampleInstance soundSampleInstance);
     }
 
     protected class PlayInstanceInfo {
@@ -153,6 +155,6 @@ public class SoundSampleInstance implements SamplePlayer.SampleHandleListener {
 
     @Override
     public void onLoaded(SamplePlayer.SampleHandle sampleHandle) {
-
+        listener.onLoaded(this);
     }
 }

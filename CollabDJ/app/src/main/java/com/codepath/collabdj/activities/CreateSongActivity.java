@@ -432,6 +432,11 @@ public class CreateSongActivity
         song.addSampleUsage(sampleUsage);
     }
 
+    @Override
+    public void onLoaded(SoundSampleInstance soundSampleInstance) {
+        //Do nothing
+    }
+
     private void setupDrawerView(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
