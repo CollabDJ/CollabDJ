@@ -29,6 +29,7 @@
                 android:layout_centerInParent="true"
                 android:layout_toLeftOf="@+id/newSongShim"
                 android:layout_toStartOf="@+id/newSongShim"
+                android:padding="20dp"
                 android:contentDescription="@string/new_song_description"
                 app:srcCompat="@drawable/ic_new_song" />
 
@@ -75,6 +76,7 @@
                 android:layout_toStartOf="@+id/openSongShim"
                 android:contentDescription="@string/open_song_desciption"
                 android:scaleType="centerInside"
+                android:padding="20dp"
                 app:srcCompat="@drawable/ic_saved_songs" />
 
             <View
@@ -119,6 +121,7 @@
                 android:layout_toLeftOf="@+id/sharedSongsShim"
                 android:layout_toStartOf="@+id/sharedSongsShim"
                 android:contentDescription="@string/shared_songs_description"
+                android:padding="20dp"
                 app:srcCompat="@drawable/ic_shared_songs" />
 
             <View

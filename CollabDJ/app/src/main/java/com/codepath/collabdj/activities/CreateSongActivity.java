@@ -124,7 +124,7 @@ public class CreateSongActivity
         rvSamples.setLayoutManager(gridLayoutManager);
 
         // Add dividers to the staggered grid.
-        SpacesItemDecoration decoration = new SpacesItemDecoration(5);
+        SpacesItemDecoration decoration = new SpacesItemDecoration(this, 5);
         rvSamples.addItemDecoration(decoration);
 
         // Set up the sound output
