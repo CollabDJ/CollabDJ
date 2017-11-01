@@ -18,13 +18,10 @@ public class SplashActivity extends AppCompatActivity {
         final ImageView splash = (ImageView) this.findViewById(R.id.ivSplash);
 
         final Handler handler = new Handler();
-        final int delay = 1500; //milliseconds
+        final int delay = 1000; //milliseconds
 
         handler.postDelayed(new Runnable(){
             public void run(){
-                //do something
-                handler.postDelayed(this, delay);
-
                 Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
