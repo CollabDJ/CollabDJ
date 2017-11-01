@@ -2,6 +2,7 @@ package com.codepath.collabdj.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 
@@ -15,9 +16,20 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         final ImageView splash = (ImageView) this.findViewById(R.id.ivSplash);
-        
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        finish();
+
+        final Handler handler = new Handler();
+        final int delay = 1500; //milliseconds
+
+        handler.postDelayed(new Runnable(){
+            public void run(){
+                //do something
+                handler.postDelayed(this, delay);
+
+                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }, delay);
+
     }
 }
