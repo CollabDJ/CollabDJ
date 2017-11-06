@@ -20,4 +20,11 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true" />
+
+    <com.codepath.collabdj.views.SongProgressView
+        android:id="@+id/songPositionBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:visibility="invisible" />
 </RelativeLayout>

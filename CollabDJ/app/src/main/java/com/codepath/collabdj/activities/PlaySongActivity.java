@@ -13,6 +13,7 @@ import com.codepath.collabdj.models.SampleUsage;
 import com.codepath.collabdj.models.Song;
 import com.codepath.collabdj.models.SoundSampleInstance;
 import com.codepath.collabdj.utils.SamplePlayer;
+import com.codepath.collabdj.views.SongProgressView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,8 @@ public class PlaySongActivity extends AppCompatActivity implements SoundSampleIn
     long songStartTime;
 
     int numLoadingSamples;
+
+    SongProgressView songPositionBar;
 
     public static void launch(Song song, Context context) {
         Intent i = new Intent(context, PlaySongActivity.class);
@@ -43,6 +46,8 @@ public class PlaySongActivity extends AppCompatActivity implements SoundSampleIn
         song = (Song) getIntent().getSerializableExtra(SONG_KEY);
 
         samplePlayer = new SamplePlayer(64);
+
+        songPositionBar = (SongProgressView) findViewById(R.id.songPositionBar);
 
         //Add the samples
         soundSampleInstances = new ArrayList<>(song.getNumSoundSamples());
@@ -67,16 +72,29 @@ public class PlaySongActivity extends AppCompatActivity implements SoundSampleIn
 
     public void startSong() {
         //Offset by a little to start the song sooner
-        songStartTime = SamplePlayer.getCurrentTimestamp() - (long)((float) song.getNumMillisecondsPerSection() * .9f);
+        final long startOffset = (long)((float) song.getNumMillisecondsPerSection() * .9f);
+
+        songStartTime = SamplePlayer.getCurrentTimestamp() - startOffset;
+
+        long endTime = 0;
 
         //Queue up the samples so the song starts playing
         for(int i = 0; i < song.getNumSampleUsages(); ++i) {
             SampleUsage sampleUsage = song.getSampleUsage(i);
 
-            soundSampleInstances.get(sampleUsage.getSoundSampleIndex()).queueSample(sampleUsage.getStartSection(),
+            SoundSampleInstance soundSampleInstance = soundSampleInstances.get(sampleUsage.getSoundSampleIndex());
+
+            long sampleEndTime = song.getSectionTimestampFromStart(sampleUsage.getStartSection())
+                    + (sampleUsage.loopTimes * soundSampleInstance.getSoundSample().getDuration()) ;
+
+            soundSampleInstance.queueSample(sampleUsage.getStartSection(),
                     song.getNumMillisecondsPerSection(),
                     songStartTime,
                     sampleUsage.loopTimes);
+
+            if (sampleEndTime > endTime) {
+                endTime = sampleEndTime;
+            }
         }
 
         // Find the ImageView to display the GIF
@@ -84,6 +102,19 @@ public class PlaySongActivity extends AppCompatActivity implements SoundSampleIn
         // Display the GIF (from raw resource) into the ImageView
         Glide.with(this).load(R.raw.background_play).asGif()
                 .into(ivGif);
+
+        songPositionBar.setVisibility(View.VISIBLE);
+        songPositionBar.setMax((int)endTime);
+        songPositionBar.setProgress(0);
+
+        songPositionBar.listener = new SongProgressView.UpdateListener() {
+            @Override
+            public void updateProgressView(SongProgressView progressView) {
+                progressView.setProgress((int) ((SamplePlayer.getCurrentTimestamp() - (songStartTime + startOffset))));
+            }
+        };
+
+        songPositionBar.invalidate();
     }
 
     @Override
