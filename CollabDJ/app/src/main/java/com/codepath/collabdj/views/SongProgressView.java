@@ -32,7 +32,7 @@ public class SongProgressView extends ProgressBar {
     }
 
     protected void configureProgressView() {
-
+        
     }
 
     @Override

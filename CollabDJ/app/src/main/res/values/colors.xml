@@ -14,4 +14,7 @@
     <color name="pieSampleLooping">#77FFFFFF</color>
     <color name="pieSampleStopQueued">#33FF0000</color>
     <color name="pieSampleEmpty">#0000</color>
+
+    <color name="playProgressTint">#33FFFFFF</color>
+    <color name="playBackgroundTint">#11FFFFFF</color>
 </resources>
