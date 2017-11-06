@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CollabDJ</string>
+    <string name="app_name">CloudDJ</string>
 
     <!-- Strings for MainActivity -->
     <string name="new_song">New Song</string>
@@ -20,4 +20,7 @@
     <!-- Strings for hamburger menu -->
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+
+    <!-- Strings for dialogFragment AddSoundSample -->
+    <string name="add_new_sample">Add sound sample</string>
 </resources>

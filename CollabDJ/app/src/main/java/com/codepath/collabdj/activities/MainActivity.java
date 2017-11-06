@@ -1,5 +1,6 @@
 package com.codepath.collabdj.activities;
 
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.codepath.collabdj.R;
+import com.codepath.collabdj.utils.AnimationUtils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Attach click listeners to each RelativeLayout.
         setupClickListeners();
+        setupAnimations();
     }
 
     private void setupClickListeners() {
@@ -82,5 +85,21 @@ public class MainActivity extends AppCompatActivity {
 //                });
             }
         });
+    }
+
+    private void setupAnimations() {
+        setupPulsatingAnimation(findViewById(R.id.ivNewSong));
+        setupPulsatingAnimation(findViewById(R.id.tvNewSong));
+
+        setupPulsatingAnimation(findViewById(R.id.ivOpenSong));
+        setupPulsatingAnimation(findViewById(R.id.tvOpenSong));
+
+        setupPulsatingAnimation(findViewById(R.id.ivSharedSongs));
+        setupPulsatingAnimation(findViewById(R.id.tvSharedSongs));
+    }
+
+    private void setupPulsatingAnimation(View view)
+    {
+        AnimationUtils.setupPulsatingAnimation(view, 500, ValueAnimator.INFINITE, 1.0f, 1.05f);
     }
 }

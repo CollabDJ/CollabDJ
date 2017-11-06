@@ -31,26 +31,74 @@ public class SoundSample implements Serializable {
 
         soundSamples.add(new SoundSample(
                 "BlastCap",
-                0,
+                R.drawable.ic_mus_drums,
                 null,
                 R.raw.drum_4_blastcap_start,
                 8000,
                 null));
 
         soundSamples.add(new SoundSample(
-                "BlastCap 0",
-                0,
+                "Eighth Gnarler E",
+                R.drawable.ic_mus_edm,
                 null,
-                R.raw.drum_4_blastcap_start_0,
-                8000,
+                R.raw.synth_2_eighth_gnarler_e,
+                2000,
                 null));
 
         soundSamples.add(new SoundSample(
-                "BlastCap 1",
-                0,
+                "1970 Analog Arp B",
+                R.drawable.ic_mus_edm,
                 null,
-                R.raw.drum_4_blastcap_start_1,
-                8000,
+                R.raw.synth_2_1970_analog_arp_b,
+                2000,
+                null));
+
+        soundSamples.add(new SoundSample(
+                "Glass Motion E0",
+                R.drawable.ic_notes_glowing,
+                null,
+                R.raw.synth_4_glass_motion_e0,
+                4000,
+                null));
+
+        soundSamples.add(new SoundSample(
+                "Glass Motion C",
+                R.drawable.ic_notes_glowing,
+                null,
+                R.raw.synth_4_glass_motion_c,
+                4000,
+                null));
+
+        soundSamples.add(new SoundSample(
+                "Airship Rising E1",
+                R.drawable.ic_mus_edm,
+                null,
+                R.raw.synth_4_airship_rising_e1,
+                4000,
+                null));
+
+        soundSamples.add(new SoundSample(
+                "Airship Rising C2",
+                R.drawable.ic_mus_edm,
+                null,
+                R.raw.synth_4_airship_rising_c2,
+                4000,
+                null));
+
+        soundSamples.add(new SoundSample(
+                "Pulsating Chords C1",
+                R.drawable.ic_mus_edm,
+                null,
+                R.raw.synth_4_pulsating_chords_c1,
+                4000,
+                null));
+
+        soundSamples.add(new SoundSample(
+                "Pulsating Chords C2",
+                R.drawable.ic_mus_edm,
+                null,
+                R.raw.synth_4_pulsating_chords_c2,
+                4000,
                 null));
 
         for (SoundSample soundSample : soundSamples) {

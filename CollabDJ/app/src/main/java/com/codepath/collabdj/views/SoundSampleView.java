@@ -2,10 +2,10 @@ package com.codepath.collabdj.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
+import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
-import android.widget.RelativeLayout;
 
+import com.codepath.collabdj.R;
 import com.codepath.collabdj.adapters.SoundSamplesAdapter;
 import com.codepath.collabdj.utils.SamplePlayer;
 
@@ -15,7 +15,7 @@ import static com.codepath.collabdj.utils.SamplePlayer.PlayInstanceState.LOOP_QU
  * Created by ilyaseletsky on 10/15/17.
  */
 
-public class SoundSampleView extends RelativeLayout {
+public class SoundSampleView extends PercentRelativeLayout {
     public SoundSamplesAdapter.ViewHolderSample viewHolder;
 
     public SoundSampleView(Context context) {
@@ -30,45 +30,61 @@ public class SoundSampleView extends RelativeLayout {
         super(context, attrs, defStyleAttr);
     }
 
+    //Making the samples be squares
+    @Override
+    protected void onMeasure(int width, int height) {
+        // note we are applying the width value as the height
+        super.onMeasure(width, width);
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         //Update the sound sample state piechart
 
         viewHolder.pbLoadingIndicator.setVisibility(viewHolder.getSoundSampleInstance().isLoaded() ? INVISIBLE : VISIBLE);
-        viewHolder.ibPlayPause.setEnabled(viewHolder.getSoundSampleInstance().isLoaded());
 
         SamplePlayer.SampleHandle.PlayInstance playInstance = viewHolder.getSoundSampleInstance().getCurrentPlayInstance();
 
         if (playInstance == null) {
-            viewHolder.tvPercent.setVisibility(INVISIBLE);
-            viewHolder.ibPlayPause.setPlayState(SamplePlayer.PlayInstanceState.STOPPED);
+            viewHolder.pcPercent.setVisibility(INVISIBLE);
+            viewHolder.ivPlayPause.setImageResource(R.drawable.ic_play);
         }
         else {
-            viewHolder.tvPercent.setVisibility(VISIBLE);
+            viewHolder.pcPercent.setVisibility(VISIBLE);
 
             float percentage = (float) playInstance.getRemainingDelay()
                     / (playInstance.getPlayState() == LOOP_QUEUED
                         ? viewHolder.millisecondsPerSection
                         : (float) viewHolder.getSoundSampleInstance().getSoundSample().getDuration());
 
-            //Hacked together for now, replace with pie chart
-            viewHolder.tvPercent.setText(String.format("%1.2f", 1.0f - percentage));
+            int colorResourceValue = 0;
 
             switch(playInstance.getPlayState()) {
                 case LOOP_QUEUED:
-                    viewHolder.tvPercent.setTextColor(Color.BLUE);
+                    colorResourceValue = R.color.pieSampleLoopQueued;
                     break;
 
                 case LOOPING:
-                    viewHolder.tvPercent.setTextColor(Color.GREEN);
+                    colorResourceValue = R.color.pieSampleLooping;
                     break;
 
+                case STOPPED:
                 case STOP_QUEUED:
-                    viewHolder.tvPercent.setTextColor(Color.RED);
+                    colorResourceValue = R.color.pieSampleStopQueued;
                     break;
             }
 
-            viewHolder.ibPlayPause.setPlayState(playInstance.getPlayState());
+            viewHolder.pcPercent.setPieChartValue(percentage, colorResourceValue);
+
+            switch(playInstance.getPlayState()) {
+                case STOP_QUEUED:
+                case STOPPED:
+                    viewHolder.ivPlayPause.setImageResource(R.drawable.ic_play);
+                    break;
+                default:
+                    viewHolder.ivPlayPause.setImageResource(R.drawable.ic_pause);
+                    break;
+            }
         }
 
         super.onDraw(canvas);

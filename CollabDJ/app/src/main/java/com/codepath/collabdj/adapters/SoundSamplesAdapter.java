@@ -6,14 +6,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.codepath.collabdj.R;
 import com.codepath.collabdj.models.SoundSampleInstance;
-import com.codepath.collabdj.utils.PlayPauseButton;
+import com.codepath.collabdj.utils.AnimationUtils;
+import com.codepath.collabdj.views.SoundSamplePieChart;
 import com.codepath.collabdj.views.SoundSampleView;
 
 import java.util.List;
@@ -32,6 +32,8 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
          *      how to display the pie chart percentage
          */
         long playButtonPressed(SoundSampleInstance soundSampleInstance);
+
+        void addSamplePressed();
     }
 
     // Tag for logging.
@@ -110,9 +112,9 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public class ViewHolderSample extends RecyclerView.ViewHolder {
 
         public TextView tvTitle;
-        public TextView tvPercent;  //TODO: replace with a piechart
-        public PlayPauseButton ibPlayPause;
-        public ImageView ivStatus;
+        public SoundSamplePieChart pcPercent;
+        public ImageView ivPlayPause;
+        public ImageView ivIcon;
         public ProgressBar pbLoadingIndicator;
         public long millisecondsPerSection;
 
@@ -121,19 +123,24 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public ViewHolderSample(View itemView) {
             super(itemView);
 
-            ((SoundSampleView)itemView).viewHolder = this;
+            SoundSampleView soundSampleView = (SoundSampleView) itemView;
+
+            soundSampleView.viewHolder = this;
 
             tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
-            tvPercent = (TextView) itemView.findViewById(R.id.tvPercent);
-            ibPlayPause = (PlayPauseButton) itemView.findViewById(R.id.ibPlayPause);
-            ivStatus = (ImageView) itemView.findViewById(R.id.ivStatus);
+            pcPercent = (SoundSamplePieChart) itemView.findViewById(R.id.pcPercent);
+            ivPlayPause = (ImageView) itemView.findViewById(R.id.ivPlayPause);
+            ivIcon = (ImageView) itemView.findViewById(R.id.ivIcon);
             pbLoadingIndicator = (ProgressBar) itemView.findViewById(R.id.pbLoadingIndicator);
 
             // Set listener on the `play/pause` button.
-            ibPlayPause.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (soundSamplePlayListener != null) {
+                    if (soundSamplePlayListener != null && getSoundSampleInstance().isLoaded()) {
+                        //Make the play pause button pulse a bit
+                        AnimationUtils.setupPulsatingAnimation(ivPlayPause, 100, 1, 1.f, 1.4f);
+
                         millisecondsPerSection = soundSamplePlayListener.playButtonPressed(getSoundSampleInstance());
                     }
                 }
@@ -147,32 +154,33 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         // Sets the sound sample information into their respective views.
         public void bind(SoundSampleInstance soundSample) {
             tvTitle.setText(soundSample.getSoundSample().getName());
+
+            int iconResource = soundSample.getSoundSample().getIconDrawableId();
+
+            ivIcon.setImageResource(iconResource == 0 ? R.drawable.ic_notes_glowing : iconResource);
         }
     }
 
     // Used to cache the views within the item layout for fast access.
     public class ViewHolderEmpty extends RecyclerView.ViewHolder {
 
-        public ImageButton ibAddSample;
+        public ImageView ivPlus;
 
         // Constructor that accepts the entire item row
         // and does the view lookups to find each subview.
         public ViewHolderEmpty(View itemView) {
             super(itemView);
 
-            ibAddSample = (ImageButton) itemView.findViewById(R.id.ibAddSample);
+            ivPlus = (ImageView) itemView.findViewById(R.id.ivPlus);
 
             // Set listener on the `add` button.
-            ibAddSample.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //TODO: Update this
-
-//                    int position = getAdapterPosition();
-//                    SoundSample soundSample = new SoundSample("Fresh Sample", 0, null, 0, 0, null);
-//                    SoundSampleInstance soundSampleInstance = new SoundSampleInstance(soundSample, null, getContext(), );
-//                    mSamples.set(position, soundSampleInstance);
-//                    notifyDataSetChanged();
+                    if (soundSamplePlayListener != null) {
+                        AnimationUtils.setupPulsatingAnimation(ivPlus, 100, 5, 1.f, 1.4f);
+                        soundSamplePlayListener.addSamplePressed();
+                    }
                 }
             });
         }

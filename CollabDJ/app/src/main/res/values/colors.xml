@@ -9,4 +9,9 @@
 
     <color name="gradientStartDark">#F2000000</color>
     <color name="gradientEndDark">#F22f2f2f</color>
+
+    <color name="pieSampleLoopQueued">#FFFF00</color>
+    <color name="pieSampleLooping">#00FF00</color>
+    <color name="pieSampleStopQueued">#FF0000</color>
+    <color name="pieSampleEmpty">#0000</color>
 </resources>
