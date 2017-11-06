@@ -4,14 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
     tools:context="com.codepath.collabdj.activities.SplashActivity">
+
+    <include layout="@layout/background_image_lights" />
 
     <ImageView
         android:id="@+id/ivSplash"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        app:srcCompat="@drawable/dj" />
+        android:padding="64dp"
+        app:srcCompat="@drawable/ic_dj_glow" />
 </RelativeLayout>

@@ -2,7 +2,7 @@
     <string name="app_name">CloudDJ</string>
 
     <!-- Strings for MainActivity -->
-    <string name="new_song">New Song</string>
+    <string name="new_song">Create Song</string>
     <string name="new_song_description">Tap to start a new song</string>
 
     <string name="open_song">Open Song</string>
