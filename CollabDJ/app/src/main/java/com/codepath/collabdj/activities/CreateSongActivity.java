@@ -380,9 +380,6 @@ public class CreateSongActivity
             case R.id.nav_second_element:
                 saveSongLocally(getTestSongTitle());
                 break;
-            case R.id.nav_third_element:
-                //Toast.makeText(CreateSongActivity.this, "Third element selected!", Toast.LENGTH_LONG).show();
-                break;
             default:
                 //Toast.makeText(CreateSongActivity.this, "Default case selected!", Toast.LENGTH_LONG).show();
         }
