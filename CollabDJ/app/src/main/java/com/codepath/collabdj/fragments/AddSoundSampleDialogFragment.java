@@ -1,5 +1,7 @@
 package com.codepath.collabdj.fragments;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -48,7 +50,10 @@ public class AddSoundSampleDialogFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_add_sound_sample, container);
+        View view = inflater.inflate(R.layout.fragment_add_sound_sample, container);
+        getDialog().getWindow().setDimAmount(0.9f);
+        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        return view;
     }
 
     @Override

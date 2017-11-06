@@ -2,6 +2,8 @@ package com.codepath.collabdj.activities;
 
 import android.content.DialogInterface;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -493,7 +495,10 @@ public class CreateSongActivity
             }
         });
 
-        builder.show();
+        AlertDialog alertDialog = builder.show();
+
+        alertDialog.getWindow().setDimAmount(0.9f);
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
 
     private void showNoSongToast() {

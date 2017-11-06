@@ -26,9 +26,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/llTitle"
-        android:divider="#FFFFFF"
-        android:dividerHeight="2dp"/>
+        android:layout_below="@+id/llTitle"/>
 
 
 </RelativeLayout>
