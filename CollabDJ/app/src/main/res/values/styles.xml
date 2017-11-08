@@ -18,4 +18,10 @@
         <item name="android:windowBackground">@drawable/splash_background</item>
     </style>
 
+    <!-- Theme used to customize the drawer items -->
+    <style name="DrawerTheme">
+        <item name="android:textSize">18sp</item> <!-- menu item text size-->
+        <item name="android:listPreferredItemHeightSmall">50dp</item><!-- menu item height-->
+    </style>
+
 </resources>

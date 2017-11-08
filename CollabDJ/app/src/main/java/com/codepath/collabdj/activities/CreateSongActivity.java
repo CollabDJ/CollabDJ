@@ -453,6 +453,10 @@ public class CreateSongActivity
     }
 
     private void setupDrawerView(NavigationView navigationView) {
+        // Disable tint on the items icon.
+        navigationView.setItemIconTintList(null);
+
+        // Set item selected listener.
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
