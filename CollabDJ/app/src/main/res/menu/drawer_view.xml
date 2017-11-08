@@ -4,12 +4,12 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_first_element"
-            android:icon="@drawable/ic_saved_songs"
-            android:title="Share" />
+            android:icon="@drawable/ic_shared_songs"
+            android:title="@string/share_option" />
         <item
             android:id="@+id/nav_second_element"
-            android:icon="@drawable/ic_shared_songs"
-            android:title="Save" />
+            android:icon="@drawable/ic_saved_songs"
+            android:title="@string/save_option" />
     </group>
 
 </menu>

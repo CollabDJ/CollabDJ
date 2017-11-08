@@ -2,7 +2,6 @@ package com.codepath.collabdj.activities;
 
 import android.content.DialogInterface;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -18,7 +17,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,6 +33,7 @@ import com.codepath.collabdj.models.SharedSong;
 import com.codepath.collabdj.models.Song;
 import com.codepath.collabdj.models.SoundSample;
 import com.codepath.collabdj.models.SoundSampleInstance;
+import com.codepath.collabdj.utils.PixelUtils;
 import com.codepath.collabdj.utils.SamplePlayer;
 import com.codepath.collabdj.utils.SpacesItemDecoration;
 import com.google.firebase.database.DatabaseReference;
@@ -488,10 +487,14 @@ public class CreateSongActivity
         // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         input.setText(initialString);
+        input.setSelection(input.getText().length());
 
         // Get the parameters of the linearLayout and set its margins.
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        params.setMargins(getPixelValue(23), getPixelValue(5), getPixelValue(24), getPixelValue(5));
+        params.setMargins(PixelUtils.getPixelValue(this, getResources().getInteger(R.integer.alert_dialog_margin_left)),
+                            PixelUtils.getPixelValue(this, getResources().getInteger(R.integer.alert_dialog_margin_top)),
+                            PixelUtils.getPixelValue(this, getResources().getInteger(R.integer.alert_dialog_margin_right)),
+                            PixelUtils.getPixelValue(this, getResources().getInteger(R.integer.alert_dialog_margin_bottom)));
         parentInput.addView(input, params);
 
         builder.setView(parentInput);
@@ -516,14 +519,14 @@ public class CreateSongActivity
         alertDialog.getWindow().setDimAmount(0.9f);
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        // Make the dialog occupy 70% of the screens width.
+        // Make the dialog occupy 80% of the screens width.
         DisplayMetrics metrics = alertDialog.getContext().getResources()
                 .getDisplayMetrics();
         int width = metrics.widthPixels;
         View view = alertDialog.getWindow().getDecorView()
                 .findViewById(android.R.id.content);
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) view.getLayoutParams();
-        layoutParams.width = 2 * width / 3; // 70% of screen
+        layoutParams.width = 4 * width / 5; // 80% of screen
         layoutParams.gravity = Gravity.CENTER;
         view.setLayoutParams(layoutParams);
 
@@ -598,9 +601,4 @@ public class CreateSongActivity
         onAddNewSample(SoundSample.SOUND_SAMPLES.get(title));
     }
 
-    private int getPixelValue(int dp) {
-        Resources resources = getResources();
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                dp, resources.getDisplayMetrics());
-    }
 }

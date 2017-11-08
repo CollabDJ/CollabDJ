@@ -33,4 +33,5 @@ public class AnimationUtils {
         scaleAnim.setRepeatMode(ValueAnimator.REVERSE);
         scaleAnim.start();
     }
+
 }
