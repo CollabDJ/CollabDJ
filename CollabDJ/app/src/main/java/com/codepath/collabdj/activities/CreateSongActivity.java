@@ -2,6 +2,7 @@ package com.codepath.collabdj.activities;
 
 import android.content.DialogInterface;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -15,9 +16,15 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.codepath.collabdj.R;
@@ -412,7 +419,6 @@ public class CreateSongActivity
 
     @Override
     public void addSamplePressed() {
-        //TODO: Present the add sample dialog here
         showAddSoundSampleDialog();
 
         //For now just hardcode it to add this
@@ -471,14 +477,24 @@ public class CreateSongActivity
 
     private void saveSongDialog(String initialString, final SaveSongDialogListener titleSetHandler) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Enter Song Title");
+        builder.setTitle(getResources().getString(R.string.add_new_title));
+
+        // Container for the input, in having this, we can add margins to the editText.
+        LinearLayout parentInput = new LinearLayout(this);
+        parentInput.setOrientation(LinearLayout.VERTICAL);
 
         // Set up the input
         final EditText input = new EditText(this);
         // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         input.setText(initialString);
-        builder.setView(input);
+
+        // Get the parameters of the linearLayout and set its margins.
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.setMargins(getPixelValue(23), getPixelValue(5), getPixelValue(24), getPixelValue(5));
+        parentInput.addView(input, params);
+
+        builder.setView(parentInput);
 
         // Set up the buttons
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -499,6 +515,18 @@ public class CreateSongActivity
 
         alertDialog.getWindow().setDimAmount(0.9f);
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        // Make the dialog occupy 70% of the screens width.
+        DisplayMetrics metrics = alertDialog.getContext().getResources()
+                .getDisplayMetrics();
+        int width = metrics.widthPixels;
+        View view = alertDialog.getWindow().getDecorView()
+                .findViewById(android.R.id.content);
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) view.getLayoutParams();
+        layoutParams.width = 2 * width / 3; // 70% of screen
+        layoutParams.gravity = Gravity.CENTER;
+        view.setLayoutParams(layoutParams);
+
     }
 
     private void showNoSongToast() {
@@ -568,5 +596,11 @@ public class CreateSongActivity
     @Override
     public void onSoundSampleAdded(String title) {
         onAddNewSample(SoundSample.SOUND_SAMPLES.get(title));
+    }
+
+    private int getPixelValue(int dp) {
+        Resources resources = getResources();
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                dp, resources.getDisplayMetrics());
     }
 }
