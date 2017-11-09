@@ -22,6 +22,7 @@
     <style name="DrawerTheme">
         <item name="android:textSize">18sp</item> <!-- menu item text size-->
         <item name="android:listPreferredItemHeightSmall">50dp</item><!-- menu item height-->
+        <!-- <item name="colorControlHighlight">@android:color/transparent</item> -->
     </style>
 
 </resources>

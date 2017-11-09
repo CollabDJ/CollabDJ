@@ -6,7 +6,7 @@
         <item
             android:id="@+id/nav_first_element"
             android:icon="@drawable/ic_shared_songs"
-            android:title="@string/share_option" />
+            android:title="@string/share_option"/>
         <item
             android:id="@+id/nav_second_element"
             android:icon="@drawable/ic_saved_songs"

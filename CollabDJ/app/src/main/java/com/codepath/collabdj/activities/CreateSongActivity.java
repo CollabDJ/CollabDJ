@@ -419,9 +419,6 @@ public class CreateSongActivity
     @Override
     public void addSamplePressed() {
         showAddSoundSampleDialog();
-
-        //For now just hardcode it to add this
-        //onAddNewSample(SoundSample.SOUND_SAMPLES.get("BlastCap"));
     }
 
     @Override
@@ -462,7 +459,7 @@ public class CreateSongActivity
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         selectDrawerItem(menuItem);
-                        return true;
+                        return false;
                     }
                 }
         );
@@ -541,6 +538,8 @@ public class CreateSongActivity
     }
 
     private void selectDrawerItem(MenuItem menuItem) {
+        menuItem.setChecked(true);
+
         switch (menuItem.getItemId()) {
             case R.id.nav_first_element:
                 if (song != null) {
@@ -574,7 +573,7 @@ public class CreateSongActivity
                 //Toast.makeText(CreateSongActivity.this, "Default case selected!", Toast.LENGTH_LONG).show();
         }
 
-        menuItem.setChecked(true);
+        menuItem.setChecked(false);
         mDrawer.closeDrawers();
     }
 
