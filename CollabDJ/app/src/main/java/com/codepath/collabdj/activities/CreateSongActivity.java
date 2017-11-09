@@ -573,12 +573,21 @@ public class CreateSongActivity
                 //Toast.makeText(CreateSongActivity.this, "Default case selected!", Toast.LENGTH_LONG).show();
         }
 
-        menuItem.setChecked(false);
+        //menuItem.setChecked(false);
         mDrawer.closeDrawers();
     }
 
     private ActionBarDrawerToggle setupDrawerToggle() {
-        return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open, R.string.drawer_close);
+        return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open, R.string.drawer_close) {
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view) {
+                // Un-select any selected item.
+                for (int i = 0; i <nvDrawer.getMenu().size() ; i++) {
+                    nvDrawer.getMenu().getItem(i).setChecked(false);
+                }
+                super.onDrawerClosed(view);
+            }
+        };
     }
 
     @Override
