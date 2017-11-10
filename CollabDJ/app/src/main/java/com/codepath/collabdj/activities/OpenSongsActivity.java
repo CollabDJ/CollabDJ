@@ -40,7 +40,7 @@ public class OpenSongsActivity extends AppCompatActivity {
         localsonglvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
-                playSong(localSongs.get(pos).getPathToData());
+                playSong(view, localSongs.get(pos).getPathToData());
             }
         });
     }
@@ -59,7 +59,7 @@ public class OpenSongsActivity extends AppCompatActivity {
         return localSongs;
     }
 
-    public void playSong(String path) {
+    public void playSong(View view, String path) {
         try {
             File JSONFile = new File(path);
 
@@ -67,8 +67,10 @@ public class OpenSongsActivity extends AppCompatActivity {
 
             JSONObject songJson = new JSONObject(new String(JSONBytes));
 
+            //View tvSongTitle = view.findViewById(R.id.sharedSongTV);
+
             Song song = new Song(songJson);
-            PlaySongActivity.launch(song, this);
+            PlaySongActivity.launch(song, this, view);
         }
         catch (Exception e) {
             e.printStackTrace();

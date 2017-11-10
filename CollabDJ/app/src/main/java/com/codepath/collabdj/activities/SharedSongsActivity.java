@@ -55,7 +55,7 @@ public class SharedSongsActivity extends AppCompatActivity {
         lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                openSong(sharedSongs.get(position));
+                openSong(view, sharedSongs.get(position));
             }
         });
 
@@ -100,7 +100,7 @@ public class SharedSongsActivity extends AppCompatActivity {
         });
     }
 
-    void openSong(SharedSong sharedSong) {
+    void openSong(final View view, SharedSong sharedSong) {
         StorageReference firebaseStorageRoot = FirebaseStorage.getInstance().getReference();
         StorageReference fileStorage = firebaseStorageRoot.child(sharedSong.getPathToData());
 
@@ -113,7 +113,7 @@ public class SharedSongsActivity extends AppCompatActivity {
 
                     Song song = new Song(jsonObject);
 
-                    PlaySongActivity.launch(song, SharedSongsActivity.this);
+                    PlaySongActivity.launch(song, SharedSongsActivity.this, view);
                 }
                 catch(Exception e) {
                     e.printStackTrace();

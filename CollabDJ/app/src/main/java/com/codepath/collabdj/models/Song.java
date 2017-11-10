@@ -117,6 +117,10 @@ public class Song implements Serializable {
         return section * numMillisecondsPerSection;
     }
 
+    public String getTitle() {
+        return this.title;
+    }
+
     public int getNumUserNames() {
         synchronized (this.userNames) {
             return this.userNames.size();

@@ -32,4 +32,25 @@
         android:backgroundTint="@color/playBackgroundTint"
         android:scaleY="2"
         android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/tvSongTitle"
+        android:transitionName="songTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:text="TextView" />
+
+    <ImageView
+        android:id="@+id/ivQuaver"
+        android:transitionName="quaverTransition"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/tvSongTitle"
+        android:layout_toStartOf="@+id/tvSongTitle"
+        app:srcCompat="@drawable/ic_notes_glowing" />
 </RelativeLayout>

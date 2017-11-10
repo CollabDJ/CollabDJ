@@ -1,11 +1,15 @@
 package com.codepath.collabdj.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.collabdj.R;
@@ -32,11 +36,21 @@ public class PlaySongActivity extends AppCompatActivity implements SoundSampleIn
 
     SongProgressView songPositionBar;
 
-    public static void launch(Song song, Context context) {
+    ImageView ivGif;
+    TextView tvSongTitle;
+
+    public static void launch(Song song, Context context, View view) {
         Intent i = new Intent(context, PlaySongActivity.class);
         i.putExtra(PlaySongActivity.SONG_KEY, song);
 
-        context.startActivity(i);
+        View tvSongTitle = view.findViewById(R.id.sharedSongTV);
+        View ivQuaver = view.findViewById(R.id.ivQuaver);
+
+        Pair<View, String> p1 = Pair.create((View)tvSongTitle, "songTitle");
+        Pair<View, String> p2 = Pair.create((View)ivQuaver, "quaverTransition");
+
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity)context, p1, p2);
+        context.startActivity(i, options.toBundle());
     }
 
     @Override
@@ -50,8 +64,11 @@ public class PlaySongActivity extends AppCompatActivity implements SoundSampleIn
 
         songPositionBar = (SongProgressView) findViewById(R.id.songPositionBar);
 
+        tvSongTitle = (TextView) findViewById(R.id.tvSongTitle);
+        tvSongTitle.setText(song.getTitle());
+
         // Find the ImageView to display the GIF
-        ImageView ivGif = (ImageView) findViewById(R.id.ivGif);
+        ivGif = (ImageView) findViewById(R.id.ivGif);
         // Display the GIF (from raw resource) into the ImageView.
         // ImageView is INVISIBLE now and will become VISIBLE when the song loads.
         Glide.with(this).load(getResIdForPlayerBackground()).asGif().dontAnimate()
@@ -105,7 +122,7 @@ public class PlaySongActivity extends AppCompatActivity implements SoundSampleIn
             }
         }
 
-        ImageView ivGif = (ImageView) findViewById(R.id.ivGif);
+        // Make the background GIF visible now that the song loaded.
         ivGif.setVisibility(View.VISIBLE);
 
         songPositionBar.setVisibility(View.VISIBLE);
@@ -149,7 +166,7 @@ public class PlaySongActivity extends AppCompatActivity implements SoundSampleIn
      */
     private int getResIdForPlayerBackground() {
         Random r = new Random();
-        int randomInt = r.nextInt(8) + 1;
+        int randomInt = r.nextInt(7) + 1;
         int res = 1;
 
         switch (randomInt) {
@@ -173,9 +190,6 @@ public class PlaySongActivity extends AppCompatActivity implements SoundSampleIn
                 break;
             case 7:
                 res = R.raw.pbg_7;
-                break;
-            case 8:
-                res = R.raw.pbg_8;
                 break;
             default:
                 res = 1;

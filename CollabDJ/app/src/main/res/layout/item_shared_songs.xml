@@ -5,6 +5,7 @@
 
     <TextView
         android:id="@+id/sharedSongTV"
+        android:transitionName="songTitle"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:layout_alignParentTop="true"
@@ -13,12 +14,14 @@
         android:layout_alignParentEnd="true"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="25dp"
+        android:textStyle="bold"
         android:gravity="center_vertical"
-        android:layout_toRightOf="@+id/imageView"
-        android:layout_toEndOf="@+id/imageView" />
+        android:layout_toRightOf="@+id/ivQuaver"
+        android:layout_toEndOf="@+id/ivQuaver" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/ivQuaver"
+        android:transitionName="quaverTransition"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignParentLeft="true"
