@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import com.codepath.collabdj.R;
 import com.codepath.collabdj.models.SampleUsage;
 import com.codepath.collabdj.models.Song;
 import com.codepath.collabdj.models.SoundSampleInstance;
+import com.codepath.collabdj.utils.OnSwipeTouchListener;
 import com.codepath.collabdj.utils.SamplePlayer;
 import com.codepath.collabdj.views.SongProgressView;
 
@@ -87,6 +89,9 @@ public class PlaySongActivity extends AppCompatActivity implements SoundSampleIn
 
             soundSampleInstances.add(soundSampleInstance);
         }
+
+        // Set onSwipe listeners.
+        setupSwipeListeners();
     }
 
     @Override
@@ -159,6 +164,37 @@ public class PlaySongActivity extends AppCompatActivity implements SoundSampleIn
 
             startSong();
         }
+    }
+
+    /*
+     * Attaches the swipe events to the background image GIF.
+     */
+    private void setupSwipeListeners() {
+        ivGif.setOnTouchListener(new OnSwipeTouchListener(this) {
+            @Override
+            public void onSwipeDown() {
+                // End the activity.
+                ActivityCompat.finishAfterTransition(PlaySongActivity.this);
+            }
+
+            @Override
+            public void onSwipeLeft() {
+                // End the activity.
+                ActivityCompat.finishAfterTransition(PlaySongActivity.this);
+            }
+
+            @Override
+            public void onSwipeUp() {
+                // End the activity.
+                ActivityCompat.finishAfterTransition(PlaySongActivity.this);
+            }
+
+            @Override
+            public void onSwipeRight() {
+                // End the activity.
+                ActivityCompat.finishAfterTransition(PlaySongActivity.this);
+            }
+        });
     }
 
     /*
