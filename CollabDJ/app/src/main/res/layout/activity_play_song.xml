@@ -45,8 +45,8 @@
         android:textSize="20sp"
         android:text="TextView"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/tvPlayerStatus"
-        android:layout_toRightOf="@+id/tvPlayerStatus"/>
+        android:layout_toEndOf="@+id/tsPlayerStatus"
+        android:layout_toRightOf="@+id/tsPlayerStatus"/>
 
     <ImageView
         android:id="@+id/ivQuaver"
@@ -58,17 +58,15 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <TextView
-        android:id="@+id/tvPlayerStatus"
+    <TextSwitcher
+        android:id="@+id/tsPlayerStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"
-        android:textStyle="bold"
-        android:textSize="20sp"
         android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/ivQuaver"
-        android:layout_toRightOf="@+id/ivQuaver"
-        android:text="@string/player_status_loading" />
+        android:layout_toRightOf="@+id/ivQuaver">
+    </TextSwitcher>
 </RelativeLayout>

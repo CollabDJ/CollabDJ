@@ -3,14 +3,18 @@ package com.codepath.collabdj.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextSwitcher;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 import com.bumptech.glide.Glide;
 import com.codepath.collabdj.R;
@@ -40,7 +44,7 @@ public class PlaySongActivity extends AppCompatActivity implements SoundSampleIn
 
     ImageView ivGif;
     TextView tvSongTitle;
-    TextView tvPlayerStatus;
+    TextSwitcher tsPlayerStatus;
 
     public static void launch(Song song, Context context, View view) {
         Intent i = new Intent(context, PlaySongActivity.class);
@@ -62,6 +66,9 @@ public class PlaySongActivity extends AppCompatActivity implements SoundSampleIn
         setContentView(R.layout.activity_play_song);
 
         song = (Song) getIntent().getSerializableExtra(SONG_KEY);
+
+        // Setup the text switcher.
+        setupPlayerStatusTextSwitcher();
 
         samplePlayer = new SamplePlayer(64);
 
@@ -90,8 +97,6 @@ public class PlaySongActivity extends AppCompatActivity implements SoundSampleIn
 
             soundSampleInstances.add(soundSampleInstance);
         }
-
-        tvPlayerStatus = (TextView) findViewById(R.id.tvPlayerStatus);
 
         // Set onSwipe listeners.
         setupSwipeListeners();
@@ -134,7 +139,7 @@ public class PlaySongActivity extends AppCompatActivity implements SoundSampleIn
         ivGif.setVisibility(View.VISIBLE);
 
         // Change the status textView to "Playing".
-        tvPlayerStatus.setText(getString(R.string.player_status_playing));
+        tsPlayerStatus.setText(getString(R.string.player_status_playing));
 
         songPositionBar.setVisibility(View.VISIBLE);
         songPositionBar.setMax((int)endTime);
@@ -201,6 +206,22 @@ public class PlaySongActivity extends AppCompatActivity implements SoundSampleIn
                 ActivityCompat.finishAfterTransition(PlaySongActivity.this);
             }
         });
+    }
+
+    private void setupPlayerStatusTextSwitcher() {
+        tsPlayerStatus = (TextSwitcher) findViewById(R.id.tsPlayerStatus);
+        tsPlayerStatus.setFactory(new ViewSwitcher.ViewFactory() {
+            @Override
+            public View makeView() {
+                TextView tvStatusText = new TextView(PlaySongActivity.this);
+                tvStatusText.setText(getString(R.string.player_status_loading));
+                tvStatusText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                tvStatusText.setTypeface(tvStatusText.getTypeface(), Typeface.BOLD);
+                return tvStatusText;
+            }
+        });
+        tsPlayerStatus.setInAnimation(this, android.R.anim.fade_in);
+        tsPlayerStatus.setOutAnimation(this, android.R.anim.fade_out);
     }
 
     /*
