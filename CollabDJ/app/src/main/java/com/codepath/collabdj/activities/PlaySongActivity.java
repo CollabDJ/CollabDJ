@@ -17,6 +17,7 @@ import com.codepath.collabdj.views.SongProgressView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class PlaySongActivity extends AppCompatActivity implements SoundSampleInstance.Listener {
     public static final String SONG_KEY = "song";
@@ -48,6 +49,13 @@ public class PlaySongActivity extends AppCompatActivity implements SoundSampleIn
         samplePlayer = new SamplePlayer(64);
 
         songPositionBar = (SongProgressView) findViewById(R.id.songPositionBar);
+
+        // Find the ImageView to display the GIF
+        ImageView ivGif = (ImageView) findViewById(R.id.ivGif);
+        // Display the GIF (from raw resource) into the ImageView.
+        // ImageView is INVISIBLE now and will become VISIBLE when the song loads.
+        Glide.with(this).load(getResIdForPlayerBackground()).asGif().dontAnimate()
+                .into(ivGif);
 
         //Add the samples
         soundSampleInstances = new ArrayList<>(song.getNumSoundSamples());
@@ -97,11 +105,8 @@ public class PlaySongActivity extends AppCompatActivity implements SoundSampleIn
             }
         }
 
-        // Find the ImageView to display the GIF
         ImageView ivGif = (ImageView) findViewById(R.id.ivGif);
-        // Display the GIF (from raw resource) into the ImageView
-        Glide.with(this).load(R.raw.background_play).asGif()
-                .into(ivGif);
+        ivGif.setVisibility(View.VISIBLE);
 
         songPositionBar.setVisibility(View.VISIBLE);
         songPositionBar.setMax((int)endTime);
@@ -137,5 +142,46 @@ public class PlaySongActivity extends AppCompatActivity implements SoundSampleIn
 
             startSong();
         }
+    }
+
+    /*
+     * Returns the Resource Identifier of a randomly selected background file for the player.
+     */
+    private int getResIdForPlayerBackground() {
+        Random r = new Random();
+        int randomInt = r.nextInt(8) + 1;
+        int res = 1;
+
+        switch (randomInt) {
+            case 1:
+                res = R.raw.pbg_1;
+                break;
+            case 2:
+                res = R.raw.pbg_2;
+                break;
+            case 3:
+                res = R.raw.pbg_3;
+                break;
+            case 4:
+                res = R.raw.pbg_4;
+                break;
+            case 5:
+                res = R.raw.pbg_5;
+                break;
+            case 6:
+                res = R.raw.pbg_6;
+                break;
+            case 7:
+                res = R.raw.pbg_7;
+                break;
+            case 8:
+                res = R.raw.pbg_8;
+                break;
+            default:
+                res = 1;
+                break;
+        }
+
+        return res;
     }
 }

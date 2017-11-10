@@ -9,7 +9,8 @@
 
     <ImageView
         android:id="@+id/ivGif"
-        android:contentDescription="Gif"
+        android:contentDescription="@string/player_bg"
+        android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

@@ -14,6 +14,9 @@
     <string name="shared_songs">Shared Songs</string>
     <string name="shared_songs_description">Tap to enter shared songs</string>
 
+    <!-- Strings for PlaySongActivity -->
+    <string name="player_bg">GIF background of the player</string>
+
     <!-- Strings for RecyclerView items -->
     <string name="new_sample_title">Add sample</string>
 
