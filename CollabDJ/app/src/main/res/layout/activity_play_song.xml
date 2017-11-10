@@ -38,19 +38,37 @@
         android:transitionName="songTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="9dp"
+        android:layout_marginStart="9dp"
         android:textStyle="bold"
         android:textSize="20sp"
-        android:text="TextView" />
+        android:text="TextView"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/tvPlayerStatus"
+        android:layout_toRightOf="@+id/tvPlayerStatus"/>
 
     <ImageView
         android:id="@+id/ivQuaver"
         android:transitionName="quaverTransition"
         android:layout_width="60dp"
         android:layout_height="60dp"
+        app:srcCompat="@drawable/ic_notes_glowing"
         android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/tvSongTitle"
-        android:layout_toStartOf="@+id/tvSongTitle"
-        app:srcCompat="@drawable/ic_notes_glowing" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/tvPlayerStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/ivQuaver"
+        android:layout_toRightOf="@+id/ivQuaver"
+        android:text="@string/player_status_loading" />
 </RelativeLayout>

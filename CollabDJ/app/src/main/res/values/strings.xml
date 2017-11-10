@@ -16,6 +16,8 @@
 
     <!-- Strings for PlaySongActivity -->
     <string name="player_bg">GIF background of the player</string>
+    <string name="player_status_playing">Playing:</string>
+    <string name="player_status_loading">Loading:</string>
 
     <!-- Strings for RecyclerView items -->
     <string name="new_sample_title">Add sample</string>

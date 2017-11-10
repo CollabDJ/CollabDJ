@@ -40,6 +40,7 @@ public class PlaySongActivity extends AppCompatActivity implements SoundSampleIn
 
     ImageView ivGif;
     TextView tvSongTitle;
+    TextView tvPlayerStatus;
 
     public static void launch(Song song, Context context, View view) {
         Intent i = new Intent(context, PlaySongActivity.class);
@@ -90,6 +91,8 @@ public class PlaySongActivity extends AppCompatActivity implements SoundSampleIn
             soundSampleInstances.add(soundSampleInstance);
         }
 
+        tvPlayerStatus = (TextView) findViewById(R.id.tvPlayerStatus);
+
         // Set onSwipe listeners.
         setupSwipeListeners();
     }
@@ -129,6 +132,9 @@ public class PlaySongActivity extends AppCompatActivity implements SoundSampleIn
 
         // Make the background GIF visible now that the song loaded.
         ivGif.setVisibility(View.VISIBLE);
+
+        // Change the status textView to "Playing".
+        tvPlayerStatus.setText(getString(R.string.player_status_playing));
 
         songPositionBar.setVisibility(View.VISIBLE);
         songPositionBar.setMax((int)endTime);
