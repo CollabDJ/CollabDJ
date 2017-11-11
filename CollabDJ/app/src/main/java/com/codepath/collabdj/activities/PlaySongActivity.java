@@ -3,6 +3,7 @@ package com.codepath.collabdj.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.bumptech.glide.Glide;
@@ -24,10 +26,10 @@ import com.codepath.collabdj.models.SoundSampleInstance;
 import com.codepath.collabdj.utils.OnSwipeTouchListener;
 import com.codepath.collabdj.utils.SamplePlayer;
 import com.codepath.collabdj.views.SongProgressView;
+import com.codepath.collabdj.views.StopRestartButton;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class PlaySongActivity extends AppCompatActivity implements SoundSampleInstance.Listener {
     public static final String SONG_KEY = "song";
@@ -45,6 +47,7 @@ public class PlaySongActivity extends AppCompatActivity implements SoundSampleIn
     ImageView ivGif;
     TextView tvSongTitle;
     TextSwitcher tsPlayerStatus;
+    StopRestartButton ibStopRestart;
 
     public static void launch(Song song, Context context, View view) {
         Intent i = new Intent(context, PlaySongActivity.class);
@@ -53,6 +56,7 @@ public class PlaySongActivity extends AppCompatActivity implements SoundSampleIn
         View tvSongTitle = view.findViewById(R.id.sharedSongTV);
         View ivQuaver = view.findViewById(R.id.ivQuaver);
 
+        // Setup shared elements activity transition.
         Pair<View, String> p1 = Pair.create((View)tvSongTitle, "songTitle");
         Pair<View, String> p2 = Pair.create((View)ivQuaver, "quaverTransition");
 
@@ -98,6 +102,9 @@ public class PlaySongActivity extends AppCompatActivity implements SoundSampleIn
             soundSampleInstances.add(soundSampleInstance);
         }
 
+        // Setup stop/restart button.
+        setupStopRestartButton();
+
         // Set onSwipe listeners.
         setupSwipeListeners();
     }
@@ -137,6 +144,8 @@ public class PlaySongActivity extends AppCompatActivity implements SoundSampleIn
 
         // Make the background GIF visible now that the song loaded.
         ivGif.setVisibility(View.VISIBLE);
+        // Make the stop/restart button visible now that the song loaded.
+        //ibStopRestart.setVisibility(View.VISIBLE);
 
         // Change the status textView to "Playing".
         tsPlayerStatus.setText(getString(R.string.player_status_playing));
@@ -157,12 +166,12 @@ public class PlaySongActivity extends AppCompatActivity implements SoundSampleIn
 
     @Override
     public void startPlaying(SoundSampleInstance soundSampleInstance, long startSection) {
-
+        Toast.makeText(this, "Song stopped!", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void stopPlaying(SoundSampleInstance soundSampleInstance, int numTimesPlayed) {
-
+        Toast.makeText(this, "Song restarted!", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -224,10 +233,36 @@ public class PlaySongActivity extends AppCompatActivity implements SoundSampleIn
         tsPlayerStatus.setOutAnimation(this, android.R.anim.fade_out);
     }
 
+    private void setupStopRestartButton() {
+        ibStopRestart = (StopRestartButton) findViewById(R.id.ibStopRestart);
+
+        ibStopRestart.setColor(Color.WHITE);
+        ibStopRestart.setAnimDuration(300);
+
+        // Set To Play State
+        ibStopRestart.setToPlay();
+
+        ibStopRestart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Switch state.
+                if (ibStopRestart.getState() == StopRestartButton.PAUSE) {
+                    ibStopRestart.setToPlay();
+                    stopPlaying(null, 0);
+                } else {
+                    ibStopRestart.setToPause();
+                    startPlaying(null, 0);
+                }
+            }
+        });
+
+    }
+
     /*
      * Returns the Resource Identifier of a randomly selected background file for the player.
      */
     private int getResIdForPlayerBackground() {
+       /*
         Random r = new Random();
         int randomInt = r.nextInt(7) + 1;
         int res = 1;
@@ -260,5 +295,7 @@ public class PlaySongActivity extends AppCompatActivity implements SoundSampleIn
         }
 
         return res;
+        */
+       return R.raw.pbg_1;
     }
 }
