@@ -3,7 +3,6 @@ package com.codepath.collabdj.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -15,7 +14,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.bumptech.glide.Glide;
@@ -125,6 +123,7 @@ public class PlaySongActivity extends AppCompatActivity implements SoundSampleIn
 
         //Queue up the samples so the song starts playing
         for(int i = 0; i < song.getNumSampleUsages(); ++i) {
+
             SampleUsage sampleUsage = song.getSampleUsage(i);
 
             SoundSampleInstance soundSampleInstance = soundSampleInstances.get(sampleUsage.getSoundSampleIndex());
@@ -140,15 +139,17 @@ public class PlaySongActivity extends AppCompatActivity implements SoundSampleIn
             if (sampleEndTime > endTime) {
                 endTime = sampleEndTime;
             }
+
         }
 
         // Make the background GIF visible now that the song loaded.
         ivGif.setVisibility(View.VISIBLE);
         // Make the stop/restart button visible now that the song loaded.
-        //ibStopRestart.setVisibility(View.VISIBLE);
+        ibStopRestart.setVisibility(View.VISIBLE);
 
         // Change the status textView to "Playing".
         tsPlayerStatus.setText(getString(R.string.player_status_playing));
+
 
         songPositionBar.setVisibility(View.VISIBLE);
         songPositionBar.setMax((int)endTime);
@@ -162,16 +163,17 @@ public class PlaySongActivity extends AppCompatActivity implements SoundSampleIn
         };
 
         songPositionBar.invalidate();
+
     }
 
     @Override
     public void startPlaying(SoundSampleInstance soundSampleInstance, long startSection) {
-        Toast.makeText(this, "Song stopped!", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
     public void stopPlaying(SoundSampleInstance soundSampleInstance, int numTimesPlayed) {
-        Toast.makeText(this, "Song restarted!", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
@@ -236,22 +238,19 @@ public class PlaySongActivity extends AppCompatActivity implements SoundSampleIn
     private void setupStopRestartButton() {
         ibStopRestart = (StopRestartButton) findViewById(R.id.ibStopRestart);
 
-        ibStopRestart.setColor(Color.WHITE);
-        ibStopRestart.setAnimDuration(300);
-
-        // Set To Play State
-        ibStopRestart.setToPlay();
+        // Set To Stop State
+        ibStopRestart.setToStop();
 
         ibStopRestart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Switch state.
-                if (ibStopRestart.getState() == StopRestartButton.PAUSE) {
-                    ibStopRestart.setToPlay();
-                    stopPlaying(null, 0);
+                if (ibStopRestart.getState() == StopRestartButton.RESTART) {
+                    ibStopRestart.setToStop();
+                    // This does nothing in terms of stopping the song!
                 } else {
-                    ibStopRestart.setToPause();
-                    startPlaying(null, 0);
+                    ibStopRestart.setToRestart();
+                    // This does nothing in terms of restarting the song!
                 }
             }
         });

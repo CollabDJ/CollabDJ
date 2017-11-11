@@ -67,8 +67,6 @@ public class OpenSongsActivity extends AppCompatActivity {
 
             JSONObject songJson = new JSONObject(new String(JSONBytes));
 
-            //View tvSongTitle = view.findViewById(R.id.sharedSongTV);
-
             Song song = new Song(songJson);
             PlaySongActivity.launch(song, this, view);
         }
