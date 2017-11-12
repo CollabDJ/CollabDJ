@@ -1,10 +1,13 @@
 package com.codepath.collabdj.activities;
 
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -33,6 +36,7 @@ import com.codepath.collabdj.models.SharedSong;
 import com.codepath.collabdj.models.Song;
 import com.codepath.collabdj.models.SoundSample;
 import com.codepath.collabdj.models.SoundSampleInstance;
+import com.codepath.collabdj.utils.NearbyConnection;
 import com.codepath.collabdj.utils.PixelUtils;
 import com.codepath.collabdj.utils.SamplePlayer;
 import com.codepath.collabdj.utils.SpacesItemDecoration;
@@ -95,11 +99,15 @@ public class CreateSongActivity
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
 
+    private NearbyConnection mNearbyConnection;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_song);
+
+        mNearbyConnection = new NearbyConnection(this, this);
 
         // Set a toolbar to replace the ActionBar.
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -268,6 +276,13 @@ public class CreateSongActivity
 
     @Override
     protected void onStart() {
+        if (mNearbyConnection.hasPermissions()) {
+            Log.v(TAG, "The app has the required permissions.");
+            mNearbyConnection.createGoogleApiClient();
+        } else {
+            Log.v(TAG, "Requesting the permissions to use NearbyApi.");
+            mNearbyConnection.requestPermissions();
+        }
         super.onStart();
 
         //TODO: take this out, for testing only
@@ -611,6 +626,24 @@ public class CreateSongActivity
     @Override
     public void onSoundSampleAdded(String title) {
         onAddNewSample(SoundSample.SOUND_SAMPLES.get(title));
+    }
+
+    /** The user has accepted (or denied) our permission request. */
+    @CallSuper
+    @Override
+    public void onRequestPermissionsResult(
+            int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == mNearbyConnection.getRequestCodeRequiredPermissions()) {
+            for (int grantResult : grantResults) {
+                if (grantResult == PackageManager.PERMISSION_DENIED) {
+                    Log.v(TAG, "Couldn't get the permissions!");
+                    finish();
+                    return;
+                }
+            }
+            recreate();
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
 }

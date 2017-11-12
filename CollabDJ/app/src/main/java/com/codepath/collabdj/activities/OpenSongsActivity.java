@@ -1,7 +1,11 @@
 package com.codepath.collabdj.activities;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -10,6 +14,7 @@ import com.codepath.collabdj.R;
 import com.codepath.collabdj.adapters.SharedSongsAdapter;
 import com.codepath.collabdj.models.SharedSong;
 import com.codepath.collabdj.models.Song;
+import com.codepath.collabdj.utils.NearbyConnection;
 
 import org.json.JSONObject;
 
@@ -26,10 +31,15 @@ public class OpenSongsActivity extends AppCompatActivity {
     SharedSongsAdapter localSongsAdapter;
     ListView localsonglvItems;
 
+    private NearbyConnection mNearbyConnection;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_open_songs);
+
+        mNearbyConnection = new NearbyConnection(this, this);
 
         localsonglvItems = (ListView) findViewById(R.id.localSongsLV);
         localSongs = getAllSongs();
@@ -44,6 +54,19 @@ public class OpenSongsActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onStart() {
+        if (mNearbyConnection.hasPermissions()) {
+            Log.v(TAG, "The app has the required permissions.");
+            mNearbyConnection.createGoogleApiClient();
+        } else {
+            Log.v(TAG, "Requesting the permissions to use NearbyApi.");
+            mNearbyConnection.requestPermissions();
+        }
+        super.onStart();
+    }
+
 
     public ArrayList<SharedSong> getAllSongs(){
         File dir = getFilesDir();
@@ -94,4 +117,25 @@ public class OpenSongsActivity extends AppCompatActivity {
         }
         return buffer;
     }
+
+
+
+    /** The user has accepted (or denied) our permission request. */
+    @CallSuper
+    @Override
+    public void onRequestPermissionsResult(
+            int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == mNearbyConnection.getRequestCodeRequiredPermissions()) {
+            for (int grantResult : grantResults) {
+                if (grantResult == PackageManager.PERMISSION_DENIED) {
+                    Log.v(TAG, "Couldn't get the permissions!");
+                    finish();
+                    return;
+                }
+            }
+            recreate();
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
 }
