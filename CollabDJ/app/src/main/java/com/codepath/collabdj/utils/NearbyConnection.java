@@ -42,10 +42,12 @@ import java.io.UnsupportedEncodingException;
 public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     // This is how this file is organized:
-    // First I declare all the members, there are a lot of them.
+    // Members of the class, there are a lot of them.
     // After that, the constructor.
-    // Following, the methods used to advertise/discover.
-    // Finally, the methods used to send/receive data.
+    // Interface to communicate with CreateSongActivity and JoinSessionActivity.
+    // Methods used to check the permissions.
+    // Methods used to advertise/discover.
+    // Methods used to send/receive data.
 
     private static final String TAG = NearbyConnection.class.getSimpleName();
 
@@ -70,6 +72,29 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
 
     /** We'll talk to Nearby Connections through the GoogleApiClient. */
     private GoogleApiClient mGoogleApiClient;
+
+    /*
+     * This variable indicates if the connection is in a state where it's able to send/receive data.
+     * This assumes that there is going to be only a 1-1 connection. Probably enough for demo purposes.
+     */
+    private boolean mConnectionEstablished;
+
+    /*
+     * This variable indicates if the current song was sent. It's used to filter the type of message.
+     * Fix in the future.
+     */
+    private boolean mWasCurrentSongSent;
+
+    /*
+     * Stores the Id of the device I'm connected to. Again, done this way for demo purposes.
+     */
+    private String mEndpointId;
+
+    /*
+     * This variable represents the listener passed in by the owning object.
+     * Passes messages up to the parent.
+     */
+    private NearbyConnectionListener listener;
 
     private static final String SERVICE_ID = "com.codepath.tiago.nearbytest";
 
@@ -109,9 +134,18 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
                     if (result.getStatus().isSuccess()) {
                         Log.v(TAG, "onConnectionResult() - Connection succeded. We can now send/receive data.");
 
+                        // Set up flags to indicate the state of the connection.
+                        mConnectionEstablished = true;
+                        mEndpointId = endpointId;
+
                         // Send data to the discoverer.
                         // TODO We should send data to every discoverer connected to us. For demo we are gonna have 1 I guess, so it's fine.
-                        sendDataToDiscoverer(endpointId);
+                        // Send all the song info.
+                        if (listener != null) {
+                            listener.sendCurrentSong();
+                        }
+
+                        //sendDataToDiscoverer(endpointId);
                     }
                 }
 
@@ -181,6 +215,10 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
                     if (result.getStatus().isSuccess()) {
                         Toast.makeText(mContext, "Finallly connected!", Toast.LENGTH_SHORT).show();
 
+                        // Set up flags to indicate the state of the connection.
+                        mConnectionEstablished = true;
+                        mEndpointId = endpointId;
+
                         // Send data to the advertiser.
                         sendDataToAdvertiser(endpointId);
                     }
@@ -223,7 +261,75 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
     public NearbyConnection(AppCompatActivity activity, Context context) {
         this.mActivity = activity;
         this.mContext = context;
+        this.mConnectionEstablished = false;
+        this.mWasCurrentSongSent = false;
+        this.listener = null;
     }
+
+
+    // Interface that defines methods to communicate with parent classes.
+    public interface NearbyConnectionListener {
+
+        public void sendCurrentSong();
+
+        public void receiveCurrentSong(String song);
+
+        public void receiveNewSample(String sample);
+
+    }
+
+    // Sets the listener.
+    public void setNearbyConnectionListener(NearbyConnectionListener listener) {
+        this.listener = listener;
+    }
+
+
+
+    /**
+     * An optional hook to pool any permissions the app needs with the permissions ConnectionsActivity
+     * will request.
+     *
+     * @return All permissions required for the app to properly function.
+     */
+    protected String[] getRequiredPermissions() {
+        return REQUIRED_PERMISSIONS;
+    }
+
+
+
+    public boolean hasPermissions() {
+        return hasPermissions(mContext, getRequiredPermissions());
+    }
+
+
+
+
+    /** @return True if the app was granted all the permissions. False otherwise. */
+    private boolean hasPermissions(Context context, String... permissions) {
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(context, permission)
+                    != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+
+
+    public void requestPermissions() {
+        ActivityCompat.requestPermissions(mActivity, getRequiredPermissions(), REQUEST_CODE_REQUIRED_PERMISSIONS);
+    }
+
+
+
+
+    public int getRequestCodeRequiredPermissions() {
+        return REQUEST_CODE_REQUIRED_PERMISSIONS;
+    }
+
+
 
     // Setup the GoogleApiClient.
     public void createGoogleApiClient() {
@@ -424,9 +530,18 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
     }
 
 
+
     // Used by an advertiser to send data to a discoverer.
     private void sendDataToDiscoverer(String endpointId) {
-        // Do nothing, for now.
+
+        /*
+        try {
+            Payload payload = Payload.fromBytes(data.toString().getBytes("UTF-8"));
+            Nearby.Connections.sendPayload(mGoogleApiClient, endpointId, payload);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        */
     }
 
 
@@ -447,43 +562,58 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
 
     // Used by a discoverer to receive data from an advertiser.
     private void receiveDataFromAdvertiser(String endpointId, Payload payload) {
-        // Do nothing, for now.
-    }
 
-
-
-    /**
-     * An optional hook to pool any permissions the app needs with the permissions ConnectionsActivity
-     * will request.
-     *
-     * @return All permissions required for the app to properly function.
-     */
-    protected String[] getRequiredPermissions() {
-        return REQUIRED_PERMISSIONS;
-    }
-
-
-    public boolean hasPermissions() {
-        return hasPermissions(mContext, getRequiredPermissions());
-    }
-
-    /** @return True if the app was granted all the permissions. False otherwise. */
-    private boolean hasPermissions(Context context, String... permissions) {
-        for (String permission : permissions) {
-            if (ContextCompat.checkSelfPermission(context, permission)
-                    != PackageManager.PERMISSION_GRANTED) {
-                return false;
-            }
+        String payloadMessage = "";
+        try {
+            payloadMessage = new String(payload.asBytes(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
-        return true;
+
+
+        // Check if the message received is the full song or a new sample being added.
+        if (!mWasCurrentSongSent) {
+            mWasCurrentSongSent = true; // This message contains the current song.
+
+            if (listener != null) {
+                listener.receiveCurrentSong(payloadMessage);
+            }
+        } else {
+            // This message contains a new sample.
+
+            if (listener != null) {
+                listener.receiveNewSample(payloadMessage);
+            }
+
+        }
     }
 
-    public void requestPermissions() {
-        ActivityCompat.requestPermissions(mActivity, getRequiredPermissions(), REQUEST_CODE_REQUIRED_PERMISSIONS);
+
+
+    public void sendData(String data) {
+        // Check if the connection is in the proper state to send/receive data.
+        if (mConnectionEstablished) {
+
+            Payload payload;
+            try {
+                payload = Payload.fromBytes(data.getBytes("UTF-8"));
+                Nearby.Connections.sendPayload(mGoogleApiClient, mEndpointId, payload);
+            } catch (UnsupportedEncodingException e) {
+                Log.v(TAG, "public sendData - Couldn't send data. Exception raised");
+                e.printStackTrace();
+            }
+
+        } else {
+            Log.v(TAG, "public sendData - connection in wrong state, can't send data.");
+        }
+
     }
 
-    public int getRequestCodeRequiredPermissions() {
-        return REQUEST_CODE_REQUIRED_PERMISSIONS;
+
+    public void sendDataToAdvertiser() {
+        // TODO implement
     }
+
+
 
 }

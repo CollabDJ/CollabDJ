@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.codepath.collabdj.R;
 import com.codepath.collabdj.adapters.SharedSongsAdapter;
@@ -39,7 +40,7 @@ public class OpenSongsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_open_songs);
 
-        mNearbyConnection = new NearbyConnection(this, this);
+        setupNearbyConnection();
 
         localsonglvItems = (ListView) findViewById(R.id.localSongsLV);
         localSongs = getAllSongs();
@@ -138,4 +139,27 @@ public class OpenSongsActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
+    private void setupNearbyConnection() {
+        mNearbyConnection = new NearbyConnection(this, this);
+        mNearbyConnection.setNearbyConnectionListener(new NearbyConnection.NearbyConnectionListener() {
+            @Override
+            public void sendCurrentSong() {
+                // Do nothing!
+            }
+
+            @Override
+            public void receiveCurrentSong(String song) {
+
+                // SHOW THE RECEIVED INFO!!!
+                Toast.makeText(OpenSongsActivity.this, song, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void receiveNewSample(String sample) {
+
+                // SHOW THE RECEIVED INFO!!!
+                Toast.makeText(OpenSongsActivity.this, sample, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 }

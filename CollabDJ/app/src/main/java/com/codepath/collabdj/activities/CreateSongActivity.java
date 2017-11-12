@@ -46,6 +46,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -107,7 +108,8 @@ public class CreateSongActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_song);
 
-        mNearbyConnection = new NearbyConnection(this, this);
+        // Setup the nearby connections.
+        setupNearbyConnection();
 
         // Set a toolbar to replace the ActionBar.
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -416,6 +418,9 @@ public class CreateSongActivity
             setupNewSong();
         }
 
+        // Send soundSample info (name for now) to connected devices.
+        mNearbyConnection.sendData(soundSampleInstance.getSoundSample().getName());
+
         SamplePlayer.SampleHandle.PlayInstance playInstance = soundSampleInstance.getCurrentPlayInstance();
 
         if (playInstance == null || playInstance.getPlayState() == STOPPED) {
@@ -600,6 +605,14 @@ public class CreateSongActivity
                 for (int i = 0; i <nvDrawer.getMenu().size() ; i++) {
                     nvDrawer.getMenu().getItem(i).setChecked(false);
                 }
+
+
+                // Send a message to the other phone. For testing only!
+                String data = "Sent from onDrawerClose!";
+                mNearbyConnection.sendData(data);
+                Toast.makeText(CreateSongActivity.this, "Message sent!", Toast.LENGTH_LONG).show();
+
+
                 super.onDrawerClosed(view);
             }
         };
@@ -644,6 +657,39 @@ public class CreateSongActivity
             recreate();
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    private void setupNearbyConnection() {
+        mNearbyConnection = new NearbyConnection(this, this);
+
+        // Set the listener to manage communication between devices.
+        mNearbyConnection.setNearbyConnectionListener(new NearbyConnection.NearbyConnectionListener() {
+            @Override
+            public void sendCurrentSong() {
+                // A discoverer just connected to us. Send all of the song info.
+                JSONObject data = new JSONObject();
+                try {
+                    data.put("Sample1", 1);
+                    data.put("Sample2", 2);
+                    data.put("Sample3", 3);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                // Send the song.
+                mNearbyConnection.sendData(data.toString());
+            }
+
+            @Override
+            public void receiveCurrentSong(String song) {
+                //Do nothing.
+            }
+
+            @Override
+            public void receiveNewSample(String sample) {
+                // Do nothing, for now.
+            }
+        });
     }
 
 }
