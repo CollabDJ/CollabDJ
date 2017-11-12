@@ -1,117 +1,87 @@
 package com.codepath.collabdj.activities;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Vibrator;
+import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.SparseArray;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.codepath.collabdj.R;
-import com.google.android.gms.vision.CameraSource;
-import com.google.android.gms.vision.Detector;
-import com.google.android.gms.vision.barcode.Barcode;
-import com.google.android.gms.vision.barcode.BarcodeDetector;
-
-import java.io.IOException;
+import com.codepath.collabdj.utils.NearbyConnection;
 
 public class JoinSessionActivity extends AppCompatActivity {
 
-    SurfaceView cameraPreview;
-    TextView txtResult;
-    BarcodeDetector barcodeDetector;
-    CameraSource cameraSource;
-    final int RequestCameraPermissionID = 1001;
+    private static final String TAG = JoinSessionActivity.class.getSimpleName();
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case RequestCameraPermissionID: {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                        return;
-                    }
-                    try {
-                        cameraSource.start(cameraPreview.getHolder());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            break;
-        }
-    }
+    private NearbyConnection mNearbyConnection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_session);
 
-        cameraPreview = (SurfaceView) findViewById(R.id.cameraPreview);
-        txtResult = (TextView) findViewById(R.id.txtResult);
+        setupNearbyConnection();
+    }
 
-        barcodeDetector = new BarcodeDetector.Builder(this)
-                .setBarcodeFormats(Barcode.QR_CODE)
-                .build();
-        cameraSource = new CameraSource
-                .Builder(this, barcodeDetector)
-                .setRequestedPreviewSize(640, 480)
-                .build();
 
-        //add event
-        cameraPreview.getHolder().addCallback(new SurfaceHolder.Callback() {
-            @Override
-            public void surfaceCreated(SurfaceHolder surfaceHolder) {
-                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    //Request permission
-                    ActivityCompat.requestPermissions(JoinSessionActivity.this,
-                            new String[]{Manifest.permission.CAMERA}, RequestCameraPermissionID);
+    @Override
+    protected void onStart() {
+        if (mNearbyConnection.hasPermissions()) {
+            Log.v(TAG, "The app has the required permissions.");
+            mNearbyConnection.createGoogleApiClient();
+        } else {
+            Log.v(TAG, "Requesting the permissions to use NearbyApi.");
+            mNearbyConnection.requestPermissions();
+        }
+        super.onStart();
+    }
+
+
+
+    /** The user has accepted (or denied) our permission request. */
+    @CallSuper
+    @Override
+    public void onRequestPermissionsResult(
+            int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == mNearbyConnection.getRequestCodeRequiredPermissions()) {
+            for (int grantResult : grantResults) {
+                if (grantResult == PackageManager.PERMISSION_DENIED) {
+                    Log.v(TAG, "Couldn't get the permissions!");
+                    finish();
                     return;
                 }
-                try {
-                    cameraSource.start(cameraPreview.getHolder());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            }
+            recreate();
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    private void setupNearbyConnection() {
+        mNearbyConnection = new NearbyConnection(this, this);
+        mNearbyConnection.setNearbyConnectionListener(new NearbyConnection.NearbyConnectionListener() {
+            @Override
+            public void sendCurrentSong() {
+                // Do nothing!
             }
 
             @Override
-            public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
+            public void receiveCurrentSong(String song) {
 
+                // Show the received info.
+                TextView tvTest = (TextView) findViewById(R.id.tvTest);
+                tvTest.setText(song);
+                //Toast.makeText(JoinSessionActivity.this, song, Toast.LENGTH_LONG).show();
             }
 
             @Override
-            public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-                cameraSource.stop();
-            }
-        });
+            public void receiveNewSample(String sample) {
 
-        barcodeDetector.setProcessor(new Detector.Processor<Barcode>(){
-            @Override
-            public void release() {
-
-            }
-
-            @Override
-            public void receiveDetections(Detector.Detections<Barcode> detections) {
-                final SparseArray<Barcode> qrcodes = detections.getDetectedItems();
-                if(qrcodes.size() != 0){
-                    txtResult.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            //create vibrate
-                            Vibrator vibrator = (Vibrator)getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
-                            vibrator.vibrate(1000);
-                            txtResult.setText(qrcodes.valueAt(0).displayValue);
-                        }
-                    });
-                }
+                // Show the received info.
+                TextView tvTest = (TextView) findViewById(R.id.tvTest);
+                tvTest.setText(sample);
+                //Toast.makeText(JoinSessionActivity.this, sample, Toast.LENGTH_LONG).show();
             }
         });
     }

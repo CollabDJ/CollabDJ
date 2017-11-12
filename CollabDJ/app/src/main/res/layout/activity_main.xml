@@ -106,6 +106,52 @@
 
 
         <RelativeLayout
+            android:id="@+id/rlJoinSession"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/ivJoinSession"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_toLeftOf="@+id/joinSessionShim"
+                android:layout_toStartOf="@+id/joinSessionShim"
+                android:contentDescription="@string/open_song_desciption"
+                android:scaleType="centerInside"
+                android:padding="20dp"
+                app:srcCompat="@drawable/ic_saved_songs" />
+
+            <View
+                android:id="@+id/joinSessionShim"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/ivJoinSession"
+                android:layout_alignTop="@+id/ivJoinSession"
+                android:layout_centerHorizontal="true"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/tvJoinSession"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_toEndOf="@+id/joinSessionShim"
+                android:layout_toRightOf="@+id/joinSessionShim"
+                android:text="@string/join_session"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:textSize="24sp" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
             android:id="@+id/rlSharedSongs"
             android:layout_weight="1"
             android:layout_width="match_parent"

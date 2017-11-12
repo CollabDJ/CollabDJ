@@ -14,7 +14,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.codepath.collabdj.activities.CreateSongActivity;
-import com.codepath.collabdj.activities.OpenSongsActivity;
+import com.codepath.collabdj.activities.JoinSessionActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -353,7 +353,7 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
 
         if (mActivity instanceof CreateSongActivity) {
             startAdvertising();
-        } else if (mActivity instanceof OpenSongsActivity) {
+        } else if (mActivity instanceof JoinSessionActivity) {
             startDiscovering();
         } else {
             Log.v(TAG, "ERROR: in onConnected() - instanceof couldn't identify the activity.");
@@ -439,7 +439,7 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
                             public void onResult(@NonNull Status status) {
                                 if (status.isSuccess()) {
                                     //onDiscoveryStarted();
-                                    Toast.makeText(mContext, "Estamos descubriendo!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(mContext, "We are discovering!", Toast.LENGTH_SHORT).show();
                                 } else {
                                     //mIsDiscovering = false;
                                     Log.w(TAG,

@@ -44,6 +44,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        RelativeLayout rlJoinSession = (RelativeLayout) findViewById(R.id.rlJoinSession);
+        rlJoinSession.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Launch OpenSongsActivity.
+                Intent i = new Intent(MainActivity.this, JoinSessionActivity.class);
+                startActivity(i);
+            }
+        });
+
         RelativeLayout rlSharedSongs = (RelativeLayout) findViewById(R.id.rlSharedSongs);
         rlSharedSongs.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +103,9 @@ public class MainActivity extends AppCompatActivity {
 
         setupPulsatingAnimation(findViewById(R.id.ivOpenSong));
         setupPulsatingAnimation(findViewById(R.id.tvOpenSong));
+
+        setupPulsatingAnimation(findViewById(R.id.ivJoinSession));
+        setupPulsatingAnimation(findViewById(R.id.tvJoinSession));
 
         setupPulsatingAnimation(findViewById(R.id.ivSharedSongs));
         setupPulsatingAnimation(findViewById(R.id.tvSharedSongs));
