@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">CollabDJ</string>
+
+    <!-- Strings for MainActivity -->
+    <string name="new_song">创作歌曲</string>
+    <string name="new_song_description">点击创作歌曲</string>
+
+    <string name="open_song">我的音乐</string>
+    <string name="open_song_desciption">点击打开我的音乐</string>
+
+    <string name="join_session">共同创作</string>
+    <string name="join_session_description">点击共同创作</string>
+
+    <string name="shared_songs">云音乐</string>
+    <string name="shared_songs_description">点击进入云音乐歌单</string>
+
+    <!-- Strings for PlaySongActivity -->
+    <string name="player_bg">播放器动态背景</string>
+    <string name="player_status_playing">播放：</string>
+    <string name="player_status_loading">加载：</string>
+
+    <!-- Strings for RecyclerView items -->
+    <string name="new_sample_title">添加样本</string>
+
+    <!-- Strings for hamburger menu -->
+    <string name="drawer_open">打开菜单</string>
+    <string name="drawer_close">关闭菜单</string>
+    <string name="share_option">分享</string>
+    <string name="save_option">保存</string>
+
+    <!-- Strings for dialogFragment AddSoundSample -->
+    <string name="add_new_sample">添加歌曲样本</string>
+
+    <!-- Strings for save/share alertDialog -->
+    <string name="add_new_title">输入歌曲名字：</string>
+</resources>
