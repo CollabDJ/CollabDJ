@@ -102,7 +102,8 @@ public class CreateSongActivity
 
     private NearbyConnection mNearbyConnection;
 
-    boolean isHost;
+    //Don't modify this value, I'm too lazy to make a getter
+    public boolean isHost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -212,6 +213,14 @@ public class CreateSongActivity
      * @param soundSample
      */
     public void onAddNewSample(SoundSample soundSample) {
+        if (mNearbyConnection != null) {
+            mNearbyConnection.sendAddSample(-1, soundSample.getName()); //Sample Index doesn't matter for demo LOL
+        }
+
+        onAddNewSampleInternal(soundSample);
+    }
+
+    protected void onAddNewSampleInternal(SoundSample soundSample) {
         int firstEmptyCellIndex = findFirstEmptyCell();
 
         //If for some reason didn't find an empty cell just add one
@@ -424,12 +433,24 @@ public class CreateSongActivity
         SamplePlayer.SampleHandle.PlayInstance playInstance = soundSampleInstance.getCurrentPlayInstance();
 
         if (playInstance == null || playInstance.getPlayState() == STOPPED) {
+            if (mNearbyConnection != null) {
+                mNearbyConnection.sendPlaySample(soundSampleIndexMapping.get(soundSampleInstance), getCurrentSection() + 1);
+            }
+
             soundSampleInstance.queueSample(getCurrentSection() + 1, song.getNumMillisecondsPerSection(), songStartTimeStamp, -1);
         }
         else if (playInstance.getPlayState() == STOP_QUEUED) {
+            if (mNearbyConnection != null) {
+                mNearbyConnection.sendPlaySample(soundSampleIndexMapping.get(soundSampleInstance), getCurrentSection() + 1);
+            }
+
             playInstance.setLoopAmount(-1);
         }
         else {
+            if (mNearbyConnection != null) {
+                mNearbyConnection.sendStopSample(soundSampleIndexMapping.get(soundSampleInstance));
+            }
+
             soundSampleInstance.stop();
         }
 
@@ -666,15 +687,25 @@ public class CreateSongActivity
         mNearbyConnection.setNearbyConnectionListener(new NearbyConnection.NearbyConnectionListener() {
             public void receiveAddSample(int sampleIndex, String sampleName) {
                 //Ignore sampleIndex for now, just add it.  And wait a bit during the demo to make sure the other side gets it at the same index
-                onAddNewSample(SoundSample.SOUND_SAMPLES.get(sampleName));
+                onAddNewSampleInternal(SoundSample.SOUND_SAMPLES.get(sampleName));
             }
 
-            public void receivePlaySample(int sampleIndex, int sectionIndex) {
+            public void receivePlaySample(int sampleIndex, long sectionIndex) {
                 if(song == null) {
                     setupNewSong();
                 }
 
-                mSamples.get(sampleIndex).queueSample(sectionIndex, song.getNumMillisecondsPerSection(), songStartTimeStamp, -1);
+                SoundSampleInstance soundSample = mSamples.get(sampleIndex);
+
+                SamplePlayer.SampleHandle.PlayInstance playInstance = soundSample.getCurrentPlayInstance();
+
+                //If queued to stop but will start next section again, just tell the sample to play again
+                if(playInstance.getPlayState() == STOP_QUEUED && sectionIndex == getCurrentSection() + 1) {
+                    playInstance.setLoopAmount(-1);
+                }
+                else {
+                    soundSample.queueSample(sectionIndex, song.getNumMillisecondsPerSection(), songStartTimeStamp, -1);
+                }
             }
 
             public void receiveStopSample(int sampleIndex) {

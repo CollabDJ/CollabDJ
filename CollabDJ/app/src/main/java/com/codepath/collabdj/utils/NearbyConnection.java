@@ -14,7 +14,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.codepath.collabdj.activities.CreateSongActivity;
-import com.codepath.collabdj.activities.JoinSessionActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -277,7 +276,7 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
     public interface NearbyConnectionListener {
         void receiveAddSample(int sampleIndex, String sampleName);
 
-        void receivePlaySample(int sampleIndex, int sectionIndex);
+        void receivePlaySample(int sampleIndex, long sectionIndex);
 
         void receiveStopSample(int sampleIndex);
     }
@@ -306,7 +305,7 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
         sendData(data.toString());
     }
 
-    public void sendPlaySample(int sampleIndex, int sectionIndex) {
+    public void sendPlaySample(int sampleIndex, long sectionIndex) {
         JSONObject data = new JSONObject();
 
         try {
@@ -407,9 +406,13 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
         Log.v(TAG, "GoogleApiClient onConnected() executed. We are gonna start advertising/discovering.");
 
         if (mActivity instanceof CreateSongActivity) {
-            startAdvertising();
-        } else if (mActivity instanceof JoinSessionActivity) {
-            startDiscovering();
+            CreateSongActivity createSongActivity = (CreateSongActivity) mActivity;
+
+            if (createSongActivity.isHost) {
+                startAdvertising();
+            } else {
+                startDiscovering();
+            }
         } else {
             Log.v(TAG, "ERROR: in onConnected() - instanceof couldn't identify the activity.");
         }
@@ -632,7 +635,7 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
             }
             else if (messageType.equals(PLAY_SAMPLE_MESSAGE)) {
                 int sampleIndex = jsonObject.getInt(SAMPLE_INDEX);
-                int sectionIndex = jsonObject.getInt(SECTION_INDEX);
+                long sectionIndex = jsonObject.getLong(SECTION_INDEX);
 
                 listener.receivePlaySample(sampleIndex, sectionIndex);
             }

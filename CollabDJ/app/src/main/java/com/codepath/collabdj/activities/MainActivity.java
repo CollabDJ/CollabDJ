@@ -49,7 +49,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Launch OpenSongsActivity.
-                Intent i = new Intent(MainActivity.this, JoinSessionActivity.class);
+                Intent i = new Intent(MainActivity.this, CreateSongActivity.class);
+                i.putExtra(CreateSongActivity.IS_HOST, false);
                 startActivity(i);
             }
         });
