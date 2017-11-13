@@ -54,7 +54,7 @@ public class SoundSampleView extends PercentRelativeLayout {
 
             float percentage = (float) playInstance.getRemainingDelay()
                     / (playInstance.getPlayState() == LOOP_QUEUED
-                        ? viewHolder.millisecondsPerSection
+                        ? viewHolder.outer().millisecondsPerSection
                         : (float) viewHolder.getSoundSampleInstance().getSoundSample().getDuration());
 
             int colorResourceValue = 0;

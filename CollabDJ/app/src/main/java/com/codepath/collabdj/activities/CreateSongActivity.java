@@ -345,6 +345,8 @@ public class CreateSongActivity
         songStartTimeStamp = SamplePlayer.getCurrentTimestamp();
         song.title = "Song";
 
+        mAdapter.millisecondsPerSection = song.getNumMillisecondsPerSection();
+
         //Go over every SoundSampleInstance already added
         for(SoundSampleInstance soundSampleInstance : mSamples) {
             if(soundSampleInstance.getSoundSample() != null) {
@@ -425,23 +427,26 @@ public class CreateSongActivity
 //    }
 
     @Override
-    public long playButtonPressed(SoundSampleInstance soundSampleInstance) {
+    public void playButtonPressed(SoundSampleInstance soundSampleInstance) {
         if(song == null) {
             setupNewSong();
         }
 
         SamplePlayer.SampleHandle.PlayInstance playInstance = soundSampleInstance.getCurrentPlayInstance();
 
+        long currentSection = getCurrentSection();
+        long nextSection = currentSection + 1;
+
         if (playInstance == null || playInstance.getPlayState() == STOPPED) {
             if (mNearbyConnection != null) {
-                mNearbyConnection.sendPlaySample(soundSampleIndexMapping.get(soundSampleInstance), getCurrentSection() + 1);
+                mNearbyConnection.sendPlaySample(soundSampleIndexMapping.get(soundSampleInstance), nextSection);
             }
 
-            soundSampleInstance.queueSample(getCurrentSection() + 1, song.getNumMillisecondsPerSection(), songStartTimeStamp, -1);
+            soundSampleInstance.queueSample(nextSection, song.getNumMillisecondsPerSection(), songStartTimeStamp, -1);
         }
         else if (playInstance.getPlayState() == STOP_QUEUED) {
             if (mNearbyConnection != null) {
-                mNearbyConnection.sendPlaySample(soundSampleIndexMapping.get(soundSampleInstance), getCurrentSection() + 1);
+                mNearbyConnection.sendPlaySample(soundSampleIndexMapping.get(soundSampleInstance), nextSection);
             }
 
             playInstance.setLoopAmount(-1);
@@ -453,8 +458,6 @@ public class CreateSongActivity
 
             soundSampleInstance.stop();
         }
-
-        return song.getNumMillisecondsPerSection();
     }
 
     @Override
@@ -699,12 +702,12 @@ public class CreateSongActivity
 
                 SamplePlayer.SampleHandle.PlayInstance playInstance = soundSample.getCurrentPlayInstance();
 
-                //If queued to stop but will start next section again, just tell the sample to play again
-                if(playInstance.getPlayState() == STOP_QUEUED && sectionIndex == getCurrentSection() + 1) {
-                    playInstance.setLoopAmount(-1);
-                }
-                else {
+                if (playInstance == null || playInstance.getPlayState() == STOPPED) {
                     soundSample.queueSample(sectionIndex, song.getNumMillisecondsPerSection(), songStartTimeStamp, -1);
+                }
+                else if(playInstance.getPlayState() == STOP_QUEUED && sectionIndex == getCurrentSection() + 1) {
+                    //If queued to stop but will start next section again, just tell the sample to play again
+                    playInstance.setLoopAmount(-1);
                 }
             }
 
