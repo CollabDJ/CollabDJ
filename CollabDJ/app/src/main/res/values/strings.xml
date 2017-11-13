@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CloudDJ</string>
+    <string name="app_name">CollabDJ</string>
 
     <!-- Strings for MainActivity -->
     <string name="new_song">Create Song</string>
