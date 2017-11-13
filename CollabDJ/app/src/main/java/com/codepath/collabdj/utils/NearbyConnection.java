@@ -33,6 +33,9 @@ import com.google.android.gms.nearby.connection.PayloadCallback;
 import com.google.android.gms.nearby.connection.PayloadTransferUpdate;
 import com.google.android.gms.nearby.connection.Strategy;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.UnsupportedEncodingException;
 
 /**
@@ -141,9 +144,12 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
                         // Send data to the discoverer.
                         // TODO We should send data to every discoverer connected to us. For demo we are gonna have 1 I guess, so it's fine.
                         // Send all the song info.
-                        if (listener != null) {
+                        /*if (listener != null) {
                             listener.sendCurrentSong();
                         }
+                        */
+
+                        //For demo purposes just assume they'll be in the same state on startup
 
                         //sendDataToDiscoverer(endpointId);
                     }
@@ -269,13 +275,62 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
 
     // Interface that defines methods to communicate with parent classes.
     public interface NearbyConnectionListener {
+        void receiveAddSample(int sampleIndex, String sampleName);
 
-        public void sendCurrentSong();
+        void receivePlaySample(int sampleIndex, int sectionIndex);
 
-        public void receiveCurrentSong(String song);
+        void receiveStopSample(int sampleIndex);
+    }
 
-        public void receiveNewSample(String sample);
+    private static final String MESSAGE_TYPE = "message_type";
 
+    private static final String ADD_SAMPLE_MESSAGE = "add_sample";
+    private static final String PLAY_SAMPLE_MESSAGE = "play_sample";
+    private static final String STOP_SAMPLE_MESSAGE = "stop_sample";
+
+    private static final String SAMPLE_INDEX = "sample_index";
+    private static final String SAMPLE_NAME = "sample_name";
+    private static final String SECTION_INDEX = "section_index";
+
+    public void sendAddSample(int sampleIndex, String sampleName) {
+        JSONObject data = new JSONObject();
+
+        try {
+            data.put(MESSAGE_TYPE, ADD_SAMPLE_MESSAGE);
+            data.put(SAMPLE_INDEX, sampleIndex);
+            data.put(SAMPLE_NAME, sampleName);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        sendData(data.toString());
+    }
+
+    public void sendPlaySample(int sampleIndex, int sectionIndex) {
+        JSONObject data = new JSONObject();
+
+        try {
+            data.put(MESSAGE_TYPE, PLAY_SAMPLE_MESSAGE);
+            data.put(SAMPLE_INDEX, sampleIndex);
+            data.put(SECTION_INDEX, sectionIndex);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        sendData(data.toString());
+    }
+
+    public void sendStopSample(int sampleIndex) {
+        JSONObject data = new JSONObject();
+
+        try {
+            data.put(MESSAGE_TYPE, STOP_SAMPLE_MESSAGE);
+            data.put(SAMPLE_INDEX, sampleIndex);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        sendData(data.toString());
     }
 
     // Sets the listener.
@@ -547,22 +602,16 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
 
     // Used by an advertiser to receive data from a discoverer.
     private void receiveDataFromDiscoverer(String endpointId, Payload payload) {
-
-        String payloadFilenameMessage = "";
-        try {
-            payloadFilenameMessage = new String(payload.asBytes(), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        // SHOW THE RECEIVED INFO!!!
-        Toast.makeText(mContext, payloadFilenameMessage, Toast.LENGTH_SHORT).show();
+        receiveData(payload);
     }
 
 
     // Used by a discoverer to receive data from an advertiser.
     private void receiveDataFromAdvertiser(String endpointId, Payload payload) {
+        receiveData(payload);
+    }
 
+    void receiveData(Payload payload) {
         String payloadMessage = "";
         try {
             payloadMessage = new String(payload.asBytes(), "UTF-8");
@@ -570,21 +619,30 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
             e.printStackTrace();
         }
 
+        try {
+            JSONObject jsonObject = new JSONObject(payloadMessage);
 
-        // Check if the message received is the full song or a new sample being added.
-        if (!mWasCurrentSongSent) {
-            mWasCurrentSongSent = true; // This message contains the current song.
+            String messageType = jsonObject.getString(MESSAGE_TYPE);
 
-            if (listener != null) {
-                listener.receiveCurrentSong(payloadMessage);
+            if (messageType.equals(ADD_SAMPLE_MESSAGE)) {
+                int sampleIndex = jsonObject.getInt(SAMPLE_INDEX);
+                String sampleName = jsonObject.getString(SAMPLE_NAME);
+
+                listener.receiveAddSample(sampleIndex, sampleName);
             }
-        } else {
-            // This message contains a new sample.
+            else if (messageType.equals(PLAY_SAMPLE_MESSAGE)) {
+                int sampleIndex = jsonObject.getInt(SAMPLE_INDEX);
+                int sectionIndex = jsonObject.getInt(SECTION_INDEX);
 
-            if (listener != null) {
-                listener.receiveNewSample(payloadMessage);
+                listener.receivePlaySample(sampleIndex, sectionIndex);
             }
+            else if (messageType.equals(STOP_SAMPLE_MESSAGE)) {
+                int sampleIndex = jsonObject.getInt(SAMPLE_INDEX);
 
+                listener.receiveStopSample(sampleIndex);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 

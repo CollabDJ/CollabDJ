@@ -46,7 +46,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -69,6 +68,7 @@ public class CreateSongActivity
             SoundSampleInstance.Listener, AddSoundSampleDialogFragment.AddSoundSampleDialogListener
 {
     public static final int NUM_COLUMNS = 3;
+    public static final String IS_HOST = "isHost";
 
     // Tag for logging.
     private static final String TAG = "CreateSongActivity";
@@ -102,11 +102,14 @@ public class CreateSongActivity
 
     private NearbyConnection mNearbyConnection;
 
+    boolean isHost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_song);
+
+        isHost = getIntent().getBooleanExtra(IS_HOST, true);
 
         // Setup the nearby connections.
         setupNearbyConnection();
@@ -418,9 +421,6 @@ public class CreateSongActivity
             setupNewSong();
         }
 
-        // Send soundSample info (name for now) to connected devices.
-        mNearbyConnection.sendData(soundSampleInstance.getSoundSample().getName());
-
         SamplePlayer.SampleHandle.PlayInstance playInstance = soundSampleInstance.getCurrentPlayInstance();
 
         if (playInstance == null || playInstance.getPlayState() == STOPPED) {
@@ -664,30 +664,21 @@ public class CreateSongActivity
 
         // Set the listener to manage communication between devices.
         mNearbyConnection.setNearbyConnectionListener(new NearbyConnection.NearbyConnectionListener() {
-            @Override
-            public void sendCurrentSong() {
-                // A discoverer just connected to us. Send all of the song info.
-                JSONObject data = new JSONObject();
-                try {
-                    data.put("Sample1", 1);
-                    data.put("Sample2", 2);
-                    data.put("Sample3", 3);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+            public void receiveAddSample(int sampleIndex, String sampleName) {
+                //Ignore sampleIndex for now, just add it.  And wait a bit during the demo to make sure the other side gets it at the same index
+                onAddNewSample(SoundSample.SOUND_SAMPLES.get(sampleName));
+            }
+
+            public void receivePlaySample(int sampleIndex, int sectionIndex) {
+                if(song == null) {
+                    setupNewSong();
                 }
 
-                // Send the song.
-                mNearbyConnection.sendData(data.toString());
+                mSamples.get(sampleIndex).queueSample(sectionIndex, song.getNumMillisecondsPerSection(), songStartTimeStamp, -1);
             }
 
-            @Override
-            public void receiveCurrentSong(String song) {
-                //Do nothing.
-            }
-
-            @Override
-            public void receiveNewSample(String sample) {
-                // Do nothing, for now.
+            public void receiveStopSample(int sampleIndex) {
+                mSamples.get(sampleIndex).stop();
             }
         });
     }
