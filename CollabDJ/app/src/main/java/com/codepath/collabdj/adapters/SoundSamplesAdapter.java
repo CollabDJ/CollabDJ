@@ -137,6 +137,7 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 @Override
                 public void onClick(View view) {
                     if (soundSamplePlayListener != null && getSoundSampleInstance().isLoaded()) {
+
                         //Make the play pause button pulse a bit
                         AnimationUtils.setupPulsatingAnimation(ivPlayPause, 100, 1, 1.f, 1.4f);
 

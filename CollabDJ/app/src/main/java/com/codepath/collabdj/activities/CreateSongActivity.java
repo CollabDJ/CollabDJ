@@ -1,6 +1,6 @@
 package com.codepath.collabdj.activities;
 
-import android.animation.ValueAnimator;
+import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
@@ -24,6 +24,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -44,6 +46,7 @@ import com.codepath.collabdj.models.SharedSong;
 import com.codepath.collabdj.models.Song;
 import com.codepath.collabdj.models.SoundSample;
 import com.codepath.collabdj.models.SoundSampleInstance;
+import com.codepath.collabdj.utils.AnimationUtils;
 import com.codepath.collabdj.utils.FabBehavior;
 import com.codepath.collabdj.utils.NearbyConnection;
 import com.codepath.collabdj.utils.PixelUtils;
@@ -121,13 +124,13 @@ public class CreateSongActivity
     //Don't modify this value, I'm too lazy to make a getter
     public boolean isHost;
 
-    private FloatingActionButton fabEndpoint;
+    public FloatingActionButton fabEndpoint;
     private FabBehavior mFabBehavior;
-    private ValueAnimator.AnimatorUpdateListener mFabAnimationListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setupSlideTransition();
         setContentView(R.layout.activity_create_song);
 
         isHost = getIntent().getBooleanExtra(IS_HOST, true);
@@ -658,7 +661,17 @@ public class CreateSongActivity
                     nvDrawer.getMenu().getItem(i).setChecked(false);
                 }
 
+                // Show FAB.
+                mFabBehavior.showFab(fabEndpoint);
+
                 super.onDrawerClosed(view);
+            }
+
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                // Hide FAB.
+                if (slideOffset != 0 && fabEndpoint.getVisibility() == View.VISIBLE) {
+                    mFabBehavior.hideFab(fabEndpoint);
+                }
             }
         };
     }
@@ -738,9 +751,15 @@ public class CreateSongActivity
                 //Ignore sampleIndex for now, just add it.  And wait a bit during the demo to make sure the other side gets it at the same index
                 onAddNewSampleInternal(SoundSample.SOUND_SAMPLES.get(sampleName));
 
-                // Trigger FAB animation.
-                mFabBehavior.triggerFabBackgroundAnimation(mFabAnimationListener, fabEndpoint);
-
+                /*
+                NO ANIMATION HERE.
+                // Action received animation.
+                int newPosition = mSamples.indexOf(SoundSample.SOUND_SAMPLES.get(sampleName));
+                Log.v(TAG, "newPosition is: " + newPosition);
+                RecyclerView.ViewHolder viewHolder = rvSamples.findViewHolderForAdapterPosition(newPosition);
+                View view = viewHolder.itemView;
+                AnimationUtils.triggerActionReceivedAnimation(view.findViewById(R.id.vActionReceived));
+                */
             }
 
             public void receivePlaySample(int sampleIndex, long sectionIndex) {
@@ -760,20 +779,22 @@ public class CreateSongActivity
                     playInstance.setLoopAmount(-1);
                 }
 
-                // Trigger FAB animation.
-                mFabBehavior.triggerFabBackgroundAnimation(mFabAnimationListener, fabEndpoint);
-
+                // Action received animation.
+                RecyclerView.ViewHolder viewHolder = rvSamples.findViewHolderForAdapterPosition(sampleIndex);
+                View view = viewHolder.itemView;
+                AnimationUtils.triggerActionReceivedAnimation(view.findViewById(R.id.vActionReceived));
             }
 
             public void receiveStopSample(int sampleIndex) {
                 mSamples.get(sampleIndex).stop();
 
-                // Trigger FAB animation.
-                mFabBehavior.triggerFabBackgroundAnimation(mFabAnimationListener, fabEndpoint);
-
+                RecyclerView.ViewHolder viewHolder = rvSamples.findViewHolderForAdapterPosition(sampleIndex);
+                View view = viewHolder.itemView;
+                AnimationUtils.triggerActionReceivedAnimation(view.findViewById(R.id.vActionReceived));
             }
         });
     }
+
 
     private void setupFab() {
 
@@ -781,6 +802,7 @@ public class CreateSongActivity
         mFabBehavior = new FabBehavior(this);
 
         String initial = isHost ? "C" : "F";
+        int color = isHost ? R.color.endpointColor1 : R.color.endpointColor2;
 
         // Build the drawable with the initial of the connected user. For demo use 'C' or 'F'.
         TextDrawable fabIcon = TextDrawable.builder()
@@ -789,21 +811,11 @@ public class CreateSongActivity
                 .useFont(Typeface.DEFAULT)
                 .fontSize(90) /* size in px */
                 .endConfig()
-                .buildRect(initial, ContextCompat.getColor(this, R.color.colorPrimaryDark));
+                .buildRect(initial, ContextCompat.getColor(this, color));
 
 
-        fabEndpoint.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorPrimaryDark)));
+        fabEndpoint.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, color)));
         fabEndpoint.setImageDrawable(fabIcon);
-
-        // Set the animation listener.
-        mFabAnimationListener = new ValueAnimator.AnimatorUpdateListener() {
-
-            @Override
-            public void onAnimationUpdate(ValueAnimator animator) {
-                fabEndpoint.setBackgroundTintList(ColorStateList.valueOf((int) animator.getAnimatedValue()));
-            }
-
-        };
 
         // This needs to be done in order for the fab animation to work.
         mFabBehavior.rollOutFab(fabEndpoint);
@@ -820,4 +832,13 @@ public class CreateSongActivity
             Snackbar.make(rvSamples, name + " " + getString(R.string.snackbar_message), Snackbar.LENGTH_LONG).show();
         }
     }
+
+
+    @TargetApi(21)
+    private void setupSlideTransition() {
+        // setup before inflating
+        Transition transition = TransitionInflater.from(this).inflateTransition(android.R.transition.fade);
+        getWindow().setEnterTransition(transition);
+    }
+
 }
