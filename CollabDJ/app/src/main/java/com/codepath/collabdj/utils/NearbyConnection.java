@@ -92,6 +92,7 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
      * Stores the Id of the device I'm connected to. Again, done this way for demo purposes.
      */
     private String mEndpointId;
+    private String mEndpointName;
 
     /*
      * This variable represents the listener passed in by the owning object.
@@ -114,6 +115,7 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
                     //Endpoint endpoint = new Endpoint(endpointId, connectionInfo.getEndpointName());
                     //mPendingConnections.put(endpointId, endpoint);
                     //StartSongActivity.this.onConnectionInitiated(endpoint, connectionInfo);
+                    mEndpointName = connectionInfo.getEndpointName();
                     advertiserAcceptsIncomingConnection(endpointId);
                 }
 
@@ -152,6 +154,8 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
                         //For demo purposes just assume they'll be in the same state on startup
 
                         //sendDataToDiscoverer(endpointId);
+                        //Toast.makeText(mContext, mEndpointName + " just joined the session!", Toast.LENGTH_SHORT).show();
+                        ((CreateSongActivity)mActivity).showFabEndpoint();
                     }
                 }
 
@@ -465,7 +469,7 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
                                         endpointId, info.getServiceId(), info.getEndpointName()));
                         Toast.makeText(mContext, "Endpoint Found!", Toast.LENGTH_LONG).show();
                         // Found an endpoint (Device).
-                        ((CreateSongActivity) mActivity).updateConnectionStatus(mContext.getString(R.string.device_found));
+                        ((CreateSongActivity) mActivity).updateConnectionStatus(mContext.getString(R.string.session_found));
 
                         if (SERVICE_ID.equals(info.getServiceId())) {
                             //Endpoint endpoint = Endpoint(endpointId, info.getEndpointName());
@@ -584,6 +588,7 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
 
     // Used by a discoverer to send data to an advertiser.
     private void sendDataToAdvertiser(String endpointId) {
+        /*
         String payloadMessage = "String mandado por Nearby!";
         try {
             // Send this message as a bytes payload.
@@ -593,6 +598,7 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+        */
     }
 
 
@@ -683,6 +689,8 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
         // TODO implement
     }
 
-
+    public String getEndpointName() {
+        return mEndpointName;
+    }
 
 }

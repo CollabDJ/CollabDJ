@@ -7,10 +7,12 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorListener;
 import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
-import android.support.v4.view.animation.FastOutLinearInInterpolator;
+import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.Interpolator;
+
+import com.codepath.collabdj.activities.CreateSongActivity;
 
 /**
  * Created by tiago on 11/14/17.
@@ -19,11 +21,13 @@ import android.view.animation.Interpolator;
 public class FabBehavior extends FloatingActionButton.Behavior {
 
 
-    private static final Interpolator FAST_OUT_SLOW_IN_INTERPOLATOR = new FastOutLinearInInterpolator();
+//    private static final Interpolator FAST_OUT_SLOW_IN_INTERPOLATOR = new FastOutLinearInInterpolator();
+    private static final Interpolator FAST_OUT_SLOW_IN_INTERPOLATOR = new LinearOutSlowInInterpolator();
 
     private int mOffscreenTranslation;
     private int mRollingState = RollingFabState.IDLE;
     private float mTensionFactor = 0f;
+    private Context mContext;
 
     private ViewPropertyAnimatorListener mRollingInListener = new ViewPropertyAnimatorListenerAdapter() {
         @Override
@@ -35,6 +39,9 @@ public class FabBehavior extends FloatingActionButton.Behavior {
         public void onAnimationEnd(View view) {
             mTensionFactor = 0.0f;
             setRollingState(RollingFabState.IDLE);
+            // Show the user connected snackbar.
+            CreateSongActivity createSongActivity = (CreateSongActivity) mContext;
+            createSongActivity.showEndpointConnectedSnackbar();
         }
     };
 
@@ -58,8 +65,9 @@ public class FabBehavior extends FloatingActionButton.Behavior {
         int IDLE = 2;
     }
 
-    public FabBehavior() {
+    public FabBehavior(Context context) {
         super();
+        this.mContext = context;
     }
 
     public FabBehavior(Context context, AttributeSet attrs) {
@@ -100,6 +108,7 @@ public class FabBehavior extends FloatingActionButton.Behavior {
 
     // Makes the FAB roll into screen, used when a user connects to us.
     public void rollInFab(FloatingActionButton fab) {
+        //fab.setVisibility(View.VISIBLE);
         rollInFabCompletely(fab);
     }
 
@@ -115,7 +124,7 @@ public class FabBehavior extends FloatingActionButton.Behavior {
     }
 
     private void rollOutFabCompletely(FloatingActionButton child) {
-        mOffscreenTranslation = 200;
+        mOffscreenTranslation = 250;
         ViewCompat.animate(child).translationX(mOffscreenTranslation).translationY(mOffscreenTranslation).rotation(360).setDuration(200).setInterpolator(FAST_OUT_SLOW_IN_INTERPOLATOR).setListener(mRollingOutListener).start();
     }
 

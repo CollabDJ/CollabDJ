@@ -33,9 +33,13 @@
 
     <!-- Strings for dialogFragment DiscoveringConnection -->
     <string name="looking_for_session_nearby">Looking for a session nearby &#8230;</string>
-    <string name="device_found">Device found, connecting &#8230;</string>
+    <string name="session_found">Session found, connecting &#8230;</string>
     <string name="connection_established">Connection established!</string>
 
     <!-- Strings for save/share alertDialog -->
     <string name="add_new_title">Enter song name:</string>
+
+    <!-- Strings for Snackbar -->
+    <string name="snackbar_message">joined the session</string>
+    <string name="snackbar_action">got it</string>
 </resources>

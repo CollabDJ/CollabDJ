@@ -10,6 +10,7 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -175,7 +176,10 @@ public class CreateSongActivity
         mAdapter.notifyDataSetChanged();
 
         fabEndpoint = (FloatingActionButton) findViewById(R.id.fabEndpoint);
-        mFabBehavior = new FabBehavior();
+        mFabBehavior = new FabBehavior(this);
+        // This needs to be done in order for this to work.
+        mFabBehavior.rollOutFab(fabEndpoint);
+        fabEndpoint.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -755,4 +759,12 @@ public class CreateSongActivity
         });
     }
 
+    public void showFabEndpoint() {
+        mFabBehavior.rollInFab(fabEndpoint);
+    }
+
+    public void showEndpointConnectedSnackbar() {
+        String name = mNearbyConnection.getEndpointName();
+        Snackbar.make(rvSamples, name + " " + getString(R.string.snackbar_message), Snackbar.LENGTH_LONG).show();
+    }
 }

@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <dimen name="design_navigation_icon_size" tools:override="true">52dp</dimen>
+
+    <!-- Overriding sizes of the FAB -->
+    <dimen name="design_fab_size_normal" tools:override="true">70dp</dimen>
 </resources>

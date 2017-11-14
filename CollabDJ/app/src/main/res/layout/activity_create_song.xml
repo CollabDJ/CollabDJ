@@ -64,6 +64,7 @@
         android:layout_margin="16dp"
         android:src="@drawable/ic_3_black_24dp"
         app:layout_anchor="@id/drawer_layout"
+        android:visibility="invisible"
         app:layout_anchorGravity="end|left|bottom" />
 
 </android.support.design.widget.CoordinatorLayout>
