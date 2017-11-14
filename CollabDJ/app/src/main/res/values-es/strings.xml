@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+        <string name="app_name">CollabDJ</string>
+
+        <!-- Strings for MainActivity -->
+        <string name="new_song">Crear Cancion</string>
+        <string name="new_song_description">Click para empezar una nueva cancion</string>
+
+        <string name="open_song">Abrir Cancion</string>
+        <string name="open_song_desciption">Click para abrir una cancion</string>
+
+        <string name="join_session">Unirse a Sesion</string>
+        <string name="join_session_description">Click para unirse a una sesion</string>
+
+        <string name="shared_songs">Canciones compartidas</string>
+        <string name="shared_songs_description">Click para ver las canciones compartidas</string>
+
+        <!-- Strings for PlaySongActivity -->
+        <string name="player_bg">Gif background del player</string>
+        <string name="player_status_playing">Escuchando:</string>
+        <string name="player_status_loading">Cargando:</string>
+
+        <!-- Strings for RecyclerView items -->
+        <string name="new_sample_title">Agregar sonido</string>
+
+        <!-- Strings for hamburger menu -->
+        <string name="drawer_open">Abrir cajon de navegacion</string>
+        <string name="drawer_close">Cerrar cajon de navegacion</string>
+        <string name="share_option">Compartir</string>
+        <string name="save_option">Guardar</string>
+
+        <!-- Strings for dialogFragment AddSoundSample -->
+        <string name="add_new_sample">Agregar sonido</string>
+
+        <!-- Strings for dialogFragment DiscoveringConnection -->
+        <string name="looking_for_session_nearby">Buscando una sesion cercana &#8230;</string>
+        <string name="device_found">Sesion encontrada, conectando &#8230;</string>
+        <string name="connection_established">Conexion establecida!</string>
+
+        <!-- Strings for save/share alertDialog -->
+        <string name="add_new_title">Ingresa el nombre:</string>
+
+</resources>
