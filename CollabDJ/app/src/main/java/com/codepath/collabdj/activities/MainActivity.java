@@ -1,9 +1,13 @@
 package com.codepath.collabdj.activities;
 
 import android.animation.ValueAnimator;
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -15,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Setup explode transition.
+        setupExplodeTransition();
         setContentView(R.layout.activity_main);
 
         // Attach click listeners to each RelativeLayout.
@@ -30,7 +36,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // Launch CreateSongActivity.
                 Intent i = new Intent(MainActivity.this, CreateSongActivity.class);
-                startActivity(i);
+                // options need to be passed when starting the activity
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this);
+                startActivity(i, options.toBundle());
             }
         });
 
@@ -40,7 +48,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // Launch OpenSongsActivity.
                 Intent i = new Intent(MainActivity.this, OpenSongsActivity.class);
-                startActivity(i);
+                // options need to be passed when starting the activity
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this);
+                startActivity(i, options.toBundle());
             }
         });
 
@@ -51,7 +61,9 @@ public class MainActivity extends AppCompatActivity {
                 // Launch OpenSongsActivity.
                 Intent i = new Intent(MainActivity.this, CreateSongActivity.class);
                 i.putExtra(CreateSongActivity.IS_HOST, false);
-                startActivity(i);
+                // options need to be passed when starting the activity
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this);
+                startActivity(i, options.toBundle());
             }
         });
 
@@ -61,7 +73,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Launch SharedSongsActivity.
                 Intent i = new Intent(MainActivity.this, SharedSongsActivity.class);
-                startActivity(i);
+                // options need to be passed when starting the activity
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this);
+                startActivity(i, options.toBundle());
 
                 //For now hardcoding this to download a file from firebase
 //                StorageReference firebaseStorageRoot = FirebaseStorage.getInstance().getReference();
@@ -115,5 +129,13 @@ public class MainActivity extends AppCompatActivity {
     private void setupPulsatingAnimation(View view)
     {
         AnimationUtils.setupPulsatingAnimation(view, 500, ValueAnimator.INFINITE, 1.0f, 1.05f);
+    }
+
+    @TargetApi(21)
+    private void setupExplodeTransition() {
+        Transition transition = TransitionInflater.from(this).inflateTransition(android.R.transition.explode);
+        transition.setDuration(500);
+        getWindow().setExitTransition(transition);
+
     }
 }

@@ -1,7 +1,10 @@
 package com.codepath.collabdj.activities;
 
+import android.annotation.TargetApi;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -95,5 +98,15 @@ public class OpenSongsActivity extends AppCompatActivity {
         }
         return buffer;
     }
+
+    @TargetApi(21)
+    private void setupSlideTransition() {
+        // setup before inflating
+        //Transition a = TransitionInflater.from(this).inflateTransition(android.R.transition.slide_right);
+        Transition transition = TransitionInflater.from(this).inflateTransition(android.R.transition.fade);
+        //transition.setDuration(5000);
+        getWindow().setEnterTransition(transition);
+    }
+
 
 }

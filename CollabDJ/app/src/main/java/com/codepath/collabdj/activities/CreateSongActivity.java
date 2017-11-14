@@ -1,5 +1,6 @@
 package com.codepath.collabdj.activities;
 
+import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -18,6 +19,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -116,6 +119,7 @@ public class CreateSongActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setupSlideTransition();
         setContentView(R.layout.activity_create_song);
 
         isHost = getIntent().getBooleanExtra(IS_HOST, true);
@@ -745,6 +749,15 @@ public class CreateSongActivity
                 mSamples.get(sampleIndex).stop();
             }
         });
+    }
+
+    @TargetApi(21)
+    private void setupSlideTransition() {
+        // setup before inflating
+        //Transition a = TransitionInflater.from(this).inflateTransition(android.R.transition.slide_right);
+        Transition transition = TransitionInflater.from(this).inflateTransition(android.R.transition.fade);
+        //transition.setDuration(5000);
+        getWindow().setEnterTransition(transition);
     }
 
 }
