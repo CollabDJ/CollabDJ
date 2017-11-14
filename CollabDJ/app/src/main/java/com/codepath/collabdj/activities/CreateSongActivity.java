@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -37,6 +38,7 @@ import com.codepath.collabdj.models.SharedSong;
 import com.codepath.collabdj.models.Song;
 import com.codepath.collabdj.models.SoundSample;
 import com.codepath.collabdj.models.SoundSampleInstance;
+import com.codepath.collabdj.utils.FabBehavior;
 import com.codepath.collabdj.utils.NearbyConnection;
 import com.codepath.collabdj.utils.PixelUtils;
 import com.codepath.collabdj.utils.SamplePlayer;
@@ -113,6 +115,9 @@ public class CreateSongActivity
     //Don't modify this value, I'm too lazy to make a getter
     public boolean isHost;
 
+    private FloatingActionButton fabEndpoint;
+    private FabBehavior mFabBehavior;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -168,6 +173,9 @@ public class CreateSongActivity
         setInitialSoundSamples();
         createInitialEmptyCells();
         mAdapter.notifyDataSetChanged();
+
+        fabEndpoint = (FloatingActionButton) findViewById(R.id.fabEndpoint);
+        mFabBehavior = new FabBehavior();
     }
 
     @Override
