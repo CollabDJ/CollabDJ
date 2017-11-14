@@ -175,11 +175,8 @@ public class CreateSongActivity
         createInitialEmptyCells();
         mAdapter.notifyDataSetChanged();
 
-        fabEndpoint = (FloatingActionButton) findViewById(R.id.fabEndpoint);
-        mFabBehavior = new FabBehavior(this);
-        // This needs to be done in order for this to work.
-        mFabBehavior.rollOutFab(fabEndpoint);
-        fabEndpoint.setVisibility(View.VISIBLE);
+        // Setup the fab with the connected "user".
+        setupFab();
     }
 
     @Override
@@ -757,6 +754,18 @@ public class CreateSongActivity
                 mSamples.get(sampleIndex).stop();
             }
         });
+    }
+
+    private void setupFab() {
+
+        fabEndpoint = (FloatingActionButton) findViewById(R.id.fabEndpoint);
+        mFabBehavior = new FabBehavior(this);
+        // Set the fab icon.
+
+        //fabEndpoint.setImageDrawable();
+        // This needs to be done in order for this to work.
+        mFabBehavior.rollOutFab(fabEndpoint);
+        fabEndpoint.setVisibility(View.VISIBLE);
     }
 
     public void showFabEndpoint() {
