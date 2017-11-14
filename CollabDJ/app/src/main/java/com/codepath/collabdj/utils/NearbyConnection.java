@@ -13,8 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.codepath.collabdj.R;
 import com.codepath.collabdj.activities.CreateSongActivity;
-import com.codepath.collabdj.activities.JoinSessionActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -32,6 +32,9 @@ import com.google.android.gms.nearby.connection.Payload;
 import com.google.android.gms.nearby.connection.PayloadCallback;
 import com.google.android.gms.nearby.connection.PayloadTransferUpdate;
 import com.google.android.gms.nearby.connection.Strategy;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 
@@ -141,9 +144,12 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
                         // Send data to the discoverer.
                         // TODO We should send data to every discoverer connected to us. For demo we are gonna have 1 I guess, so it's fine.
                         // Send all the song info.
-                        if (listener != null) {
+                        /*if (listener != null) {
                             listener.sendCurrentSong();
                         }
+                        */
+
+                        //For demo purposes just assume they'll be in the same state on startup
 
                         //sendDataToDiscoverer(endpointId);
                     }
@@ -220,7 +226,7 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
                         mEndpointId = endpointId;
 
                         // Dismiss dialogFragment.
-                        ((JoinSessionActivity)mActivity).connectionEstablished();
+                        ((CreateSongActivity)mActivity).connectionEstablished();
 
                         // Send data to the advertiser.
                         sendDataToAdvertiser(endpointId);
@@ -272,13 +278,62 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
 
     // Interface that defines methods to communicate with parent classes.
     public interface NearbyConnectionListener {
+        void receiveAddSample(int sampleIndex, String sampleName);
 
-        public void sendCurrentSong();
+        void receivePlaySample(int sampleIndex, long sectionIndex);
 
-        public void receiveCurrentSong(String song);
+        void receiveStopSample(int sampleIndex);
+    }
 
-        public void receiveNewSample(String sample);
+    private static final String MESSAGE_TYPE = "message_type";
 
+    private static final String ADD_SAMPLE_MESSAGE = "add_sample";
+    private static final String PLAY_SAMPLE_MESSAGE = "play_sample";
+    private static final String STOP_SAMPLE_MESSAGE = "stop_sample";
+
+    private static final String SAMPLE_INDEX = "sample_index";
+    private static final String SAMPLE_NAME = "sample_name";
+    private static final String SECTION_INDEX = "section_index";
+
+    public void sendAddSample(int sampleIndex, String sampleName) {
+        JSONObject data = new JSONObject();
+
+        try {
+            data.put(MESSAGE_TYPE, ADD_SAMPLE_MESSAGE);
+            data.put(SAMPLE_INDEX, sampleIndex);
+            data.put(SAMPLE_NAME, sampleName);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        sendData(data.toString());
+    }
+
+    public void sendPlaySample(int sampleIndex, long sectionIndex) {
+        JSONObject data = new JSONObject();
+
+        try {
+            data.put(MESSAGE_TYPE, PLAY_SAMPLE_MESSAGE);
+            data.put(SAMPLE_INDEX, sampleIndex);
+            data.put(SECTION_INDEX, sectionIndex);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        sendData(data.toString());
+    }
+
+    public void sendStopSample(int sampleIndex) {
+        JSONObject data = new JSONObject();
+
+        try {
+            data.put(MESSAGE_TYPE, STOP_SAMPLE_MESSAGE);
+            data.put(SAMPLE_INDEX, sampleIndex);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        sendData(data.toString());
     }
 
     // Sets the listener.
@@ -355,9 +410,13 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
         Log.v(TAG, "GoogleApiClient onConnected() executed. We are gonna start advertising/discovering.");
 
         if (mActivity instanceof CreateSongActivity) {
-            startAdvertising();
-        } else if (mActivity instanceof JoinSessionActivity) {
-            startDiscovering();
+            CreateSongActivity createSongActivity = (CreateSongActivity) mActivity;
+
+            if (createSongActivity.isHost) {
+                startAdvertising();
+            } else {
+                startDiscovering();
+            }
         } else {
             Log.v(TAG, "ERROR: in onConnected() - instanceof couldn't identify the activity.");
         }
@@ -405,6 +464,8 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
                                         "onEndpointFound(endpointId=%s, serviceId=%s, endpointName=%s)",
                                         endpointId, info.getServiceId(), info.getEndpointName()));
                         Toast.makeText(mContext, "Endpoint Found!", Toast.LENGTH_LONG).show();
+                        // Found an endpoint (Device).
+                        ((CreateSongActivity) mActivity).updateConnectionStatus(mContext.getString(R.string.device_found));
 
                         if (SERVICE_ID.equals(info.getServiceId())) {
                             //Endpoint endpoint = Endpoint(endpointId, info.getEndpointName());
@@ -493,6 +554,8 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
                                             String.format(
                                                     "acceptConnection succeded!."));
                                     Toast.makeText(mContext, "Conectadooooo!!!", Toast.LENGTH_SHORT).show();
+                                    // We are connected.
+                                    ((CreateSongActivity) mActivity).updateConnectionStatus(mContext.getString(R.string.connection_established));
                                 }
                             }
                         });
@@ -550,22 +613,16 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
 
     // Used by an advertiser to receive data from a discoverer.
     private void receiveDataFromDiscoverer(String endpointId, Payload payload) {
-
-        String payloadFilenameMessage = "";
-        try {
-            payloadFilenameMessage = new String(payload.asBytes(), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        // SHOW THE RECEIVED INFO!!!
-        Toast.makeText(mContext, payloadFilenameMessage, Toast.LENGTH_SHORT).show();
+        receiveData(payload);
     }
 
 
     // Used by a discoverer to receive data from an advertiser.
     private void receiveDataFromAdvertiser(String endpointId, Payload payload) {
+        receiveData(payload);
+    }
 
+    void receiveData(Payload payload) {
         String payloadMessage = "";
         try {
             payloadMessage = new String(payload.asBytes(), "UTF-8");
@@ -573,21 +630,30 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
             e.printStackTrace();
         }
 
+        try {
+            JSONObject jsonObject = new JSONObject(payloadMessage);
 
-        // Check if the message received is the full song or a new sample being added.
-        if (!mWasCurrentSongSent) {
-            mWasCurrentSongSent = true; // This message contains the current song.
+            String messageType = jsonObject.getString(MESSAGE_TYPE);
 
-            if (listener != null) {
-                listener.receiveCurrentSong(payloadMessage);
+            if (messageType.equals(ADD_SAMPLE_MESSAGE)) {
+                int sampleIndex = jsonObject.getInt(SAMPLE_INDEX);
+                String sampleName = jsonObject.getString(SAMPLE_NAME);
+
+                listener.receiveAddSample(sampleIndex, sampleName);
             }
-        } else {
-            // This message contains a new sample.
+            else if (messageType.equals(PLAY_SAMPLE_MESSAGE)) {
+                int sampleIndex = jsonObject.getInt(SAMPLE_INDEX);
+                long sectionIndex = jsonObject.getLong(SECTION_INDEX);
 
-            if (listener != null) {
-                listener.receiveNewSample(payloadMessage);
+                listener.receivePlaySample(sampleIndex, sectionIndex);
             }
+            else if (messageType.equals(STOP_SAMPLE_MESSAGE)) {
+                int sampleIndex = jsonObject.getInt(SAMPLE_INDEX);
 
+                listener.receiveStopSample(sampleIndex);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 

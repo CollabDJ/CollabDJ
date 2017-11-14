@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CloudDJ</string>
+    <string name="app_name">CollabDJ</string>
 
     <!-- Strings for MainActivity -->
     <string name="new_song">Create Song</string>
@@ -33,6 +33,8 @@
 
     <!-- Strings for dialogFragment DiscoveringConnection -->
     <string name="looking_for_session_nearby">Looking for a session nearby &#8230;</string>
+    <string name="device_found">Device found, connecting &#8230;</string>
+    <string name="connection_established">Connection established!</string>
 
     <!-- Strings for save/share alertDialog -->
     <string name="add_new_title">Enter song name:</string>

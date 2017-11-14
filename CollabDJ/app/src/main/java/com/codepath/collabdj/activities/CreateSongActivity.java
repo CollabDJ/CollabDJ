@@ -31,6 +31,7 @@ import android.widget.Toast;
 import com.codepath.collabdj.R;
 import com.codepath.collabdj.adapters.SoundSamplesAdapter;
 import com.codepath.collabdj.fragments.AddSoundSampleDialogFragment;
+import com.codepath.collabdj.fragments.DiscoveringConnectionDialogFragment;
 import com.codepath.collabdj.models.SampleUsage;
 import com.codepath.collabdj.models.SharedSong;
 import com.codepath.collabdj.models.Song;
@@ -46,7 +47,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -69,6 +69,7 @@ public class CreateSongActivity
             SoundSampleInstance.Listener, AddSoundSampleDialogFragment.AddSoundSampleDialogListener
 {
     public static final int NUM_COLUMNS = 3;
+    public static final String IS_HOST = "isHost";
 
     // Tag for logging.
     private static final String TAG = "CreateSongActivity";
@@ -102,14 +103,30 @@ public class CreateSongActivity
 
     private NearbyConnection mNearbyConnection;
 
+    // Listener to dismiss the progress bar dialogFragment.
+    private OnConnectionEstablishedListener onConnectionEstablishedListener;
+    public interface OnConnectionEstablishedListener {
+        public void onConnectionEstablished();
+        public void onUpdateConnectionStatus(String status);
+    }
+
+    //Don't modify this value, I'm too lazy to make a getter
+    public boolean isHost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_song);
 
+        isHost = getIntent().getBooleanExtra(IS_HOST, true);
+
         // Setup the nearby connections.
         setupNearbyConnection();
+
+        if (!isHost) {
+            // Show dialogFragment with progress bar until a connection is established.
+            showDiscoveringConnectionDialog();
+        }
 
         // Set a toolbar to replace the ActionBar.
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -209,6 +226,14 @@ public class CreateSongActivity
      * @param soundSample
      */
     public void onAddNewSample(SoundSample soundSample) {
+        if (mNearbyConnection != null) {
+            mNearbyConnection.sendAddSample(-1, soundSample.getName()); //Sample Index doesn't matter for demo LOL
+        }
+
+        onAddNewSampleInternal(soundSample);
+    }
+
+    protected void onAddNewSampleInternal(SoundSample soundSample) {
         int firstEmptyCellIndex = findFirstEmptyCell();
 
         //If for some reason didn't find an empty cell just add one
@@ -333,6 +358,8 @@ public class CreateSongActivity
         songStartTimeStamp = SamplePlayer.getCurrentTimestamp();
         song.title = "Song";
 
+        mAdapter.millisecondsPerSection = song.getNumMillisecondsPerSection();
+
         //Go over every SoundSampleInstance already added
         for(SoundSampleInstance soundSampleInstance : mSamples) {
             if(soundSampleInstance.getSoundSample() != null) {
@@ -413,27 +440,37 @@ public class CreateSongActivity
 //    }
 
     @Override
-    public long playButtonPressed(SoundSampleInstance soundSampleInstance) {
+    public void playButtonPressed(SoundSampleInstance soundSampleInstance) {
         if(song == null) {
             setupNewSong();
         }
 
-        // Send soundSample info (name for now) to connected devices.
-        mNearbyConnection.sendData(soundSampleInstance.getSoundSample().getName());
-
         SamplePlayer.SampleHandle.PlayInstance playInstance = soundSampleInstance.getCurrentPlayInstance();
 
+        long currentSection = getCurrentSection();
+        long nextSection = currentSection + 1;
+
         if (playInstance == null || playInstance.getPlayState() == STOPPED) {
-            soundSampleInstance.queueSample(getCurrentSection() + 1, song.getNumMillisecondsPerSection(), songStartTimeStamp, -1);
+            if (mNearbyConnection != null) {
+                mNearbyConnection.sendPlaySample(soundSampleIndexMapping.get(soundSampleInstance), nextSection);
+            }
+
+            soundSampleInstance.queueSample(nextSection, song.getNumMillisecondsPerSection(), songStartTimeStamp, -1);
         }
         else if (playInstance.getPlayState() == STOP_QUEUED) {
+            if (mNearbyConnection != null) {
+                mNearbyConnection.sendPlaySample(soundSampleIndexMapping.get(soundSampleInstance), nextSection);
+            }
+
             playInstance.setLoopAmount(-1);
         }
         else {
+            if (mNearbyConnection != null) {
+                mNearbyConnection.sendStopSample(soundSampleIndexMapping.get(soundSampleInstance));
+            }
+
             soundSampleInstance.stop();
         }
-
-        return song.getNumMillisecondsPerSection();
     }
 
     @Override
@@ -629,6 +666,29 @@ public class CreateSongActivity
         addSoundSampleDialogFragment.show(fm, "fragment_add_sound_sample");
     }
 
+    private void showDiscoveringConnectionDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        DiscoveringConnectionDialogFragment discoveringConnectionDialogFragment = DiscoveringConnectionDialogFragment.newInstance(getString(R.string.looking_for_session_nearby));
+        discoveringConnectionDialogFragment.show(fm, "fragment_discovering_connection");
+    }
+
+
+    public void setOnConnectionEstablishedListener(OnConnectionEstablishedListener listener) {
+        this.onConnectionEstablishedListener = listener;
+    }
+
+    public void connectionEstablished() {
+        if (onConnectionEstablishedListener != null) {
+            onConnectionEstablishedListener.onConnectionEstablished();
+        }
+    }
+
+    public void updateConnectionStatus(String status) {
+        if (onConnectionEstablishedListener != null) {
+            onConnectionEstablishedListener.onUpdateConnectionStatus(status);
+        }
+    }
+
     @Override
     public void onSoundSampleAdded(String title) {
         onAddNewSample(SoundSample.SOUND_SAMPLES.get(title));
@@ -654,33 +714,35 @@ public class CreateSongActivity
 
     private void setupNearbyConnection() {
         mNearbyConnection = new NearbyConnection(this, this);
+        this.onConnectionEstablishedListener = null;
 
         // Set the listener to manage communication between devices.
         mNearbyConnection.setNearbyConnectionListener(new NearbyConnection.NearbyConnectionListener() {
-            @Override
-            public void sendCurrentSong() {
-                // A discoverer just connected to us. Send all of the song info.
-                JSONObject data = new JSONObject();
-                try {
-                    data.put("Sample1", 1);
-                    data.put("Sample2", 2);
-                    data.put("Sample3", 3);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+            public void receiveAddSample(int sampleIndex, String sampleName) {
+                //Ignore sampleIndex for now, just add it.  And wait a bit during the demo to make sure the other side gets it at the same index
+                onAddNewSampleInternal(SoundSample.SOUND_SAMPLES.get(sampleName));
+            }
+
+            public void receivePlaySample(int sampleIndex, long sectionIndex) {
+                if(song == null) {
+                    setupNewSong();
                 }
 
-                // Send the song.
-                mNearbyConnection.sendData(data.toString());
+                SoundSampleInstance soundSample = mSamples.get(sampleIndex);
+
+                SamplePlayer.SampleHandle.PlayInstance playInstance = soundSample.getCurrentPlayInstance();
+
+                if (playInstance == null || playInstance.getPlayState() == STOPPED) {
+                    soundSample.queueSample(sectionIndex, song.getNumMillisecondsPerSection(), songStartTimeStamp, -1);
+                }
+                else if(playInstance.getPlayState() == STOP_QUEUED && sectionIndex == getCurrentSection() + 1) {
+                    //If queued to stop but will start next section again, just tell the sample to play again
+                    playInstance.setLoopAmount(-1);
+                }
             }
 
-            @Override
-            public void receiveCurrentSong(String song) {
-                //Do nothing.
-            }
-
-            @Override
-            public void receiveNewSample(String sample) {
-                // Do nothing, for now.
+            public void receiveStopSample(int sampleIndex) {
+                mSamples.get(sampleIndex).stop();
             }
         });
     }

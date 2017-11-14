@@ -28,10 +28,8 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         /**
          * Notifies the listener that the play button on a SoundSampleInstance was pressed
          * @param soundSampleInstance
-         * @return returns the milliseconds per section so when a sample is queued to play it knows
-         *      how to display the pie chart percentage
          */
-        long playButtonPressed(SoundSampleInstance soundSampleInstance);
+        void playButtonPressed(SoundSampleInstance soundSampleInstance);
 
         void addSamplePressed();
     }
@@ -42,6 +40,8 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private List<SoundSampleInstance> mSamples;
     private Context mContext;
     private SoundSamplePlayListener soundSamplePlayListener;
+
+    public long millisecondsPerSection;
 
     public SoundSamplesAdapter(Context context,
                                List<SoundSampleInstance> samples,
@@ -116,7 +116,6 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public ImageView ivPlayPause;
         public ImageView ivIcon;
         public ProgressBar pbLoadingIndicator;
-        public long millisecondsPerSection;
 
         // Constructor that accepts the entire item row
         // and does the view lookups to find each subview.
@@ -141,10 +140,14 @@ public class SoundSamplesAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         //Make the play pause button pulse a bit
                         AnimationUtils.setupPulsatingAnimation(ivPlayPause, 100, 1, 1.f, 1.4f);
 
-                        millisecondsPerSection = soundSamplePlayListener.playButtonPressed(getSoundSampleInstance());
+                        soundSamplePlayListener.playButtonPressed(getSoundSampleInstance());
                     }
                 }
             });
+        }
+
+        public SoundSamplesAdapter outer() {
+            return SoundSamplesAdapter.this;
         }
 
         public SoundSampleInstance getSoundSampleInstance() {

@@ -1,8 +1,10 @@
 package com.codepath.collabdj.fragments;
 
 import android.app.Dialog;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -17,7 +19,7 @@ import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import com.codepath.collabdj.R;
-import com.codepath.collabdj.activities.JoinSessionActivity;
+import com.codepath.collabdj.activities.CreateSongActivity;
 
 /**
  * Created by tiago on 11/12/17.
@@ -35,6 +37,7 @@ public class DiscoveringConnectionDialogFragment extends DialogFragment {
 
     public static DiscoveringConnectionDialogFragment newInstance(String status) {
         DiscoveringConnectionDialogFragment frag = new DiscoveringConnectionDialogFragment();
+
         Bundle args = new Bundle();
         args.putString("status", status);
         frag.setArguments(args);
@@ -52,6 +55,10 @@ public class DiscoveringConnectionDialogFragment extends DialogFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Set the background style of the dialogFragment.
+        getDialog().getWindow().setDimAmount(0.9f);
+        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
         setupTextSwitcher(view);
 
         // Fetch arguments from bundle and set status.
@@ -64,10 +71,15 @@ public class DiscoveringConnectionDialogFragment extends DialogFragment {
         pbConnecting.setVisibility(ProgressBar.VISIBLE);
 
         // Listener to dismiss the dialogFragment when the connection is established.
-        ((JoinSessionActivity)getActivity()).setOnConnectionEstablishedListener(new JoinSessionActivity.OnConnectionEstablishedListener() {
+        ((CreateSongActivity)getActivity()).setOnConnectionEstablishedListener(new CreateSongActivity.OnConnectionEstablishedListener() {
             @Override
             public void onConnectionEstablished() {
                 dismiss();
+            }
+
+            @Override
+            public void onUpdateConnectionStatus(String status) {
+                tsConnectionStatus.setText(status);
             }
         });
 
