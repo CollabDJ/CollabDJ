@@ -1,42 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:id="@+id/clMainContent"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
 
-    <include layout="@layout/background_image_lights_dark" />
+    <!-- Beggining of original code -->
 
-    <!-- This RelativeLayout represents the contents of the screen  -->
-    <RelativeLayout
+
+    <android.support.v4.widget.DrawerLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="com.codepath.collabdj.activities.CreateSongActivity">
+        android:layout_height="match_parent">
 
-        <!-- The ActionBar displayed at the top -->
-        <include
-            layout="@layout/toolbar_create_song"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        <include layout="@layout/background_image_lights_dark" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvSamples"
+        <!-- This RelativeLayout represents the contents of the screen  -->
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/toolbar"/>
-    </RelativeLayout>
+            tools:context="com.codepath.collabdj.activities.CreateSongActivity">
 
-    <!-- The navigation drawer that comes from the left -->
-    <!-- Note that `android:layout_gravity` needs to be set to 'start' -->
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nvView"
+            <!-- The ActionBar displayed at the top -->
+            <include
+                layout="@layout/toolbar_create_song"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvSamples"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/toolbar"/>
+        </RelativeLayout>
+
+        <!-- The navigation drawer that comes from the left -->
+        <!-- Note that `android:layout_gravity` needs to be set to 'start' -->
+        <android.support.design.widget.NavigationView
+            android:id="@+id/nvView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:theme="@style/DrawerTheme"
+            android:layout_gravity="start"
+            app:menu="@menu/drawer_view"
+            app:headerLayout="@layout/nav_header_create_song"/>
+    </android.support.v4.widget.DrawerLayout>
+
+
+    <!-- End of original code -->
+
+    <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        app:theme="@style/DrawerTheme"
-        android:layout_gravity="start"
-        app:menu="@menu/drawer_view"
-        app:headerLayout="@layout/nav_header_create_song"/>
-</android.support.v4.widget.DrawerLayout>
+        android:layout_height="wrap_content"
+        app:layout_behavior="com.codepath.collabdj.utils.ScrollAwareFABBehavior"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_3_black_24dp"
+        app:layout_anchor="@id/drawer_layout"
+        app:layout_anchorGravity="bottom|right|end" />
+
+</android.support.design.widget.CoordinatorLayout>
+
