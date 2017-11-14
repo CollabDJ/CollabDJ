@@ -4,11 +4,13 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
 
 import com.codepath.collabdj.R;
+import com.codepath.collabdj.fragments.DiscoveringConnectionDialogFragment;
 import com.codepath.collabdj.utils.NearbyConnection;
 
 public class JoinSessionActivity extends AppCompatActivity {
@@ -17,12 +19,23 @@ public class JoinSessionActivity extends AppCompatActivity {
 
     private NearbyConnection mNearbyConnection;
 
+    private OnConnectionEstablishedListener listener;
+
+    public interface OnConnectionEstablishedListener {
+        public void onConnectionEstablished();
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_session);
 
         setupNearbyConnection();
+
+        showDiscoveringConnectionDialog();
+        listener = null;
+
     }
 
 
@@ -85,4 +98,53 @@ public class JoinSessionActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    private void showDiscoveringConnectionDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        DiscoveringConnectionDialogFragment discoveringConnectionDialogFragment = DiscoveringConnectionDialogFragment.newInstance(getString(R.string.looking_for_session_nearby));
+        discoveringConnectionDialogFragment.show(fm, "fragment_discovering_connection");
+    }
+
+
+    public void setOnConnectionEstablishedListener(OnConnectionEstablishedListener listener) {
+        this.listener = listener;
+    }
+
+    public void connectionEstablished() {
+        if (listener != null) {
+            listener.onConnectionEstablished();
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

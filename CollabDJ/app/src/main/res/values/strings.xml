@@ -31,6 +31,9 @@
     <!-- Strings for dialogFragment AddSoundSample -->
     <string name="add_new_sample">Add sound sample</string>
 
+    <!-- Strings for dialogFragment DiscoveringConnection -->
+    <string name="looking_for_session_nearby">Looking for a session nearby &#8230;</string>
+
     <!-- Strings for save/share alertDialog -->
     <string name="add_new_title">Enter song name:</string>
 </resources>

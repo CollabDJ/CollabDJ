@@ -606,13 +606,6 @@ public class CreateSongActivity
                     nvDrawer.getMenu().getItem(i).setChecked(false);
                 }
 
-
-                // Send a message to the other phone. For testing only!
-                String data = "Sent from onDrawerClose!";
-                mNearbyConnection.sendData(data);
-                Toast.makeText(CreateSongActivity.this, "Message sent!", Toast.LENGTH_LONG).show();
-
-
                 super.onDrawerClosed(view);
             }
         };

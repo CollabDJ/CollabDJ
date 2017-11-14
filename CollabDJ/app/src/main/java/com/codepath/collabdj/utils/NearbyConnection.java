@@ -219,6 +219,9 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
                         mConnectionEstablished = true;
                         mEndpointId = endpointId;
 
+                        // Dismiss dialogFragment.
+                        ((JoinSessionActivity)mActivity).connectionEstablished();
+
                         // Send data to the advertiser.
                         sendDataToAdvertiser(endpointId);
                     }
