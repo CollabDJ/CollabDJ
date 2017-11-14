@@ -1,9 +1,12 @@
 package com.codepath.collabdj.activities;
 
+import android.animation.ValueAnimator;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
@@ -12,6 +15,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
@@ -30,6 +34,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.amulyakhare.textdrawable.TextDrawable;
 import com.codepath.collabdj.R;
 import com.codepath.collabdj.adapters.SoundSamplesAdapter;
 import com.codepath.collabdj.fragments.AddSoundSampleDialogFragment;
@@ -118,6 +123,7 @@ public class CreateSongActivity
 
     private FloatingActionButton fabEndpoint;
     private FabBehavior mFabBehavior;
+    private ValueAnimator.AnimatorUpdateListener mFabAnimationListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -728,8 +734,13 @@ public class CreateSongActivity
         // Set the listener to manage communication between devices.
         mNearbyConnection.setNearbyConnectionListener(new NearbyConnection.NearbyConnectionListener() {
             public void receiveAddSample(int sampleIndex, String sampleName) {
+
                 //Ignore sampleIndex for now, just add it.  And wait a bit during the demo to make sure the other side gets it at the same index
                 onAddNewSampleInternal(SoundSample.SOUND_SAMPLES.get(sampleName));
+
+                // Trigger FAB animation.
+                mFabBehavior.triggerFabBackgroundAnimation(mFabAnimationListener, fabEndpoint);
+
             }
 
             public void receivePlaySample(int sampleIndex, long sectionIndex) {
@@ -748,10 +759,18 @@ public class CreateSongActivity
                     //If queued to stop but will start next section again, just tell the sample to play again
                     playInstance.setLoopAmount(-1);
                 }
+
+                // Trigger FAB animation.
+                mFabBehavior.triggerFabBackgroundAnimation(mFabAnimationListener, fabEndpoint);
+
             }
 
             public void receiveStopSample(int sampleIndex) {
                 mSamples.get(sampleIndex).stop();
+
+                // Trigger FAB animation.
+                mFabBehavior.triggerFabBackgroundAnimation(mFabAnimationListener, fabEndpoint);
+
             }
         });
     }
@@ -760,10 +779,33 @@ public class CreateSongActivity
 
         fabEndpoint = (FloatingActionButton) findViewById(R.id.fabEndpoint);
         mFabBehavior = new FabBehavior(this);
-        // Set the fab icon.
 
-        //fabEndpoint.setImageDrawable();
-        // This needs to be done in order for this to work.
+        String initial = isHost ? "C" : "F";
+
+        // Build the drawable with the initial of the connected user. For demo use 'C' or 'F'.
+        TextDrawable fabIcon = TextDrawable.builder()
+                .beginConfig()
+                .textColor(Color.WHITE)
+                .useFont(Typeface.DEFAULT)
+                .fontSize(90) /* size in px */
+                .endConfig()
+                .buildRect(initial, ContextCompat.getColor(this, R.color.colorPrimaryDark));
+
+
+        fabEndpoint.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorPrimaryDark)));
+        fabEndpoint.setImageDrawable(fabIcon);
+
+        // Set the animation listener.
+        mFabAnimationListener = new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animator) {
+                fabEndpoint.setBackgroundTintList(ColorStateList.valueOf((int) animator.getAnimatedValue()));
+            }
+
+        };
+
+        // This needs to be done in order for the fab animation to work.
         mFabBehavior.rollOutFab(fabEndpoint);
         fabEndpoint.setVisibility(View.VISIBLE);
     }
@@ -773,7 +815,9 @@ public class CreateSongActivity
     }
 
     public void showEndpointConnectedSnackbar() {
-        String name = mNearbyConnection.getEndpointName();
-        Snackbar.make(rvSamples, name + " " + getString(R.string.snackbar_message), Snackbar.LENGTH_LONG).show();
+        if (isHost) {
+            String name = mNearbyConnection.getEndpointName();
+            Snackbar.make(rvSamples, name + " " + getString(R.string.snackbar_message), Snackbar.LENGTH_LONG).show();
+        }
     }
 }

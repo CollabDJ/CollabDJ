@@ -1,5 +1,7 @@
 package com.codepath.collabdj.utils;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.support.annotation.IntDef;
 import android.support.design.widget.CoordinatorLayout;
@@ -13,6 +15,8 @@ import android.view.View;
 import android.view.animation.Interpolator;
 
 import com.codepath.collabdj.activities.CreateSongActivity;
+import com.daasuu.ei.Ease;
+import com.daasuu.ei.EasingInterpolator;
 
 /**
  * Created by tiago on 11/14/17.
@@ -130,6 +134,23 @@ public class FabBehavior extends FloatingActionButton.Behavior {
 
     private void setRollingState(@RollingFabState int rollingState) {
         this.mRollingState = rollingState;
+    }
+
+    public void triggerFabBackgroundAnimation(ValueAnimator.AnimatorUpdateListener listener, View view) {
+        /*int colorFrom = ContextCompat.getColor(mContext, R.color.colorPrimaryDark);
+        int colorTo = ContextCompat.getColor(mContext, android.R.color.white);
+        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo, colorFrom);
+        colorAnimation.setDuration(250); // milliseconds
+        colorAnimation.addUpdateListener(listener);
+        colorAnimation.start();*/
+        doBounceAnimation(view);
+    }
+
+    private void doBounceAnimation(View targetView) {
+        ObjectAnimator animator = ObjectAnimator.ofFloat(targetView, "translationY", 0, 100, 0);
+        animator.setInterpolator(new EasingInterpolator(Ease.ELASTIC_IN_OUT));
+        animator.setDuration(200);
+        animator.start();
     }
 
 }

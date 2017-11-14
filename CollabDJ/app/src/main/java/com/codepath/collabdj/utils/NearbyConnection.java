@@ -232,6 +232,9 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
                         // Dismiss dialogFragment.
                         ((CreateSongActivity)mActivity).connectionEstablished();
 
+                        // Show FAB.
+                        ((CreateSongActivity)mActivity).showFabEndpoint();
+
                         // Send data to the advertiser.
                         sendDataToAdvertiser(endpointId);
                     }
@@ -478,7 +481,7 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
 
                             // Ask to connect
                             Nearby.Connections.requestConnection(
-                                    mGoogleApiClient, "Isabelle", endpointId, mConnectionLifecycleCallbackDiscoverer)
+                                    mGoogleApiClient, "Codepath", endpointId, mConnectionLifecycleCallbackDiscoverer)
                                     .setResultCallback(
                                             new ResultCallback<Status>() {
                                                 @Override
