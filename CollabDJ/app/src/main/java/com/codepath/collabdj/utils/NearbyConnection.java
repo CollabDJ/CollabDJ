@@ -11,7 +11,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.codepath.collabdj.R;
 import com.codepath.collabdj.activities.CreateSongActivity;
@@ -223,7 +222,7 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
                     //connectedToEndpoint(mPendingConnections.remove(endpointId));
 
                     if (result.getStatus().isSuccess()) {
-                        Toast.makeText(mContext, "Finallly connected!", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(mContext, "Finallly connected!", Toast.LENGTH_SHORT).show();
 
                         // Set up flags to indicate the state of the connection.
                         mConnectionEstablished = true;
