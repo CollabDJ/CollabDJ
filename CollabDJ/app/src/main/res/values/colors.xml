@@ -19,5 +19,5 @@
     <color name="playBackgroundTint">#11FFFFFF</color>
     <color name="transparent">#0000</color>
     <color name="endpointColor1">#33007bff</color>
-    <color name="endpointColor2">#3308ff00</color>
+    <color name="endpointColor2">#33ff00ee</color>
 </resources>

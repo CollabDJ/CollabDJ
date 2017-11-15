@@ -470,7 +470,7 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
                                 String.format(
                                         "onEndpointFound(endpointId=%s, serviceId=%s, endpointName=%s)",
                                         endpointId, info.getServiceId(), info.getEndpointName()));
-                        Toast.makeText(mContext, "Endpoint Found!", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(mContext, "Endpoint Found!", Toast.LENGTH_LONG).show();
                         // Found an endpoint (Device).
                         ((CreateSongActivity) mActivity).updateConnectionStatus(mContext.getString(R.string.session_found));
 
@@ -510,7 +510,7 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
                             public void onResult(@NonNull Status status) {
                                 if (status.isSuccess()) {
                                     //onDiscoveryStarted();
-                                    Toast.makeText(mContext, "We are discovering!", Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(mContext, "We are discovering!", Toast.LENGTH_SHORT).show();
                                 } else {
                                     //mIsDiscovering = false;
                                     Log.w(TAG,
@@ -560,7 +560,7 @@ public class NearbyConnection implements GoogleApiClient.ConnectionCallbacks, Go
                                     Log.v(TAG,
                                             String.format(
                                                     "acceptConnection succeded!."));
-                                    Toast.makeText(mContext, "Conectadooooo!!!", Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(mContext, "Conectadooooo!!!", Toast.LENGTH_SHORT).show();
                                     // We are connected.
                                     ((CreateSongActivity) mActivity).updateConnectionStatus(mContext.getString(R.string.connection_established));
                                 }
