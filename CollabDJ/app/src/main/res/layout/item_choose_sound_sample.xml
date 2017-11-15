@@ -13,7 +13,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         app:srcCompat="@drawable/placeholder_music"
-        android:layout_marginTop="5dp"/>
+        android:layout_marginTop="10dp"/>
 
     <TextView
         android:id="@+id/tvSoundSampleTitle"
@@ -34,7 +34,7 @@
         android:layout_below="@+id/tvSoundSampleTitle"
         android:layout_toRightOf="@+id/ivSoundSamplePic"
         android:text="Some description describing the beat would go here"
-        android:textSize="10sp"
+        android:textSize="14sp"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
@@ -47,6 +47,6 @@
         android:text="Duration: 8s"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:textSize="11sp"
+        android:textSize="12sp"
         android:layout_marginBottom="5dp"/>
 </RelativeLayout>

@@ -34,11 +34,13 @@ public class ChooseSoundSamplesAdapter extends ArrayAdapter<SoundSample> {
         }
 
         TextView tvTitle = (TextView) convertView.findViewById(R.id.tvSoundSampleTitle);
-        TextView tvHome = (TextView) convertView.findViewById(R.id.tvSoundSampleDesc);
+        TextView tvDescription = (TextView) convertView.findViewById(R.id.tvSoundSampleDesc);
         TextView tvDuration = (TextView) convertView.findViewById(R.id.tvSoundSampleDuration);
         ImageView ivPic = (ImageView) convertView.findViewById(R.id.ivSoundSamplePic);
 
         tvTitle.setText(soundSample.getName());
+        tvDescription.setText(soundSample.getDescription());
+        tvDuration.setText(soundSample.getDurationString());
 
         int iconResource = soundSample.getIconDrawableId();
 
